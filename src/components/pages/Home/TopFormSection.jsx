@@ -9,7 +9,7 @@ const PortfolioForm = () => {
 
   return (
     <>
-      {/* Portfolio Name Section (unchanged) */}
+      {/* Portfolio Name Section*/}
       <Grid container spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
         <Grid item size={{ xs: 6, md: 3 }}>
           <TextField
@@ -71,7 +71,7 @@ const PortfolioForm = () => {
       
       <Divider sx={{ my: 1, width: '100%' }} />
 
-      {/* First Row of Fields (unchanged) */}
+      {/* First Row of Fields*/}
       <Grid container spacing={2} sx={{ mb: 2 }} >
         <Grid item xs={12} sm={4}>
           <FormControl>
@@ -120,7 +120,7 @@ const PortfolioForm = () => {
         </Grid>
       </Grid>
 
-      {/* Quantity Section with Action Buttons */}
+      {/* Quantity Section with Mixed Button Sizes */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           <TextField
@@ -158,60 +158,57 @@ const PortfolioForm = () => {
               </TextField>
             </FormControl>
             
-            {/* Action Buttons - Sized like Template button */}
-            <Grid container spacing={2} sx={{ width: 'auto', ml: 1 }}>
-              {/* 1. Add Button (Black) */}
-              <Grid item>
-                <Button
-                  variant="contained"
-                  startIcon={<Add />}
-                  sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#333' },
-                    minWidth: '120px'
-                  }}
-                >
-                  Add
-                </Button>
-              </Grid>
+            {/* Action Buttons */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {/* Add Button */}
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: 'black',
+                  color: 'white',
+                  '&:hover': { backgroundColor: '#333' },
+                  minWidth: '120px',
+                  height: '40px',
+                  padding: '8px'
+                }}
+              >
+                <Add />
+              </Button>
               
-              {/* 2. FileCopy Button (Black) */}
-              <Grid item>
-                <Button 
-                  variant="contained"
-                  startIcon={<FileCopy />}
-                  sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#333' },
-                    minWidth: '120px'
-                  }}
-                >
-                  Copy
-                </Button>
-              </Grid>
-              
-              {/* 3. Help Button (White) */}
-              <Grid item>
-                <Button 
-                  variant="outlined"
-                  startIcon={<HelpOutline />}
-                  sx={{
-                    backgroundColor: 'white',
-                    color: 'black',
-                    borderColor: 'black',
-                    '&:hover': { 
-                      backgroundColor: '#f5f5f5',
-                      borderColor: 'black'
-                    },
-                    minWidth: '120px'
-                  }}
-                >
-                  Help
-                </Button>
-              </Grid>
-            </Grid>
+              {/* FileCopy Button*/}
+              <Button 
+                variant="contained"
+                sx={{
+                  backgroundColor: 'black',
+                  color: 'white',
+                  '&:hover': { backgroundColor: '#333' },
+                  minWidth: '120px',
+                  height: '40px',
+                  padding: '8px'
+                }}
+              >
+                <FileCopy/>
+              </Button>
+              {/* Help Button*/}
+              <Button 
+                variant="outlined"
+                sx={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  borderColor: 'black',
+                  '&:hover': { 
+                    backgroundColor: '#f5f5f5',
+                    borderColor: 'black'
+                  },
+                  minWidth: '40px',
+                  width: '40px',
+                  height: '40px',
+                  padding: 0
+                }}
+              >
+                <HelpOutline/>
+              </Button>
+            </Box>
           </Box>
         </Grid>
       </Grid>
@@ -219,4 +216,4 @@ const PortfolioForm = () => {
   );
 };
 
-export default PortfolioForm;
+export default PortfolioForm; 
