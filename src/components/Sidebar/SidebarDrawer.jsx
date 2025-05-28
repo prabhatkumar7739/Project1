@@ -6,11 +6,11 @@ import {
   IconButton,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import SidebarSelect from "./SidebarSelect";
+import SidebarSelect from './SidebarSelect';
 import PortfolioHeader from "./PortfolioHeader";
 import PortfolioList from "./PortfolioList";
 
-const drawerWidth = 250;
+const drawerWidth = '20%';
 
 const selectOptions = [
   {
@@ -27,28 +27,22 @@ const selectOptions = [
   },
 ];
 
-export default function SidebarDrawer({ open, toggleDrawer }) {
+export default function SidebarDrawer({ toggleDrawer }) {
   const theme = useTheme();
   const borderColor = theme.palette.sidebar?.border || theme.palette.divider;
 
   return (
-    <Box
-      bgcolor="white"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        borderRight: `1px solid ${borderColor}`,
-        position: 'fixed',
-        left: 0,
-        top: 64, // Matches TopNavBar height
-        height: 'calc(100vh - 64px)',
-        zIndex: 1200,
-        transform: open ? 'translateX(0)' : 'translateX(-100%)',
-        transition: 'transform 0.3s ease',
-        boxShadow: 3,
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", pt: 2, px: 2 }}>
+    // <Box
+    //   bgcolor="inherit"
+    //   mt={theme.spacing(8.375)}
+    //   sx={{
+    //     width: drawerWidth,
+    //     flexShrink: 0,
+    //     borderRight: `1px solid ${borderColor}`,
+    //   }}
+    // >
+    <div style={{width: drawerWidth,marginTop:'10px',padding:'5px'}}>
+ <div style={{display:'flex'}}>
         <SidebarSelect
           label="Service Provider"
           options={selectOptions}
@@ -56,7 +50,7 @@ export default function SidebarDrawer({ open, toggleDrawer }) {
         />
         <IconButton
           id="btn-dashboard-togglePortfolios"
-          onClick={() => toggleDrawer(false)}
+          onClick={toggleDrawer(false)}
           sx={{
             ml: "auto",
             p: 0,
@@ -68,12 +62,13 @@ export default function SidebarDrawer({ open, toggleDrawer }) {
         >
           <ChevronLeftIcon fontSize="large" />
         </IconButton>
-      </Box>
+        </div>
 
       <Divider sx={{ my: 2 }} />
-
       <PortfolioHeader />
       <PortfolioList />
-    </Box>
+    </div>
+     
+    // </Box>
   );
 }

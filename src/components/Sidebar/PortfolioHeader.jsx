@@ -10,16 +10,17 @@ function PortfolioHeader() {
       justifyContent="space-between"
       fontWeight={500}
       height="2.5rem"
-      px={2}
     >
-      <Typography variant="subtitle1">Portfolios</Typography>
-      <Tooltip title="Create New Portfolio">
+      <Typography sx={{ pl: 1 }}>Portfolios</Typography>
+      <Tooltip
+        title="Create New Portfolio"
+        slotProps={{ tooltip: { sx: { fontSize: "0.8rem" } } }}
+      >
         <IconButton
           size="small"
           sx={{
-            color: "black",
+            backgroundColor: "transparent",
             "&:hover": {
-              color: "primary.main",
               backgroundColor: "transparent",
             },
           }}

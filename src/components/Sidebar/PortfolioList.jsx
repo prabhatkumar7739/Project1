@@ -19,7 +19,7 @@ export default function PortfolioList() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ height: "calc(100% - 120px)", overflowY: "auto" }}>
+    <Box sx={{ height: "70vh", overflowY: "auto" }}>
       <List id="dashboard-portfolio-list">
         {portfolios.map((portfolio) => {
           const isActive = portfolio === activePortfolio;
@@ -35,7 +35,6 @@ export default function PortfolioList() {
                 borderRadius: 1,
                 mb: 0.5,
                 p: 1,
-                mx: 1,
                 backgroundColor: isActive
                   ? theme.palette.primary.main
                   : "transparent",
@@ -51,6 +50,7 @@ export default function PortfolioList() {
               <ListItemText
                 primary={
                   <Typography
+                    className="item-title"
                     fontWeight={isActive ? 500 : "normal"}
                     fontSize={12}
                   >

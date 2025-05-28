@@ -11,8 +11,8 @@ import {
 const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
   const theme = useTheme();
   return (
-    <FormControl fullWidth variant="outlined" size="small">
-      <InputLabel>{label}</InputLabel>
+    <FormControl fullWidth variant="outlined">
+      <InputLabel>Service Provider</InputLabel>
       <Select
         value={value}
         onChange={onValueChange}
@@ -31,9 +31,8 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
           <ListSubheader
             key={group.label}
             sx={{
-              color: theme.palette.text.primary,
-              fontSize: "0.875rem",
-              fontWeight: 500,
+              color: theme.palette.dark,
+              fontSize: "16px",
             }}
           >
             {group.label}
@@ -42,7 +41,7 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
             <MenuItem
               key={option.value}
               value={option.value}
-              sx={{ height: "36px", fontSize: "0.875rem" }}
+              sx={{ height: "40px" }}
             >
               {option.label}
             </MenuItem>

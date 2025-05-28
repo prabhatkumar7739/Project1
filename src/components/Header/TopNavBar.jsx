@@ -14,7 +14,7 @@ import amdlogo from "../../assets/amdlogo.png";
 
 const TopNavBar = () => {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#000", px: 2 }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "#000", px: 2 }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box display="flex" alignItems="center">
           <img
