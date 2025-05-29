@@ -11,7 +11,7 @@ import {
   Link
 } from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
-import PortfolioTable from './PortfolioTable';
+import PortfolioTable from '../../PortfolioTable/PortfolioTable';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
