@@ -1,6 +1,17 @@
 import React, { useState, memo } from 'react';
-import {Box,Grid,TextField,MenuItem,FormControl,Divider,Button,Stack,Link} from '@mui/material';
+import {
+  Box,
+  Grid,
+  TextField,
+  MenuItem,
+  FormControl,
+  Divider,
+  Button,
+  Stack,
+  Link
+} from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
+import PortfolioTable from './PortfolioTable';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
@@ -31,9 +42,28 @@ const PortfolioForm = () => {
   const [region, setRegion] = useState('');
   const [size, setSize] = useState('');
   const [pricingModel, setPricingModel] = useState('');
+  const [uuid, setUUID] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [hours, setHours] = useState('');
+  const [tableData, setTableData] = useState([]);
+
+  const handleAdd = () => {
+    if (region && size && pricingModel && uuid && quantity && hours) {
+      const newRow = {
+        uuid,
+        region,
+        size,
+        quantity,
+        hours,
+        pricingModel
+      };
+      setTableData((prev) => [...prev, newRow]);
+    }
+  };
 
   return (
     <>
+      {/* Top Section */}
       <Grid container spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
         <Grid item xs={6} md={3}>
           <TextField
@@ -63,20 +93,22 @@ const PortfolioForm = () => {
 
       <Divider sx={{ my: 1, width: '100%' }} />
 
+      {/* Input Fields */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, [
             { label: 'US East', value: 'us-east' },
             { label: 'US West', value: 'us-west' },
-            { label: 'Europe', value: 'europe' }
+            { label: 'Europe', value: 'europe' },
+            { label: 'Africa South 1', value: 'africa-south1' }
           ])}
         </Grid>
 
         <Grid item xs={12} sm={4}>
           {textFieldProps('Size*', size, (e) => setSize(e.target.value), 200, [
-            { label: 'Small', value: 'small' },
-            { label: 'Medium', value: 'medium' },
-            { label: 'Large', value: 'large' }
+            { label: 'c4-highmem-8', value: 'c4-highmem-8' },
+            { label: 'c4-highmem-16', value: 'c4-highmem-16' },
+            { label: 'c4-highmem-32', value: 'c4-highmem-32' }
           ])}
         </Grid>
 
@@ -86,6 +118,8 @@ const PortfolioForm = () => {
             variant="outlined"
             sx={{ width: '400px' }}
             size="small"
+            value={uuid}
+            onChange={(e) => setUUID(e.target.value)}
           />
         </Grid>
       </Grid>
@@ -98,6 +132,8 @@ const PortfolioForm = () => {
             type="number"
             sx={{ width: '200px' }}
             size="small"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
           />
         </Grid>
 
@@ -108,43 +144,55 @@ const PortfolioForm = () => {
             type="number"
             sx={{ width: '400px' }}
             size="small"
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
           />
         </Grid>
 
         <Grid item xs={12} sm={4}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {textFieldProps('Pricing Model*', pricingModel, (e) => setPricingModel(e.target.value), 200, [
-              { label: 'On-Demand', value: 'on-demand' },
-              { label: 'Reserved', value: 'reserved' },
-              { label: 'Spot', value: 'spot' }
+              { label: 'on-demand', value: 'ondemand' },
+              { label: 'reserved', value: 'reserved' },
+              { label: 'spot', value: 'spot' }
             ])}
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {[<Add />, <FileCopy />].map((icon, i) => (
-                <Button key={i} variant="contained" sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}>
-                  {icon}
-                </Button>
-              ))}
+            <Button
+              variant="contained"
+              sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
+              onClick={handleAdd}
+            >
+              <Add />
+            </Button>
 
-              <Button
-                variant="outlined"
-                sx={{
-                  backgroundColor: 'white',
-                  color: 'black',
-                  borderColor: 'black',
-                  '&:hover': { backgroundColor: '#f5f5f5', borderColor: 'black' },
-                  minWidth: '40px',
-                  width: '40px',
-                  height: '40px',
-                  padding: 0
-                }}
-              >
-                <HelpOutline />
-              </Button>
-            </Box>
+            <Button
+              variant="contained"
+              sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
+            >
+              <FileCopy />
+            </Button>
+
+            <Button
+              variant="outlined"
+              sx={{
+                backgroundColor: 'white',
+                color: 'black',
+                borderColor: 'black',
+                '&:hover': { backgroundColor: '#f5f5f5', borderColor: 'black' },
+                minWidth: '40px',
+                width: '40px',
+                height: '40px',
+                padding: 0
+              }}
+            >
+              <HelpOutline />
+            </Button>
           </Box>
         </Grid>
       </Grid>
+
+      {/* Table appears here if data exists */}
+      {tableData.length > 0 && <PortfolioTable data={tableData} />}
     </>
   );
 };
