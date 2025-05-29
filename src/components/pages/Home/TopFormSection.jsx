@@ -1,17 +1,41 @@
-import React from 'react';
-import { Box, Grid, TextField, MenuItem, FormControl, Divider, Button, Stack, Link } from '@mui/material';
+import React, { useState, memo } from 'react';
+import {Box,Grid,TextField,MenuItem,FormControl,Divider,Button,Stack,Link} from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
 
+const commonBtnStyle = {
+  backgroundColor: 'black',
+  color: 'white',
+  '&:hover': { backgroundColor: '#333' },
+  minWidth: '120px'
+};
+
+const textFieldProps = (label, value, onChange, width = 200, options = []) => (
+  <FormControl>
+    <TextField
+      label={label}
+      variant="outlined"
+      select={!!options.length}
+      value={value}
+      onChange={onChange}
+      sx={{ width }}
+      size="small"
+    >
+      {options.map((opt) => (
+        <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+      ))}
+    </TextField>
+  </FormControl>
+);
+
 const PortfolioForm = () => {
-  const [region, setRegion] = React.useState('');
-  const [size, setSize] = React.useState('');
-  const [pricingModel, setPricingModel] = React.useState('');
+  const [region, setRegion] = useState('');
+  const [size, setSize] = useState('');
+  const [pricingModel, setPricingModel] = useState('');
 
   return (
     <>
-      {/* Portfolio Name Section*/}
       <Grid container spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
-        <Grid item size={{ xs: 6, md: 3 }}>
+        <Grid item xs={6} md={3}>
           <TextField
             id="portfolio-name"
             label="Portfolio Name*"
@@ -21,93 +45,39 @@ const PortfolioForm = () => {
           />
         </Grid>
 
-        <Grid item size={{xs: 4, md:5}}>
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2,
-            justifyContent: { xs: 'flex-start', sm: 'flex-end' }
-          }}>
+        <Grid item xs={6} md={5}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
             <Stack direction="row" spacing={8}>
-              <Button
-                variant="contained"
-                startIcon={<Upload />}
-                sx={{
-                  backgroundColor: 'black',
-                  color: 'white',
-                  '&:hover': { backgroundColor: '#333' },
-                  minWidth: '120px'
-                }}
-              >
-                Upload
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<Download />}
-                sx={{
-                  backgroundColor: 'black',
-                  color: 'white',
-                  '&:hover': { backgroundColor: '#333' },
-                  minWidth: '120px'
-                }}
-              >
-                Template
-              </Button>
+              <Button variant="contained" startIcon={<Upload />} sx={commonBtnStyle}>Upload</Button>
+              <Button component="a" href="/PortfolioTemplate.csv" download="PortfolioTemplate.csv" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
             </Stack>
             <Link
               href="#"
-              sx={{
-                color: 'black',
-                textDecoration: 'none',
-                '&:hover': { textDecoration: 'underline' },
-                whiteSpace: 'nowrap'
-              }}
+              sx={{ color: 'black', textDecoration: 'none', '&:hover': { textDecoration: 'underline' }, whiteSpace: 'nowrap' }}
             >
               Cloud Usage Reports
             </Link>
           </Box>
         </Grid>
       </Grid>
-      
+
       <Divider sx={{ my: 1, width: '100%' }} />
 
-      {/* First Row of Fields*/}
-      <Grid container spacing={2} sx={{ mb: 2 }} >
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
-          <FormControl>
-            <TextField
-              label="Region*"
-              variant="outlined"
-              select
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              sx={{ width: '200px' }}
-              size="small"
-            >
-              <MenuItem value="us-east">US East</MenuItem>
-              <MenuItem value="us-west">US West</MenuItem>
-              <MenuItem value="europe">Europe</MenuItem>
-            </TextField>
-          </FormControl>
+          {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, [
+            { label: 'US East', value: 'us-east' },
+            { label: 'US West', value: 'us-west' },
+            { label: 'Europe', value: 'europe' }
+          ])}
         </Grid>
-        
+
         <Grid item xs={12} sm={4}>
-          <FormControl>
-            <TextField
-              id='Size'
-              label="Size*"
-              variant="outlined"
-              select
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-              sx={{ width: '200px' }}
-              size="small"
-            >
-              <MenuItem value="small">Small</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="large">Large</MenuItem>
-            </TextField>
-          </FormControl>
+          {textFieldProps('Size*', size, (e) => setSize(e.target.value), 200, [
+            { label: 'Small', value: 'small' },
+            { label: 'Medium', value: 'medium' },
+            { label: 'Large', value: 'large' }
+          ])}
         </Grid>
 
         <Grid item xs={12} sm={4}>
@@ -120,17 +90,17 @@ const PortfolioForm = () => {
         </Grid>
       </Grid>
 
-      {/* Quantity Section with Mixed Button Sizes */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           <TextField
             label="Quantity"
             variant="outlined"
-            type='number'
+            type="number"
             sx={{ width: '200px' }}
             size="small"
           />
         </Grid>
+
         <Grid item xs={12} sm={4}>
           <TextField
             label="Total Number of Hours per Month*"
@@ -140,73 +110,36 @@ const PortfolioForm = () => {
             size="small"
           />
         </Grid>
+
         <Grid item xs={12} sm={4}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FormControl>
-              <TextField
-                label="Pricing Model*"
-                variant="outlined"
-                select
-                value={pricingModel}
-                onChange={(e) => setPricingModel(e.target.value)}
-                sx={{ width: '200px' }}
-                size="small"
-              >
-                <MenuItem value="on-demand">On-Demand</MenuItem>
-                <MenuItem value="reserved">Reserved</MenuItem>
-                <MenuItem value="spot">Spot</MenuItem>
-              </TextField>
-            </FormControl>
-            
-            {/* Action Buttons */}
+            {textFieldProps('Pricing Model*', pricingModel, (e) => setPricingModel(e.target.value), 200, [
+              { label: 'On-Demand', value: 'on-demand' },
+              { label: 'Reserved', value: 'reserved' },
+              { label: 'Spot', value: 'spot' }
+            ])}
+
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {/* Add Button */}
+              {[<Add />, <FileCopy />].map((icon, i) => (
+                <Button key={i} variant="contained" sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}>
+                  {icon}
+                </Button>
+              ))}
+
               <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: 'black',
-                  color: 'white',
-                  '&:hover': { backgroundColor: '#333' },
-                  minWidth: '120px',
-                  height: '40px',
-                  padding: '8px'
-                }}
-              >
-                <Add />
-              </Button>
-              
-              {/* FileCopy Button*/}
-              <Button 
-                variant="contained"
-                sx={{
-                  backgroundColor: 'black',
-                  color: 'white',
-                  '&:hover': { backgroundColor: '#333' },
-                  minWidth: '120px',
-                  height: '40px',
-                  padding: '8px'
-                }}
-              >
-                <FileCopy/>
-              </Button>
-              {/* Help Button*/}
-              <Button 
                 variant="outlined"
                 sx={{
                   backgroundColor: 'white',
                   color: 'black',
                   borderColor: 'black',
-                  '&:hover': { 
-                    backgroundColor: '#f5f5f5',
-                    borderColor: 'black'
-                  },
+                  '&:hover': { backgroundColor: '#f5f5f5', borderColor: 'black' },
                   minWidth: '40px',
                   width: '40px',
                   height: '40px',
                   padding: 0
                 }}
               >
-                <HelpOutline/>
+                <HelpOutline />
               </Button>
             </Box>
           </Box>
@@ -216,4 +149,4 @@ const PortfolioForm = () => {
   );
 };
 
-export default PortfolioForm;
+export default memo(PortfolioForm);

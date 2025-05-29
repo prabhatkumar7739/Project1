@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Box, 
-  Divider, 
+  Divider,
   useTheme,
   IconButton,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import SidebarSelect from './SidebarSelect';
+import SidebarSelect from "./SidebarSelect";
 import PortfolioHeader from "./PortfolioHeader";
 import PortfolioList from "./PortfolioList";
 
-const drawerWidth = '20%';
+const drawerWidth = "20%";
 
 const selectOptions = [
   {
@@ -31,22 +30,22 @@ export default function SidebarDrawer({ toggleDrawer }) {
   const theme = useTheme();
   const borderColor = theme.palette.sidebar?.border || theme.palette.divider;
 
+  // State for selected service provider
+  const [selectedProvider, setSelectedProvider] = useState("AWS");
+
+  // Handle selection change
+  const handleProviderChange = (event) => {
+    setSelectedProvider(event.target.value);
+  };
+
   return (
-    // <Box
-    //   bgcolor="inherit"
-    //   mt={theme.spacing(8.375)}
-    //   sx={{
-    //     width: drawerWidth,
-    //     flexShrink: 0,
-    //     borderRight: `1px solid ${borderColor}`,
-    //   }}
-    // >
-    <div style={{width: drawerWidth,marginTop:'10px',padding:'5px'}}>
- <div style={{display:'flex'}}>
+    <div style={{ width: drawerWidth, marginTop: "10px", padding: "5px" }}>
+      <div style={{ display: "flex" }}>
         <SidebarSelect
           label="Service Provider"
           options={selectOptions}
-          value={selectOptions[0].options[0].value}
+          value={selectedProvider}
+          onValueChange={handleProviderChange}
         />
         <IconButton
           id="btn-dashboard-togglePortfolios"
@@ -62,13 +61,11 @@ export default function SidebarDrawer({ toggleDrawer }) {
         >
           <ChevronLeftIcon fontSize="large" />
         </IconButton>
-        </div>
+      </div>
 
       <Divider sx={{ my: 2 }} />
       <PortfolioHeader />
       <PortfolioList />
     </div>
-     
-    // </Box>
   );
 }
