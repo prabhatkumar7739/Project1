@@ -8,7 +8,8 @@ import {
   Divider,
   Button,
   Stack,
-  Link
+  Link,
+  Snackbar
 } from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
 import PortfolioTable from '../../PortfolioTable/PortfolioTable';
@@ -46,6 +47,8 @@ const PortfolioForm = () => {
   const [quantity, setQuantity] = useState('');
   const [hours, setHours] = useState('');
   const [tableData, setTableData] = useState([]);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false); // ✅ success alert
 
   const handleAdd = () => {
     if (region && size && pricingModel && uuid && quantity && hours) {
@@ -58,6 +61,19 @@ const PortfolioForm = () => {
         pricingModel
       };
       setTableData((prev) => [...prev, newRow]);
+
+      // Clear fields
+      setRegion('');
+      setSize('');
+      setPricingModel('');
+      setUUID('');
+      setQuantity('');
+      setHours('');
+
+      // Show success alert
+      setSuccessOpen(true);
+    } else {
+      setErrorOpen(true);
     }
   };
 
@@ -79,7 +95,7 @@ const PortfolioForm = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
             <Stack direction="row" spacing={8}>
               <Button variant="contained" startIcon={<Upload />} sx={commonBtnStyle}>Upload</Button>
-              <Button component="a" href="/PortfolioTemplate.csv" download="PortfolioTemplate.csv" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
+              <Button component="a" href="/PortfolioTemplate.xlsx" download="PortfolioTemplate.xlsx" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
             </Stack>
             <Link
               href="#"
@@ -193,6 +209,84 @@ const PortfolioForm = () => {
 
       {/* Table appears here if data exists */}
       {tableData.length > 0 && <PortfolioTable data={tableData} />}
+
+      {/* Error Snackbar */}
+      <Snackbar
+        open={errorOpen}
+        autoHideDuration={4000}
+        onClose={() => setErrorOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#b4001e',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>Please enter the required fields.</span>
+          <Button
+            onClick={() => setErrorOpen(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto'
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
+
+      {/* ✅ Success Snackbar */}
+      <Snackbar
+        open={successOpen}
+        autoHideDuration={4000}
+        onClose={() => setSuccessOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>Instance added successfully</span>
+          <Button
+            onClick={() => setSuccessOpen(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto'
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
     </>
   );
 };

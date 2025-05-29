@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Link } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 
-const PortfolioTableFooter = ({ selected, handleDelete }) => (
+const PortfolioTableFooter = ({ selected, onDeleteClick }) => (
   <Box
     sx={{
       mt: 1,
@@ -12,17 +12,17 @@ const PortfolioTableFooter = ({ selected, handleDelete }) => (
       borderRadius: '0 0 4px 4px',
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
     }}
   >
     <Button
       variant="contained"
       color="error"
       startIcon={<Delete />}
-      onClick={handleDelete}
+      onClick={onDeleteClick}
       disabled={selected.length === 0}
     >
-      Delete
+      Delete ({selected.length})
     </Button>
     <Link
       href="https://cloud.google.com/compute/docs/regions-zones"

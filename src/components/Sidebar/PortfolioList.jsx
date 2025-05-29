@@ -1,64 +1,59 @@
 import React, { useState } from "react";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Typography,
-  useTheme,
-} from "@mui/material";
-
+import {List, ListItem, ListItemText, Box, Typography, useTheme, ListItemIcon, Paper,} from "@mui/material";
+import DescriptionIcon from '@mui/icons-material/Description';
 const portfolios = [
-  "apiauto7", "test", "Aditya", "cello", "Test", "Test0", "Demo16",
-  "Test388", "Test387", "Test1", "Test2", "Test3", "Test4",
-  "Test5", "Test6", "Test7", "Test8", "Test9", "Test10",
+  "UIAuto1535-renamed", "UIAuto1488", "UIAuto1534-renamed", "UIAuto1531-renamed",
+  "UIAuto1532-renamed", "UIAuto1530-renamed", "UIAuto1529-renamed", "UIAuto1514-renamed",
+  "UIAuto1499-renamed", "UIAuto1487", "UIAuto1484"
 ];
 
 export default function PortfolioList() {
-  const [activePortfolio, setActivePortfolio] = useState("test");
+  const [activePortfolio, setActivePortfolio] = useState("UIAuto1488");
   const theme = useTheme();
 
   return (
     <Box sx={{ height: "70vh", overflowY: "auto" }}>
-      <List id="dashboard-portfolio-list">
+      <List id="dashboard-portfolio-list" disablePadding>
         {portfolios.map((portfolio) => {
           const isActive = portfolio === activePortfolio;
 
           return (
-            <ListItem
+            <Paper
               key={portfolio}
-              button
-              onClick={() => setActivePortfolio(portfolio)}
-              selected={isActive}
+              elevation={0}
               sx={{
-                cursor: "pointer",
-                borderRadius: 1,
-                mb: 0.5,
-                p: 1,
-                backgroundColor: isActive
-                  ? theme.palette.primary.main
-                  : "transparent",
-                color: isActive
-                  ? theme.palette.primary.contrastText
-                  : "inherit",
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.dark,
-                  color: theme.palette.primary.contrastText,
-                },
+                mb: 1,
+                border: "1px solid #e0e0e0",
+                borderRadius: "6px",
+                backgroundColor: isActive ? "#f5f5f5" : "#ffffff",
               }}
             >
-              <ListItemText
-                primary={
-                  <Typography
-                    className="item-title"
-                    fontWeight={isActive ? 500 : "normal"}
-                    fontSize={12}
-                  >
-                    {portfolio}
-                  </Typography>
-                }
-              />
-            </ListItem>
+              <ListItem
+                button
+                onClick={() => setActivePortfolio(portfolio)}
+                selected={isActive}
+                sx={{
+                  p: 1,
+                  "&.Mui-selected": {
+                    backgroundColor: "#e0e0e0",
+                    "&:hover": {
+                      backgroundColor: "#d5d5d5",
+                    },
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 36 }}>
+                  < DescriptionIcon sx={{ color: "#3f3f3f" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography fontSize={14}>
+                      {portfolio}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </Paper>
           );
         })}
       </List>

@@ -1,11 +1,21 @@
 import React from 'react';
 import {
-  Table, TableHead, TableRow, TableCell, TableBody, Checkbox
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Checkbox,
 } from '@mui/material';
 
 const PortfolioTableBody = ({
-  data, page, rowsPerPage, selected,
-  handleSelectAllClick, handleClick, isSelected
+  data,
+  page,
+  rowsPerPage,
+  selected,
+  handleSelectAllClick,
+  handleClick,
+  isSelected,
 }) => (
   <Table>
     <TableHead>
@@ -24,7 +34,7 @@ const PortfolioTableBody = ({
           'Size',
           'Quantity',
           'Total Number of Hours per Month',
-          'Pricing Model'
+          'Pricing Model',
         ].map((head) => (
           <TableCell key={head} sx={{ color: '#00B0FF', fontWeight: 'bold' }}>
             {head}

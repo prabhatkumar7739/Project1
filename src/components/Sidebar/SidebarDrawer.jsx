@@ -9,7 +9,7 @@ import SidebarSelect from "./SidebarSelect";
 import PortfolioHeader from "./PortfolioHeader";
 import PortfolioList from "./PortfolioList";
 
-const drawerWidth = "20%";
+const drawerWidth = "17%";
 
 const selectOptions = [
   {
@@ -30,10 +30,9 @@ export default function SidebarDrawer({ toggleDrawer }) {
   const theme = useTheme();
   const borderColor = theme.palette.sidebar?.border || theme.palette.divider;
 
-  // State for selected service provider
+
   const [selectedProvider, setSelectedProvider] = useState("AWS");
 
-  // Handle selection change
   const handleProviderChange = (event) => {
     setSelectedProvider(event.target.value);
   };

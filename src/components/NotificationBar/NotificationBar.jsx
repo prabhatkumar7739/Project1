@@ -6,22 +6,60 @@ import SaveIcon from '@mui/icons-material/Save';
 
 const NotificationBar = () => {
   return (
-    <Box sx={{
-      backgroundColor: 'light',
-      p: 3,
-      borderTop: '1px solid #e0e0e0',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%'
-    }}>
+    <Box
+      sx={{
+        backgroundColor: '#f0f0f0',
+        p: 3,
+        borderTop: '1px solid #e0e0e0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
       <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
         Note: Please upload file with maximum of 20000 records
       </Typography>
+
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button variant="contained" color="#e0e0e0" startIcon={<CloseIcon/>}>Cancel</Button>
-        <Button variant="contained" color="Light" startIcon={< SaveIcon/>}>Save</Button>
-        <Button variant="contained" color="Light" startIcon={<AttachMoneyIcon/>}sx={{padding:'10px'}}>Cost Advice</Button>
+        <Button
+          startIcon={<CloseIcon />}
+          sx={{
+            backgroundColor: '#d9534f',
+            color: '#fff',
+            '&:hover': { backgroundColor: '#c9302c' },
+            textTransform: 'none',
+            px: 3,
+          }}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          startIcon={<SaveIcon />}
+          sx={{
+            backgroundColor: '#5c5c5c',
+            color: '#fff',
+            '&:hover': { backgroundColor: '#4a4a4a' },
+            textTransform: 'none',
+            px: 3,
+          }}
+        >
+          Save
+        </Button>
+
+        <Button
+          startIcon={<AttachMoneyIcon />}
+          sx={{
+            backgroundColor: '#5c5c5c',
+            color: '#fff',
+            '&:hover': { backgroundColor: '#4a4a4a' },
+            textTransform: 'none',
+            px: 3,
+          }}
+        >
+          Cost Advice
+        </Button>
       </Box>
     </Box>
   );
