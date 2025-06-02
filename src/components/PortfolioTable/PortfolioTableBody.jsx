@@ -17,6 +17,7 @@ const PortfolioTableBody = ({
   handleSelectAllClick,
   handleClick,
   isSelected,
+<<<<<<< HEAD
 }) => {
   const { selectedProvider } = useCloudProvider();
   
@@ -30,6 +31,30 @@ const PortfolioTableBody = ({
               onChange={handleSelectAllClick}
               sx={{ color: 'white' }}
             />
+=======
+}) => (
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={selected.length === data.length}
+            onChange={handleSelectAllClick}
+            sx={{ color: 'white' }}
+          />
+        </TableCell>
+        {[
+          'UUID / Instance Name',
+          'Cloud',
+          'Region',
+          'Size',
+          'Quantity',
+          'Total Number of Hours per Month',
+          'Pricing Model',
+        ].map((head) => (
+          <TableCell key={head} sx={{ color: '#00B0FF', fontWeight: 'bold' }}>
+            {head}
+>>>>>>> origin/main
           </TableCell>
           {[
             'UUID / Instance Name',

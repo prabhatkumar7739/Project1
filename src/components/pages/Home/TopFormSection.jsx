@@ -47,6 +47,7 @@ const PortfolioForm = () => {
   const [uuid, setUUID] = useState('');
   const [quantity, setQuantity] = useState('');
   const [hours, setHours] = useState('');
+<<<<<<< HEAD
   const [portfolioName, setPortfolioName] = useState('');
   const [errorOpen, setErrorOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
@@ -80,6 +81,11 @@ const PortfolioForm = () => {
     const isFormComplete = portfolioName && region && size && pricingModel && uuid && quantity && hours;
     setIsFormFilled(isFormComplete);
   }, [portfolioName, region, size, pricingModel, uuid, quantity, hours, setIsFormFilled]);
+=======
+  const [tableData, setTableData] = useState([]);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false); // ✅ success alert
+>>>>>>> origin/main
 
   const handleAdd = () => {
     if (portfolioName && region && size && pricingModel && uuid && quantity && hours) {
@@ -91,6 +97,7 @@ const PortfolioForm = () => {
         hours,
         pricingModel
       };
+<<<<<<< HEAD
       
       setTableData(prev => {
         const newData = [...prev, newRow];
@@ -101,6 +108,11 @@ const PortfolioForm = () => {
       });
 
       // Clear instance fields but keep portfolio name and table
+=======
+      setTableData((prev) => [...prev, newRow]);
+
+      // Clear fields
+>>>>>>> origin/main
       setRegion('');
       setSize('');
       setPricingModel('');
@@ -262,7 +274,11 @@ const PortfolioForm = () => {
       </Grid>
 
       {/* Table appears here if data exists */}
+<<<<<<< HEAD
       {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={setTableData} />}
+=======
+      {tableData.length > 0 && <PortfolioTable data={tableData} />}
+>>>>>>> origin/main
 
       {/* Error Snackbar */}
       <Snackbar

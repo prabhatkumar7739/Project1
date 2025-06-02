@@ -33,6 +33,12 @@ export default function SidebarDrawer({ toggleDrawer }) {
   const borderColor = theme.palette.sidebar?.border || theme.palette.divider;
   const { selectedProvider, setSelectedProvider } = useCloudProvider();
 
+<<<<<<< HEAD
+=======
+
+  const [selectedProvider, setSelectedProvider] = useState("AWS");
+
+>>>>>>> origin/main
   const handleProviderChange = (event) => {
     setSelectedProvider(event.target.value);
   };
