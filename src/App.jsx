@@ -4,22 +4,31 @@ import TopNavBar from './components/Header/TopNavBar';
 import Footer from './components/Footer/Footer';
 import Home from './components/pages/Home/Home';
 import NotificationBar from './components/NotificationBar/NotificationBar';
+import { CloudProviderProvider } from './context/CloudProviderContext';
+import { FormTableProvider } from './context/FormTableContext';
+import { PortfolioProvider } from './context/PortfolioContext';
 
 function App() {
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh', 
-      backgroundColor: '#f5f5f5'
-    }}>
-      <TopNavBar />
-      <Box sx={{ display: 'flex', flexGrow: 1 }}>
-        <Home />
-      </Box>
-      <NotificationBar />
-      <Footer />
-    </Box>
+    <CloudProviderProvider>
+      <FormTableProvider>
+        <PortfolioProvider>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh', 
+            backgroundColor: '#f5f5f5'
+          }}>
+            <TopNavBar />
+            <Box sx={{ display: 'flex', flexGrow: 1 }}>
+              <Home />
+            </Box>
+            <NotificationBar />
+            <Footer />
+          </Box>
+        </PortfolioProvider>
+      </FormTableProvider>
+    </CloudProviderProvider>
   );
 }
 
