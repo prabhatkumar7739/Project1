@@ -1,60 +1,106 @@
-import React, { useState } from "react";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Typography,
-  useTheme,
-} from "@mui/material";
-
-const portfolios = [
-  "apiauto7", "test", "Aditya", "cello", "Test", "Test0", "Demo16",
-  "Test388", "Test387", "Test1", "Test2", "Test3", "Test4",
-  "Test5", "Test6", "Test7", "Test8", "Test9", "Test10",
-];
+import React, { useState, useEffect } from "react";
+import {List, ListItem, ListItemText, Box, Typography, useTheme, ListItemIcon, Paper,} from "@mui/material";
+import DescriptionIcon from '@mui/icons-material/Description';
+import { usePortfolio } from '../../context/PortfolioContext';
+import { useFormTable } from '../../context/FormTableContext';
 
 export default function PortfolioList() {
-  const [activePortfolio, setActivePortfolio] = useState("test");
+  const [activePortfolio, setActivePortfolio] = useState("UIAuto1488");
+  const { portfolioList, addPortfolio } = usePortfolio();
+  const { setTableData, setIsTableCreated } = useFormTable();
   const theme = useTheme();
 
+  // Listen for save portfolio events
+  useEffect(() => {
+    const handleSavePortfolio = (event) => {
+      const { portfolioName, cloudProvider } = event.detail;
+      const success = addPortfolio({ name: portfolioName, provider: cloudProvider });
+      if (success) {
+        setActivePortfolio(portfolioName);
+      }
+    };
+
+    window.addEventListener('saveToPortfolio', handleSavePortfolio);
+    return () => {
+      window.removeEventListener('saveToPortfolio', handleSavePortfolio);
+    };
+  }, [addPortfolio]);
+
+  // Handle portfolio click
+  const handlePortfolioClick = (portfolioName) => {
+    setActivePortfolio(portfolioName);
+    
+    // Get stored data for this portfolio from localStorage
+    const storedData = localStorage.getItem(`portfolio_${portfolioName}`);
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setTableData(parsedData);
+      setIsTableCreated(parsedData.length > 0);
+    } else {
+      setTableData([]);
+      setIsTableCreated(false);
+    }
+
+    // Dispatch event to update portfolio name field
+    window.dispatchEvent(new CustomEvent('updatePortfolioName', {
+      detail: { portfolioName }
+    }));
+  };
+
   return (
-    <Box sx={{ height: "70vh", overflowY: "auto" }}>
-      <List id="dashboard-portfolio-list">
-        {portfolios.map((portfolio) => {
-          const isActive = portfolio === activePortfolio;
+    <Box sx={{ 
+      height: "calc(100vh - 180px)", 
+      overflow: "hidden",
+      "&:hover": {
+        overflowY: "auto"
+      },
+      position: "relative",
+      backgroundColor: "#f5f5f5",
+    }}>
+      <List id="dashboard-portfolio-list" sx={{ p: 0 }}>
+        {portfolioList.map((portfolio) => {
+          const isActive = typeof portfolio === 'string' 
+            ? portfolio === activePortfolio
+            : portfolio.name === activePortfolio;
+          const portfolioName = typeof portfolio === 'string' ? portfolio : portfolio.name;
+          const provider = typeof portfolio === 'string' ? null : portfolio.provider;
 
           return (
             <ListItem
-              key={portfolio}
+              key={portfolioName}
               button
-              onClick={() => setActivePortfolio(portfolio)}
-              selected={isActive}
+              onClick={() => handlePortfolioClick(portfolioName)}
               sx={{
-                cursor: "pointer",
-                borderRadius: 1,
-                mb: 0.5,
-                p: 1,
-                backgroundColor: isActive
-                  ? theme.palette.primary.main
-                  : "transparent",
-                color: isActive
-                  ? theme.palette.primary.contrastText
-                  : "inherit",
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.dark,
-                  color: theme.palette.primary.contrastText,
+                py: 1,
+                px: 2,
+                color: isActive ? '#fff' : '#000',
+                backgroundColor: isActive ? '#000' : 'transparent',
+                '& .MuiListItemIcon-root': {
+                  color: isActive ? '#fff' : '#666',
+                  minWidth: 36
+                },
+                '&:hover': {
+                  backgroundColor: isActive ? '#222' : '#e8e8e8',
                 },
               }}
             >
+              <ListItemIcon>
+                <DescriptionIcon fontSize="small" />
+              </ListItemIcon>
               <ListItemText
                 primary={
-                  <Typography
-                    className="item-title"
-                    fontWeight={isActive ? 500 : "normal"}
-                    fontSize={12}
-                  >
-                    {portfolio}
+                  <Typography variant="body2">
+                    {portfolioName}
+                    {provider && (
+                      <Typography
+                        component="span"
+                        fontSize={12}
+                        color={isActive ? '#fff' : 'text.secondary'}
+                        sx={{ ml: 1 }}
+                      >
+                        ({provider})
+                      </Typography>
+                    )}
                   </Typography>
                 }
               />

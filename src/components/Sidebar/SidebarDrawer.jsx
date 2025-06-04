@@ -3,13 +3,15 @@ import {
   Divider,
   useTheme,
   IconButton,
+  Select,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import SidebarSelect from "./SidebarSelect";
 import PortfolioHeader from "./PortfolioHeader";
 import PortfolioList from "./PortfolioList";
+import { useCloudProvider } from '../../context/CloudProviderContext';
 
-const drawerWidth = "20%";
+const drawerWidth = "17%";
 
 const selectOptions = [
   {
@@ -28,18 +30,21 @@ const selectOptions = [
 
 export default function SidebarDrawer({ toggleDrawer }) {
   const theme = useTheme();
-  const borderColor = theme.palette.sidebar?.border || theme.palette.divider;
+  const { selectedProvider, setSelectedProvider } = useCloudProvider();
 
-  // State for selected service provider
-  const [selectedProvider, setSelectedProvider] = useState("AWS");
-
-  // Handle selection change
   const handleProviderChange = (event) => {
     setSelectedProvider(event.target.value);
   };
 
   return (
-    <div style={{ width: drawerWidth, marginTop: "10px", padding: "5px" }}>
+    <div style={{ 
+      width: drawerWidth, 
+      height: "100vh",
+      marginTop: "10px", 
+      padding: "5px",
+      borderRight: "1px solid #e0e0e0",
+      backgroundColor: "#f5f5f5"
+    }}>
       <div style={{ display: "flex" }}>
         <SidebarSelect
           label="Service Provider"

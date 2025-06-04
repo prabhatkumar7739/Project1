@@ -8,10 +8,12 @@ import {
   Divider,
   Button,
   Stack,
-  Link
+  Link,
+  Snackbar
 } from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
 import PortfolioTable from '../../PortfolioTable/PortfolioTable';
+import { useFormTable } from '../../../context/FormTableContext';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
@@ -45,19 +47,89 @@ const PortfolioForm = () => {
   const [uuid, setUUID] = useState('');
   const [quantity, setQuantity] = useState('');
   const [hours, setHours] = useState('');
-  const [tableData, setTableData] = useState([]);
+  const [portfolioName, setPortfolioName] = useState('');
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  
+  const { setIsFormFilled, setIsTableCreated, tableData, setTableData } = useFormTable();
+
+  // Listen for portfolio selection
+  React.useEffect(() => {
+    const handlePortfolioSelection = (event) => {
+      const { portfolioName } = event.detail;
+      setPortfolioName(portfolioName);
+    };
+
+    window.addEventListener('updatePortfolioName', handlePortfolioSelection);
+    return () => {
+      window.removeEventListener('updatePortfolioName', handlePortfolioSelection);
+    };
+  }, []);
+
+  // Add event listener for clearing table data
+  React.useEffect(() => {
+    const handleClearTableData = () => {
+      // Only clear the table data when explicitly requested (e.g., on page refresh)
+      if (window.performance.navigation.type === 1) {  // Check if it's a page refresh
+        setTableData([]);
+        setRegion('');
+        setSize('');
+        setPricingModel('');
+        setUUID('');
+        setQuantity('');
+        setHours('');
+        setPortfolioName('');
+      }
+    };
+
+    window.addEventListener('clearTableData', handleClearTableData);
+    return () => {
+      window.removeEventListener('clearTableData', handleClearTableData);
+    };
+  }, [setTableData]);
+
+  // Check if form is filled whenever any field changes
+  React.useEffect(() => {
+    // All fields except portfolio name and UUID are required for adding instance
+    const isFormComplete = region && size && pricingModel && quantity && hours;
+    setIsFormFilled(isFormComplete);
+  }, [region, size, pricingModel, quantity, hours, setIsFormFilled]);
 
   const handleAdd = () => {
-    if (region && size && pricingModel && uuid && quantity && hours) {
+    if (region && size && pricingModel && quantity && hours) {
       const newRow = {
-        uuid,
+        uuid: uuid || '',  // UUID optional
         region,
         size,
         quantity,
         hours,
         pricingModel
       };
-      setTableData((prev) => [...prev, newRow]);
+      
+      setTableData(prev => {
+        const newData = [...prev, newRow];
+        if (newData.length > 0) {
+          setIsTableCreated(true);
+        }
+        // Save to localStorage
+        if (portfolioName) {  // Only save to localStorage if portfolio name exists
+          localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(newData));
+        }
+        return newData;
+      });
+
+      // Clear instance fields but keep portfolio name and table
+      setRegion('');
+      setSize('');
+      setPricingModel('');
+      setUUID('');
+      setQuantity('');
+      setHours('');
+
+      // Show success alert
+      setSuccessOpen(true);
+    } else {
+      setErrorOpen(true);
     }
   };
 
@@ -65,25 +137,41 @@ const PortfolioForm = () => {
     <>
       {/* Top Section */}
       <Grid container spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
-        <Grid item xs={6} md={3}>
+        <Grid item xs={6} md={4}>
           <TextField
             id="portfolio-name"
-            label="Portfolio Name*"
+            label="Portfolio Name"
             variant="outlined"
             fullWidth
             size="small"
+            value={portfolioName}
+            onChange={(e) => setPortfolioName(e.target.value)}
+            sx={{ width: '350px' }}
           />
         </Grid>
 
-        <Grid item xs={6} md={5}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
-            <Stack direction="row" spacing={8}>
+        <Grid item xs={6} md={8}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 4,
+            justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+            width: '100%',
+            pl: 40
+          }}>
+            <Stack direction="row" spacing={4}>
               <Button variant="contained" startIcon={<Upload />} sx={commonBtnStyle}>Upload</Button>
-              <Button component="a" href="/PortfolioTemplate.csv" download="PortfolioTemplate.csv" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
+              <Button component="a" href="/PortfolioTemplate.xlsx" download="PortfolioTemplate.xlsx" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
             </Stack>
             <Link
               href="#"
-              sx={{ color: 'black', textDecoration: 'none', '&:hover': { textDecoration: 'underline' }, whiteSpace: 'nowrap' }}
+              sx={{ 
+                color: 'black', 
+                textDecoration: 'none', 
+                '&:hover': { textDecoration: 'underline' }, 
+                whiteSpace: 'nowrap',
+                ml: 6
+              }}
             >
               Cloud Usage Reports
             </Link>
@@ -127,13 +215,14 @@ const PortfolioForm = () => {
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Quantity"
+            label="Quantity*"
             variant="outlined"
             type="number"
             sx={{ width: '200px' }}
             size="small"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
+            required
           />
         </Grid>
 
@@ -146,6 +235,7 @@ const PortfolioForm = () => {
             size="small"
             value={hours}
             onChange={(e) => setHours(e.target.value)}
+            required
           />
         </Grid>
 
@@ -192,7 +282,85 @@ const PortfolioForm = () => {
       </Grid>
 
       {/* Table appears here if data exists */}
-      {tableData.length > 0 && <PortfolioTable data={tableData} />}
+      {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={setTableData} />}
+
+      {/* Error Snackbar */}
+      <Snackbar
+        open={errorOpen}
+        autoHideDuration={4000}
+        onClose={() => setErrorOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#b4001e',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).</span>
+          <Button
+            onClick={() => setErrorOpen(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto'
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
+
+      {/* ✅ Success Snackbar */}
+      <Snackbar
+        open={successOpen}
+        autoHideDuration={4000}
+        onClose={() => setSuccessOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>Instance added successfully</span>
+          <Button
+            onClick={() => setSuccessOpen(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto'
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
     </>
   );
 };

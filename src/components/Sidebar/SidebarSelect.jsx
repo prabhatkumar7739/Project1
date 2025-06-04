@@ -11,7 +11,16 @@ import {
 const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
   const theme = useTheme();
   return (
-    <FormControl fullWidth variant="outlined">
+    <FormControl 
+      variant="outlined" 
+      size="small"
+      sx={{
+        width: "100%",
+        "& .MuiOutlinedInput-root": {
+          height: "40px"
+        }
+      }}
+    >
       <InputLabel>Service Provider</InputLabel>
       <Select
         value={value}
