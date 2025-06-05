@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -6,6 +7,7 @@ import {
   IconButton,
   Button,
   Box,
+  Menu,
   Menu,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -95,8 +97,23 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
 
           {/* Support Button */}
           <IconButton color="inherit" onClick={handleSupportClick}>
+
+          {/* Support Button */}
+          <IconButton color="inherit" onClick={handleSupportClick}>
             <HeadsetMicIcon />
           </IconButton>
+          <SupportPopover
+            anchorEl={supportAnchorEl}
+            handleClose={handleSupportClose}
+          />
+
+          {/* User Menu */}
+          <IconButton
+            color="inherit"
+            onClick={handleMenuClick}
+            aria-controls="user-menu"
+            aria-haspopup="true"
+          >
           <SupportPopover
             anchorEl={supportAnchorEl}
             handleClose={handleSupportClose}
@@ -161,4 +178,5 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
 };
 
 export default TopNavBar;
+
 

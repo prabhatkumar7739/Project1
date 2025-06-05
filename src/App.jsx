@@ -11,6 +11,9 @@ import NotificationBar from './components/NotificationBar/NotificationBar';
 import { CloudProviderProvider } from './context/CloudProviderContext';
 import { FormTableProvider } from './context/FormTableContext';
 import { PortfolioProvider } from './context/PortfolioContext';
+import { CloudProviderProvider } from './context/CloudProviderContext';
+import { FormTableProvider } from './context/FormTableContext';
+import { PortfolioProvider } from './context/PortfolioContext';
 
 function App() {
   const [currentView, setCurrentView] = useState('portfolio');

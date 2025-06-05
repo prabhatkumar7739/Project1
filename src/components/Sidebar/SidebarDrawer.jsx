@@ -4,13 +4,16 @@ import {
   useTheme,
   IconButton,
   Select,
+  Select,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import SidebarSelect from "./SidebarSelect";
 import PortfolioHeader from "./PortfolioHeader";
 import PortfolioList from "./PortfolioList";
 import { useCloudProvider } from '../../context/CloudProviderContext';
+import { useCloudProvider } from '../../context/CloudProviderContext';
 
+const drawerWidth = "17%";
 const drawerWidth = "17%";
 
 const selectOptions = [
