@@ -47,14 +47,27 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
             alt="AMD Logo"
             style={{ height: 32, marginRight: 60 }}
           />
-          <Typography variant="h6" fontWeight="bold" mr={4}>
+          <Typography 
+            variant="h6" 
+            sx={{
+              fontFamily: "'Titillium Web', sans-serif",
+              fontWeight: 600,
+              fontSize: "1.25rem",
+              letterSpacing: "0.02em",
+              marginRight: 4
+            }}
+          >
             EPYC Cloud Cost Advisor
           </Typography>
           <Button 
             color="inherit" 
             sx={{ 
               textDecoration: currentView === 'portfolio' ? "underline" : "none",
-              mr: 2
+              mr: 2,
+              fontFamily: "'Titillium Web', sans-serif",
+              fontWeight: 400,
+              textTransform: "none",
+              fontSize: "1rem"
             }}
             onClick={() => onViewChange('portfolio')}
           >
@@ -63,7 +76,11 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           <Button 
             color="inherit"
             sx={{ 
-              textDecoration: currentView === 'explorer' ? "underline" : "none"
+              textDecoration: currentView === 'explorer' ? "underline" : "none",
+              fontFamily: "'Titillium Web', sans-serif",
+              fontWeight: 400,
+              textTransform: "none",
+              fontSize: "1rem"
             }}
             onClick={() => onViewChange('explorer')}
           >
@@ -94,17 +111,29 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           >
             <AccountCircleIcon />
           </IconButton>
-          <Typography variant="body2">testuser@infobellit.com</Typography>
+          <Typography 
+            variant="body2" 
+            sx={{
+              fontFamily: "'Titillium Web', sans-serif",
+              fontWeight: 400,
+              fontSize: "0.875rem"
+            }}
+          >
+            testuser@infobellit.com
+          </Typography>
 
           <style>
             {`
               #user-menu .MuiPaper-root {
                 background-color: #000 !important;
                 color: #fff !important;
+                font-family: 'Titillium Web', sans-serif !important;
               }
               #user-menu .MuiMenuItem-root {
                 color: #fff !important;
                 margin-bottom: 8px !important;
+                font-family: 'Titillium Web', sans-serif !important;
+                font-weight: 400 !important;
               }
               #user-menu .MuiMenuItem-root:last-child {
                 margin-bottom: 0 !important;

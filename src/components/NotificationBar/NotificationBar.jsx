@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
@@ -8,6 +9,7 @@ import { useFormTable } from '../../context/FormTableContext';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 const NotificationBar = ({ onViewChange }) => {
+  const navigate = useNavigate();
   const { areButtonsEnabled, resetTable, tableData, setTableData } = useFormTable();
   const { removePortfolio } = usePortfolio();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -193,7 +195,10 @@ const NotificationBar = ({ onViewChange }) => {
           <Button
             startIcon={<AttachMoneyIcon />}
             disabled={!areButtonsEnabled}
-            onClick={() => onViewChange('cost-advice')}
+            onClick={() => {
+              onViewChange('cost-advice');
+              navigate('/cost-advice');
+            }}
             sx={{
               backgroundColor: '#5c5c5c',
               color: '#fff',

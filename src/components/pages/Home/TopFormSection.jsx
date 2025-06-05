@@ -50,7 +50,7 @@ const PortfolioForm = () => {
   const [portfolioName, setPortfolioName] = useState('');
   const [errorOpen, setErrorOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
-  
+
   const { setIsFormFilled, setIsTableCreated, tableData, setTableData } = useFormTable();
 
   // Listen for portfolio selection
@@ -69,8 +69,7 @@ const PortfolioForm = () => {
   // Add event listener for clearing table data
   React.useEffect(() => {
     const handleClearTableData = () => {
-      // Only clear the table data when explicitly requested (e.g., on page refresh)
-      if (window.performance.navigation.type === 1) {  // Check if it's a page refresh
+      if (window.performance.navigation.type === 1) {
         setTableData([]);
         setRegion('');
         setSize('');
@@ -105,7 +104,7 @@ const PortfolioForm = () => {
         hours,
         pricingModel
       };
-      
+
       setTableData(prev => {
         const newData = [...prev, newRow];
         if (newData.length > 0) {
@@ -151,24 +150,27 @@ const PortfolioForm = () => {
         </Grid>
 
         <Grid item xs={6} md={8}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
             gap: 4,
             justifyContent: { xs: 'flex-start', sm: 'flex-end' },
             width: '100%',
             pl: 40
           }}>
             <Stack direction="row" spacing={4}>
-              <Button variant="contained" startIcon={<Upload />} sx={commonBtnStyle}>Upload</Button>
-              <Button component="a" href="/PortfolioTemplate.xlsx" download="PortfolioTemplate.xlsx" variant="contained" startIcon={<Download />} sx={commonBtnStyle}>Template</Button>
+              <Button variant="contained" startIcon={<Upload />} sx={{ ...commonBtnStyle, textTransform: "none" }}>Upload</Button>
+
+              <Button component="a" href="/PortfolioTemplate.xlsx" download="PortfolioTemplate.xlsx" variant="contained" startIcon={<Download />}
+                sx={{ ...commonBtnStyle, textTransform: "none" }}>Template</Button>
             </Stack>
+
             <Link
               href="#"
-              sx={{ 
-                color: 'black', 
-                textDecoration: 'none', 
-                '&:hover': { textDecoration: 'underline' }, 
+              sx={{
+                color: 'black',
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' },
                 whiteSpace: 'nowrap',
                 ml: 6
               }}

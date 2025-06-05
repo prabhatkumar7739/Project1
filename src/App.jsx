@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme/theme';
 import TopNavBar from './components/Header/TopNavBar';
 import Footer from './components/Footer/Footer';
 import Home from './components/pages/Home/Home';
 import Explorer from './components/pages/Explorer/Explorer';
-import CostAdvice from './components/pages/CostAdvice';
+import CostAdvicePage from './components/pages/CostAdvicePage/CostAdvicePage';
 import NotificationBar from './components/NotificationBar/NotificationBar';
 import { CloudProviderProvider } from './context/CloudProviderContext';
 import { FormTableProvider } from './context/FormTableContext';
@@ -12,7 +14,7 @@ import { PortfolioProvider } from './context/PortfolioContext';
 
 function App() {
   const [currentView, setCurrentView] = useState('portfolio');
-// // Initialize currentView to 'portfolio' to show the Home component by default
+
   const renderContent = () => {
     switch(currentView) {
       case 'portfolio':
@@ -20,32 +22,35 @@ function App() {
       case 'explorer':
         return <Explorer />;
       case 'cost-advice':
-        return <CostAdvice />;
+        return <CostAdvicePage />;
       default:
         return <Home />;
     }
   };
-    // Render the content based on the current view
+
   return (
-    <CloudProviderProvider>
-      <FormTableProvider>
-        <PortfolioProvider>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh', 
-            backgroundColor: '#f5f5f5'
-          }}>
-            <TopNavBar onViewChange={setCurrentView} currentView={currentView} />
-            <Box sx={{ display: 'flex', flexGrow: 1 }}>
-              {renderContent()}
+    <ThemeProvider theme={theme}>
+      <CloudProviderProvider>
+        <FormTableProvider>
+          <PortfolioProvider>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh', 
+              backgroundColor: '#f5f5f5'
+            }}>
+              <TopNavBar onViewChange={setCurrentView} currentView={currentView} />
+              <Box sx={{ display: 'flex', flexGrow: 1 }}>
+                {renderContent()}
+              </Box>
+              {/* Only show NotificationBar on portfolio view */}
+              {currentView === 'portfolio' && <NotificationBar onViewChange={setCurrentView} />}
+              <Footer />
             </Box>
-            {currentView === 'portfolio' && <NotificationBar onViewChange={setCurrentView} />}
-            <Footer />
-          </Box>
-        </PortfolioProvider>
-      </FormTableProvider>
-    </CloudProviderProvider>
+          </PortfolioProvider>
+        </FormTableProvider>
+      </CloudProviderProvider>
+    </ThemeProvider>
   );
 }
 
