@@ -9,7 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import InfoIcon from "@mui/icons-material/Info";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ClassIcon from '@mui/icons-material/Class';
-import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import OnlineDocumentationDialog from './OnlineDocumentationDialog';
 import AboutDialog from './AboutDialog';
 
@@ -35,7 +35,7 @@ const UserMenu = ({ onClose }) => {
         onClick={() => setDocOpen(true)}
       >
         <ListItemIcon>
-          <HelpOutlineRoundedIcon fontSize="medium" sx={{ color: "#fff" }} />
+          <QuestionMarkIcon fontSize="medium" sx={{ color: "#fff" }} />
         </ListItemIcon>
         <ListItemText>Online Documentation</ListItemText>
       </MenuItem>

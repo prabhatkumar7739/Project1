@@ -24,9 +24,10 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { useFormTable } from '../../context/FormTableContext';
+import SharedNotification from '../../components/SharedNotification/SharedNotification';
 
 // Constants
 const BASE_PRICE = 0.05;
@@ -73,12 +74,14 @@ const COMMON_STYLES = {
   }
 };
 
-const CostAdvice = () => {
+const CostAdvice = ({ onClose }) => {
   const [savingsType, setSavingsType] = useState('All');
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [showCostAdviceNote, setShowCostAdviceNote] = useState(true);
+  const [showNotification, setShowNotification] = useState(true);
   const { portfolioList } = usePortfolio();
   const { tableData } = useFormTable();
+
+  const notificationMessage = "Cloud service providers (CSPs) offer spot instances at discounted rates, but pricing is dynamic and depends on current demand and capacity. Availability is not guaranteed, and instances can be reclaimed by the CSP at any time use only for workloads that can handle interruptions.";
 
   // Memoized helper functions
   const extractVCPU = useCallback((size) => {
@@ -229,6 +232,13 @@ const CostAdvice = () => {
     setSavingsType(e.target.value);
   }, []);
 
+  const handleClose = () => {
+    // Use the onClose prop to navigate back
+    if (onClose) {
+      onClose();
+    }
+  };
+
   // Memoize the visible rows based on pagination
   const visibleRows = useMemo(() => {
     const startIndex = 0;
@@ -237,14 +247,23 @@ const CostAdvice = () => {
   }, [transformedData, itemsPerPage]);
 
   return (
-    <Box sx={{ position: 'relative', height: '100%' }}>
+    <Box sx={{ 
+      position: 'relative', 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      width: '100%'
+    }}>
+      {/* Main Content */}
       <Box sx={{ 
         p: 2.5, 
         bgcolor: '#f5f5f5', 
         width: '100%', 
         overflowX: 'auto',
         color: '#333333',
-        pb: showCostAdviceNote ? '60px' : '20px'
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1
       }}>
         <Box sx={{ 
           display: 'flex', 
@@ -308,7 +327,7 @@ const CostAdvice = () => {
                   }
                 }}
               >
-                <HelpOutlineIcon sx={{ fontSize: '1rem' }} />
+                <QuestionMarkIcon sx={{ fontSize: '1rem' }} />
               </IconButton>
 
               <Box sx={{ display: 'flex', gap: 2, ml: 1 }}>
@@ -698,8 +717,14 @@ const CostAdvice = () => {
         </TableContainer>
 
         <Pagination itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
-        <CostAdviceNote showCostAdviceNote={showCostAdviceNote} setShowCostAdviceNote={setShowCostAdviceNote} />
       </Box>
+
+      {/* Notification Bar - Between content and footer */}
+      <SharedNotification
+        show={true}
+        message={notificationMessage}
+        onClose={handleClose}
+      />
     </Box>
   );
 };

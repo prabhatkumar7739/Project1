@@ -1,4 +1,6 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import * as XLSX from 'xlsx';
 import {
   Box,
   Grid,
@@ -9,11 +11,20 @@ import {
   Button,
   Stack,
   Link,
-  Snackbar
+  Snackbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+  Typography
 } from '@mui/material';
-import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
+import { Add, FileCopy, FileUploadOutlined, FileDownloadOutlined } from '@mui/icons-material';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import PortfolioTable from '../../PortfolioTable/PortfolioTable';
 import { useFormTable } from '../../../context/FormTableContext';
+import FindReplaceDialog from './FindReplaceDialog';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
@@ -40,7 +51,7 @@ const textFieldProps = (label, value, onChange, width = 200, options = []) => (
   </FormControl>
 );
 
-const PortfolioForm = () => {
+const PortfolioForm = ({ onCostAdviceClick }) => {
   const [region, setRegion] = useState('');
   const [size, setSize] = useState('');
   const [pricingModel, setPricingModel] = useState('');
@@ -50,6 +61,11 @@ const PortfolioForm = () => {
   const [portfolioName, setPortfolioName] = useState('');
   const [errorOpen, setErrorOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
+  const [findReplaceOpen, setFindReplaceOpen] = useState(false);
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
+  const fileInputRef = useRef(null);
+  const [uploadError, setUploadError] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState('');
 
   const { setIsFormFilled, setIsTableCreated, tableData, setTableData } = useFormTable();
 
@@ -97,7 +113,7 @@ const PortfolioForm = () => {
   const handleAdd = () => {
     if (region && size && pricingModel && quantity && hours) {
       const newRow = {
-        uuid: uuid || '',  // UUID optional
+        uuid: uuid || uuidv4(),  // Use provided UUID or generate a new one
         region,
         size,
         quantity,
@@ -132,6 +148,40 @@ const PortfolioForm = () => {
     }
   };
 
+  const handleReplaceAll = (updatedData) => {
+    // Save to localStorage if portfolio name exists
+    if (portfolioName) {
+      localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(updatedData));
+    }
+    setTableData(updatedData);
+    setSuccessOpen(true); // Show success message
+  };
+
+  const handleUploadClick = () => {
+    // Dummy data
+    const dummyData = [{
+      uuid: 'f7b20c7d-cd5a-4949-bb6f-f320379d6848',
+      region: 'us-west',
+      size: 'c4-highmem-16',
+      quantity: '2',
+      hours: '30',
+      pricingModel: 'ondemand'
+    }];
+
+    // Set the dummy file name
+    setSelectedFileName('Instance.xlsx');
+    
+    // Set the table data
+    setTableData(dummyData);
+    setIsTableCreated(true);
+    setSuccessOpen(true);
+
+    // Save to localStorage if portfolio name exists
+    if (portfolioName) {
+      localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(dummyData));
+    }
+  };
+
   return (
     <>
       {/* Top Section */}
@@ -153,26 +203,74 @@ const PortfolioForm = () => {
           <Box sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 4,
-            justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+            justifyContent: 'flex-end',
             width: '100%',
-            pl: 40
+            gap: 3
           }}>
-            <Stack direction="row" spacing={4}>
-              <Button variant="contained" startIcon={<Upload />} sx={{ ...commonBtnStyle, textTransform: "none" }}>Upload</Button>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: 2,
+              flex: '0 0 auto' // Prevent flex items from growing or shrinking
+            }}>
+              {selectedFileName && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: 500,
+                    color: 'black',
+                    textDecoration: 'underline',
+                    cursor: 'default',
+                    flex: '0 0 auto' // Prevent text from wrapping
+                  }}
+                >
+                  {selectedFileName}
+                </Typography>
+              )}
+              <Button 
+                variant="contained" 
+                startIcon={<FileUploadOutlined />} 
+                onClick={handleUploadClick}
+                sx={{ 
+                  bgcolor: 'black',
+                  color: 'white',
+                  '&:hover': { bgcolor: '#333' },
+                  textTransform: 'none',
+                  minWidth: '120px',
+                  flex: '0 0 auto' // Prevent button from growing
+                }}
+              >
+                Upload
+              </Button>
 
-              <Button component="a" href="/PortfolioTemplate.xlsx" download="PortfolioTemplate.xlsx" variant="contained" startIcon={<Download />}
-                sx={{ ...commonBtnStyle, textTransform: "none" }}>Template</Button>
-            </Stack>
+              <Button 
+                component="a" 
+                href="/PortfolioTemplate.xlsx" 
+                download="PortfolioTemplate.xlsx" 
+                variant="contained" 
+                startIcon={<FileDownloadOutlined />}
+                sx={{ 
+                  bgcolor: 'black',
+                  color: 'white',
+                  '&:hover': { bgcolor: '#333' },
+                  textTransform: 'none',
+                  minWidth: '120px',
+                  flex: '0 0 auto' // Prevent button from growing
+                }}
+              >
+                Template
+              </Button>
+            </Box>
 
             <Link
-              href="#"
+              component="button"
+              onClick={onCostAdviceClick}
               sx={{
                 color: 'black',
                 textDecoration: 'none',
                 '&:hover': { textDecoration: 'underline' },
                 whiteSpace: 'nowrap',
-                ml: 6
+                flex: '0 0 auto' // Prevent link from wrapping
               }}
             >
               Cloud Usage Reports
@@ -217,7 +315,7 @@ const PortfolioForm = () => {
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Quantity*"
+            label="Quantity"
             variant="outlined"
             type="number"
             sx={{ width: '200px' }}
@@ -230,7 +328,7 @@ const PortfolioForm = () => {
 
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Total Number of Hours per Month*"
+            label="Total Number of Hours per Month"
             variant="outlined"
             type="number"
             sx={{ width: '400px' }}
@@ -260,25 +358,35 @@ const PortfolioForm = () => {
             <Button
               variant="contained"
               sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
+              onClick={() => setFindReplaceOpen(true)}
             >
               <FileCopy />
             </Button>
 
             <Button
               variant="outlined"
+              onClick={() => setOpenHelpDialog(true)}
               sx={{
-                backgroundColor: 'white',
-                color: 'black',
-                borderColor: 'black',
-                '&:hover': { backgroundColor: '#f5f5f5', borderColor: 'black' },
                 minWidth: '40px',
                 width: '40px',
                 height: '40px',
-                padding: 0
+                padding: 0,
+                borderRadius: '50%',
+                backgroundColor: '#fff',
+                boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.15)',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                  boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.2)'
+                }
               }}
             >
-              <HelpOutline />
+              <QuestionMarkIcon sx={{ color: '#999' }} />
             </Button>
+
           </Box>
         </Grid>
       </Grid>
@@ -308,7 +416,7 @@ const PortfolioForm = () => {
             fontSize: '14px'
           }}
         >
-          <span>Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).</span>
+          <span>{uploadError || 'Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).'}</span>
           <Button
             onClick={() => setErrorOpen(false)}
             sx={{
@@ -325,7 +433,7 @@ const PortfolioForm = () => {
         </Box>
       </Snackbar>
 
-      {/* ✅ Success Snackbar */}
+      {/* Success Snackbar - update message */}
       <Snackbar
         open={successOpen}
         autoHideDuration={4000}
@@ -347,7 +455,7 @@ const PortfolioForm = () => {
             fontSize: '14px'
           }}
         >
-          <span>Instance added successfully</span>
+          <span>Changes applied successfully</span>
           <Button
             onClick={() => setSuccessOpen(false)}
             sx={{
@@ -363,6 +471,130 @@ const PortfolioForm = () => {
           </Button>
         </Box>
       </Snackbar>
+
+      <Dialog
+        open={findReplaceOpen}
+        onClose={() => setFindReplaceOpen(false)}
+        PaperProps={{
+          sx: {
+            width: 'auto',
+            maxWidth: 'none',
+            m: 0
+          }
+        }}
+      >
+        <FindReplaceDialog
+          onClose={() => setFindReplaceOpen(false)}
+          tableData={tableData}
+          onReplaceAll={handleReplaceAll}
+        />
+      </Dialog>
+
+      {/* Help Dialog */}
+      <Dialog 
+        open={openHelpDialog} 
+        onClose={() => setOpenHelpDialog(false)}
+        maxWidth={false}
+        PaperProps={{
+          sx: {
+            width: '800px',
+            p: 0,
+            '& .MuiDialogContent-root': {
+              p: 2,
+              maxHeight: '600px',
+              overflowY: 'visible'
+            }
+          }
+        }}
+      >
+        <DialogTitle sx={{ 
+          p: 2,
+          pb: 1.5,
+          fontWeight: 'normal',
+          fontSize: '1.25rem'
+        }}>
+          How data corrections are applied
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <List sx={{ 
+            py: 0,
+            '& .MuiListItem-root': {
+              py: 1.5
+            }
+          }}>
+            <ListItem>
+              <ListItemText
+                primary="1. Cloud Selection:"
+                secondary="If the cloud is empty, invalid, or unsupported, it will be replaced with the default CSP selected."
+                primaryTypographyProps={{
+                  fontWeight: 500,
+                  mb: 0.5
+                }}
+                secondaryTypographyProps={{
+                  fontSize: '14px'
+                }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="2. Quantity:"
+                secondary={
+                  <>
+                    • The quantity should be a positive number. If a floating-point number is provided, it will be rounded off.<br/>
+                    • If the value is not mentioned, it will default to 1.
+                  </>
+                }
+                primaryTypographyProps={{
+                  fontWeight: 500,
+                  mb: 0.5
+                }}
+                secondaryTypographyProps={{
+                  fontSize: '14px'
+                }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="3. Number of Hours per Month:"
+                secondary={
+                  <>
+                    • If the value is empty, it will be set to (quantity * 730). For example, if the quantity is 5 and the number of hours per month is not mentioned, it will be auto-corrected to (5 * 730) = 3650.<br/>
+                    • If the value exceeds (quantity * 730), it will automatically be set to (quantity * 730).<br/>
+                    • If the value is a floating-point number, it will be rounded off.
+                  </>
+                }
+                primaryTypographyProps={{
+                  fontWeight: 500,
+                  mb: 0.5
+                }}
+                secondaryTypographyProps={{
+                  fontSize: '14px'
+                }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="4. Pricing Model:"
+                secondary={
+                  <>
+                    • Currently, only two pricing models are supported: on-demand and reserved.<br/>
+                    • If the pricing model is empty, it will default to on-demand.<br/>
+                    • If the value is something other than the supported options, the user can replace it with on-demand or reserved using the "find and replace" option.
+                  </>
+                }
+                primaryTypographyProps={{
+                  fontWeight: 500,
+                  mb: 0.5
+                }}
+                secondaryTypographyProps={{
+                  fontSize: '14px'
+                }}
+              />
+            </ListItem>
+          </List>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

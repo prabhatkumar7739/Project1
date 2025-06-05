@@ -22,7 +22,7 @@ function App() {
       case 'explorer':
         return <Explorer />;
       case 'cost-advice':
-        return <CostAdvicePage />;
+        return <CostAdvicePage onViewChange={setCurrentView} />;
       default:
         return <Home />;
     }

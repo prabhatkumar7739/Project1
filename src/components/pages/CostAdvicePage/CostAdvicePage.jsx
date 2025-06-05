@@ -3,21 +3,28 @@ import { Box } from '@mui/material';
 import CostAdvice from '../CostAdvice';
 import Sidebar from '../../Sidebar/Sidebar';
 
-const CostAdvicePage = () => {
+const CostAdvicePage = ({ onViewChange }) => {
+  const handleClose = () => {
+    if (onViewChange) {
+      onViewChange('portfolio');
+    }
+  };
+
   return (
     <div style={{ 
       display: 'flex',
       flexGrow: 1,
       backgroundColor: '#f5f5f5',
       height: '80vh',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      width: '100%'
     }}>
       <Sidebar />
       <Box sx={{ 
-        width: '83%',
+        width: '100%',
         overflow: 'auto'
       }}>
-        <CostAdvice />
+        <CostAdvice onClose={handleClose} />
       </Box>
     </div>
   );
