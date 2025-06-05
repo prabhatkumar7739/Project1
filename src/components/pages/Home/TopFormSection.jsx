@@ -10,12 +10,9 @@ import {
   Stack,
   Link,
   Snackbar
-  Link,
-  Snackbar
 } from '@mui/material';
 import { Upload, Download, Add, FileCopy, HelpOutline } from '@mui/icons-material';
 import PortfolioTable from '../../PortfolioTable/PortfolioTable';
-import { useFormTable } from '../../../context/FormTableContext';
 import { useFormTable } from '../../../context/FormTableContext';
 
 const commonBtnStyle = {
@@ -140,16 +137,12 @@ const PortfolioForm = () => {
       {/* Top Section */}
       <Grid container spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
         <Grid item xs={6} md={4}>
-        <Grid item xs={6} md={4}>
           <TextField
             id="portfolio-name"
             label="Portfolio Name"
             variant="outlined"
             fullWidth
             size="small"
-            value={portfolioName}
-            onChange={(e) => setPortfolioName(e.target.value)}
-            sx={{ width: '350px' }}
             value={portfolioName}
             onChange={(e) => setPortfolioName(e.target.value)}
             sx={{ width: '350px' }}
