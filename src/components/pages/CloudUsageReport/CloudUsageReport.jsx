@@ -93,7 +93,6 @@ const CloudUsageReport = ({ onClose }) => {
     <Box sx={{ 
       display: 'flex',
       minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
       width: '100%'
     }}>
       <Sidebar />
@@ -102,7 +101,7 @@ const CloudUsageReport = ({ onClose }) => {
         width: `calc(100% - ${drawerWidth})`,
         minHeight: '100vh',
         p: 3, 
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f0f0f0',
       }}>
         <Box sx={{ 
           display: 'flex', 

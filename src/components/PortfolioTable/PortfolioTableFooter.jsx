@@ -5,7 +5,7 @@ import { useCloudProvider } from '../../context/CloudProviderContext';
 
 const providerLinks = {
   AWS: {
-    url: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html',
+    url: 'https://cca-prod.amd.com/regionLists?providerName=AWS',
     text: 'List of AWS Regions'
   },
   Azure: {

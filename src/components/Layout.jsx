@@ -55,10 +55,14 @@ const Layout = () => {
               display: 'flex',
               flexDirection: 'column',
               minHeight: '100vh',
-              backgroundColor: '#f5f5f5'
+              backgroundColor: '#f0f0f0'
             }}>
               <TopNavBar currentView={currentView} onViewChange={handleViewChange} />
-              <Box sx={{ display: 'flex', flexGrow: 1 }}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexGrow: 1,
+                backgroundColor: '#f0f0f0'
+              }}>
                 <Outlet />
               </Box>
               {currentView === 'portfolio' && <NotificationBar onViewChange={handleViewChange} />}
