@@ -4,6 +4,7 @@ const PortfolioContext = createContext();
 
 export const PortfolioProvider = ({ children }) => {
   const [portfolioList, setPortfolioList] = useState([]);
+  const [activePortfolio, setActivePortfolio] = useState(null);
 
   const addPortfolio = (portfolioData) => {
     const portfolioName = typeof portfolioData === 'string' ? portfolioData : portfolioData.name;
@@ -21,6 +22,7 @@ export const PortfolioProvider = ({ children }) => {
     }
 
     setPortfolioList(prev => [portfolioData, ...prev]);
+    setActivePortfolio(portfolioName);
     return true;
   };
 
@@ -28,6 +30,9 @@ export const PortfolioProvider = ({ children }) => {
     setPortfolioList(prev => prev.filter(p => 
       typeof p === 'string' ? p !== portfolioName : p.name !== portfolioName
     ));
+    if (activePortfolio === portfolioName) {
+      setActivePortfolio(null);
+    }
   };
 
   return (
@@ -36,7 +41,9 @@ export const PortfolioProvider = ({ children }) => {
         portfolioList,
         setPortfolioList,
         addPortfolio,
-        removePortfolio
+        removePortfolio,
+        activePortfolio,
+        setActivePortfolio
       }}
     >
       {children}

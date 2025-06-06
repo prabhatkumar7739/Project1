@@ -6,7 +6,6 @@ import {
   Button,
   Select,
   MenuItem,
-  InputLabel,
   FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,6 +13,7 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import PropTypes from "prop-types";
 import { FIND_AND_REPLACE_FIELD_TYPES } from "../../../lib/constant";
 import FormAlert from "../../ui/FormAlert";
+import { commonSelectStyles } from "../../../styles/commonStyles";
 
 const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
   const [formValues, setFormValues] = useState({
@@ -34,7 +34,6 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
     }));
   };
 
-  // Check if any field pair is filled
   const isValid = Object.values(formValues).some(
     pair => pair.from && pair.to
   );
@@ -44,7 +43,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
       const updatedData = tableData.map((row) => {
         let changed = false;
         const newRow = { ...row };
-        
+
         Object.entries(formValues).forEach(([key, value]) => {
           if (value.from && value.to) {
             if (key === 'size' && row.size === value.from) {
@@ -61,7 +60,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
             }
           }
         });
-        
+
         return changed ? newRow : row;
       });
 
@@ -74,9 +73,9 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
   };
 
   return (
-    <Box sx={{ width: "400px" }}>
+    <Box sx={{ width: "400px", bgcolor: "#fff", borderRadius: 1 }}>
       <Box sx={{ p: "8px 12px" }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: 20 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 16 }}>
           Find and Replace
         </Typography>
       </Box>
@@ -84,40 +83,56 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
       <Box sx={{ p: 2 }}>
         {FIND_AND_REPLACE_FIELD_TYPES.map(({ key, label, options }) => (
           <Box key={key} sx={{ mb: 3 }}>
-            <Typography variant="caption" sx={{ fontSize: 16, fontWeight: 600 }}>
+            <Typography sx={{ fontSize: 14, fontWeight: 400, color: "#666", mb: 1 }}>
               {label}
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 1 }}>
-              <FormControl fullWidth>
-                <InputLabel>From</InputLabel>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              <FormControl fullWidth size="small">
                 <Select
                   value={formValues[key].from}
                   onChange={(e) => handleChange(key, 'from', e.target.value)}
-                  size="small"
+                  displayEmpty
+                  sx={{
+                    backgroundColor: '#f5f5f5',
+                    fontSize: 14,
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#e0e0e0'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'black',
+                      borderWidth: '2px'
+                    }
+                  }}
                 >
-                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value="" disabled>From</MenuItem>
                   {options.map((opt) => (
-                    <MenuItem key={opt} value={opt}>
-                      {opt}
-                    </MenuItem>
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40 }}>
-                <ArrowRightAltIcon />
-              </Box>
-              <FormControl fullWidth>
-                <InputLabel>To</InputLabel>
+
+              <ArrowRightAltIcon sx={{ color: "#555" }} />
+
+              <FormControl fullWidth size="small">
                 <Select
                   value={formValues[key].to}
                   onChange={(e) => handleChange(key, 'to', e.target.value)}
-                  size="small"
+                  displayEmpty
+                  sx={{
+                    backgroundColor: '#f5f5f5',
+                    fontSize: 14,
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#e0e0e0'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'black',
+                      borderWidth: '2px'
+                    }
+                  }}
                 >
-                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value="" disabled>To</MenuItem>
                   {options.map((opt) => (
-                    <MenuItem key={opt} value={opt}>
-                      {opt}
-                    </MenuItem>
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -125,25 +140,25 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
           </Box>
         ))}
       </Box>
+      <Divider />
       <Box
         sx={{
           display: "flex",
           justifyContent: "flex-end",
-          p: "10px 12px",
-          gap: 2,
-          borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+          p: "12px",
+          gap: 2
         }}
       >
         <Button
           variant="contained"
           startIcon={<CloseIcon />}
           onClick={onClose}
-          sx={{ 
+          sx={{
             textTransform: 'none',
-            backgroundColor: '#dc3545',
+            backgroundColor: '#b00020',
             color: 'white',
             '&:hover': {
-              backgroundColor: '#c82333'
+              backgroundColor: '#930017'
             }
           }}
         >
@@ -153,7 +168,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
           variant="contained"
           onClick={handleSubmit}
           disabled={!isValid}
-          sx={{ 
+          sx={{
             textTransform: 'none',
             backgroundColor: isValid ? '#000' : '#e0e0e0',
             color: isValid ? '#fff' : '#999',
@@ -162,7 +177,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
             }
           }}
         >
-          Replace All
+          Replace all
         </Button>
       </Box>
       {error && (

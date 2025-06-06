@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Snackbar
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,12 +20,28 @@ import { usePortfolio } from '../../context/PortfolioContext';
 const NotificationBar = ({ onViewChange }) => {
   const navigate = useNavigate();
   const { areButtonsEnabled, resetTable, tableData, setTableData } = useFormTable();
-  const { removePortfolio } = usePortfolio();
+  const { removePortfolio, portfolioList, activePortfolio } = usePortfolio();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [savedPortfolioName, setSavedPortfolioName] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    const handlePortfolioSelect = (event) => {
+      if (event.detail.portfolioName) {
+        setSavedPortfolioName(event.detail.portfolioName);
+        if (event.detail.enableButtons) {
+          setIsSaved(true);
+        }
+      }
+    };
+
+    window.addEventListener('updatePortfolioName', handlePortfolioSelect);
+    return () => {
+      window.removeEventListener('updatePortfolioName', handlePortfolioSelect);
+    };
+  }, []);
 
   useEffect(() => {
     const handleReset = (event) => {
@@ -32,15 +57,12 @@ const NotificationBar = ({ onViewChange }) => {
     };
   }, []);
 
-  // Reset isSaved when table data changes
   useEffect(() => {
     setIsSaved(false);
   }, [tableData]);
 
   const handleCancelClick = () => {
-    if (areButtonsEnabled) {
-      setIsDialogOpen(true);
-    }
+    setIsDialogOpen(true);
   };
 
   const handleDialogClose = () => {
@@ -48,11 +70,8 @@ const NotificationBar = ({ onViewChange }) => {
   };
 
   const handleConfirmDiscard = () => {
-    // Reset the table and form state
     resetTable();
-    // Close the dialog
     setIsDialogOpen(false);
-    // Dispatch a custom event to notify TopFormSection to clear table data
     const event = new CustomEvent('clearTableData');
     window.dispatchEvent(event);
   };
@@ -63,58 +82,38 @@ const NotificationBar = ({ onViewChange }) => {
 
   const handleConfirmDelete = () => {
     if (savedPortfolioName) {
-      // Remove the portfolio
       removePortfolio(savedPortfolioName);
-      
-      // Clear the table data
-      setTableData([]);
-      
-      // Reset the form
       resetTable();
-      
-      // Dispatch event to clear form data
-      const event = new CustomEvent('clearTableData');
-      window.dispatchEvent(event);
-
-      // Clear the saved portfolio name
       setSavedPortfolioName('');
-      
-      // Close the dialog
       setDeleteDialogOpen(false);
-
-      // Show success notification
       setSaveSuccess(true);
     }
   };
 
   const handleSave = () => {
-    // Get portfolio name from the form
     const portfolioNameInput = document.getElementById('portfolio-name');
     const portfolioName = portfolioNameInput ? portfolioNameInput.value : '';
 
     if (portfolioName && tableData.length > 0) {
-      // Save the portfolio name for delete functionality
       setSavedPortfolioName(portfolioName);
-      
-      // Dispatch event to save to portfolio
       const saveEvent = new CustomEvent('saveToPortfolio', {
-        detail: { 
+        detail: {
           portfolioName,
-          tableData 
+          tableData
         }
       });
       window.dispatchEvent(saveEvent);
-
-      // Don't reset the table after saving
-      // Just clear the portfolio name input
-      if (portfolioNameInput) {
-        portfolioNameInput.value = '';
-      }
-
-      // Show success message and set saved state
+      if (portfolioNameInput) portfolioNameInput.value = '';
       setSaveSuccess(true);
       setIsSaved(true);
     }
+  };
+
+  const buttonBaseStyle = {
+    minWidth: '140px',
+    borderRadius: '4px',
+    textTransform: 'none',
+    color: '#ffffff'
   };
 
   return (
@@ -140,17 +139,16 @@ const NotificationBar = ({ onViewChange }) => {
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button
             startIcon={<CloseIcon />}
-            disabled={!areButtonsEnabled}
             onClick={handleCancelClick}
+            disabled={portfolioList.length === 0 || !activePortfolio}
             sx={{
-              backgroundColor: '#d9534f',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#c9302c' },
-              textTransform: 'none',
-              px: 3,
+              ...buttonBaseStyle,
+              backgroundColor: '#c1022b',
+              '&:hover': { backgroundColor: '#a10024' },
               '&.Mui-disabled': {
-                backgroundColor: '#f0f0f0',
-                color: 'rgba(0, 0, 0, 0.26)'
+                backgroundColor: '#c1022b',
+                opacity: 0.6,
+                color: '#ffffff'
               }
             }}
           >
@@ -162,11 +160,14 @@ const NotificationBar = ({ onViewChange }) => {
               startIcon={<DeleteIcon />}
               onClick={handleDeletePortfolio}
               sx={{
-                backgroundColor: '#d9534f',
-                color: '#fff',
-                '&:hover': { backgroundColor: '#c9302c' },
-                textTransform: 'none',
-                px: 3
+                ...buttonBaseStyle,
+                backgroundColor: '#c1022b',
+                '&:hover': { backgroundColor: '#a10024' },
+                '&.Mui-disabled': {
+                  backgroundColor: '#c1022b',
+                  opacity: 0.6,
+                  color: '#ffffff'
+                }
               }}
             >
               Delete Portfolio
@@ -178,14 +179,13 @@ const NotificationBar = ({ onViewChange }) => {
             disabled={!areButtonsEnabled || isSaved}
             onClick={handleSave}
             sx={{
-              backgroundColor: '#5c5c5c',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#4a4a4a' },
-              textTransform: 'none',
-              px: 3,
+              ...buttonBaseStyle,
+              backgroundColor: '#000000',
+              '&:hover': { backgroundColor: '#333333' },
               '&.Mui-disabled': {
-                backgroundColor: '#f0f0f0',
-                color: 'rgba(0, 0, 0, 0.26)'
+                backgroundColor: '#000000',
+                opacity: 0.6,
+                color: '#ffffff'
               }
             }}
           >
@@ -194,20 +194,19 @@ const NotificationBar = ({ onViewChange }) => {
 
           <Button
             startIcon={<AttachMoneyIcon />}
-            disabled={!areButtonsEnabled}
+            disabled={!savedPortfolioName}
             onClick={() => {
               onViewChange('cost-advice');
               navigate('/cost-advice');
             }}
             sx={{
-              backgroundColor: '#5c5c5c',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#4a4a4a' },
-              textTransform: 'none',
-              px: 3,
+              ...buttonBaseStyle,
+              backgroundColor: '#000000',
+              '&:hover': { backgroundColor: '#333333' },
               '&.Mui-disabled': {
-                backgroundColor: '#f0f0f0',
-                color: 'rgba(0, 0, 0, 0.26)'
+                backgroundColor: '#000000',
+                opacity: 0.6,
+                color: '#ffffff'
               }
             }}
           >
@@ -216,115 +215,46 @@ const NotificationBar = ({ onViewChange }) => {
         </Box>
       </Box>
 
-      {/* Confirmation Dialog */}
-      <Dialog
-        open={isDialogOpen}
-        onClose={handleDialogClose}
-        aria-labelledby="unsaved-changes-dialog"
-      >
-        <DialogContent sx={{ pt: 2, pb: 1 }}>
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Discard Changes?</DialogTitle>
+        <DialogContent>
           <Typography>
-            You have unsaved changes.
-            <br />
-            Are you sure you want to discard changes?
+            Are you sure you want to discard all changes? This action cannot be undone.
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button
-            onClick={handleDialogClose}
-            variant="contained"
-            sx={{
-              backgroundColor: '#dc3545',
-              color: 'white',
-              '&:hover': { backgroundColor: '#bb2d3b' },
-              textTransform: 'none'
-            }}
-          >
-            No
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Cancel
           </Button>
-          <Button
-            onClick={handleConfirmDiscard}
-            variant="contained"
-            sx={{
-              backgroundColor: '#000000',
-              color: 'white',
-              '&:hover': { backgroundColor: '#333333' },
-              textTransform: 'none'
-            }}
-          >
-            Yes
+          <Button onClick={handleConfirmDiscard} color="error">
+            Discard
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Delete Portfolio Confirmation Dialog */}
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        aria-labelledby="delete-portfolio-dialog"
-      >
-        <DialogTitle>Delete Portfolio</DialogTitle>
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>Delete Portfolio?</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete portfolio "{savedPortfolioName}"?
-            This action cannot be undone.
+            Are you sure you want to delete this portfolio? This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={() => setDeleteDialogOpen(false)}
-            sx={{ color: '#666' }}
-          >
+          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button 
-            onClick={handleConfirmDelete}
-            color="error"
-            variant="contained"
-          >
+          <Button onClick={handleConfirmDelete} color="error">
             Delete
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Success Snackbar */}
       <Snackbar
         open={saveSuccess}
         autoHideDuration={3000}
         onClose={() => setSaveSuccess(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Box
-          sx={{
-            backgroundColor: '#4CAF50',
-            color: '#fff',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px',
-            borderRadius: '6px',
-            width: '100%',
-            maxWidth: '420px',
-            fontWeight: '500',
-            fontSize: '14px'
-          }}
-        >
-          <span>Successfully saved to portfolio</span>
-          <Button
-            onClick={() => setSaveSuccess(false)}
-            sx={{
-              color: '#fff',
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              fontSize: '12px',
-              padding: '4px 8px',
-              minWidth: 'auto'
-            }}
-          >
-            CLOSE
-          </Button>
-        </Box>
-      </Snackbar>
+        message={savedPortfolioName ? "Portfolio deleted successfully" : "Portfolio saved successfully"}
+      />
     </>
   );
 };

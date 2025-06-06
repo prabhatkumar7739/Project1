@@ -1,57 +1,24 @@
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme/theme';
-import TopNavBar from './components/Header/TopNavBar';
-import Footer from './components/Footer/Footer';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
 import Home from './components/pages/Home/Home';
+import CostAdvice from './components/pages/CostAdvice';
+import CloudUsageReport from './components/pages/CloudUsageReport/CloudUsageReport';
 import Explorer from './components/pages/Explorer/Explorer';
-import CostAdvicePage from './components/pages/CostAdvicePage/CostAdvicePage';
-import NotificationBar from './components/NotificationBar/NotificationBar';
-import { CloudProviderProvider } from './context/CloudProviderContext';
-import { FormTableProvider } from './context/FormTableContext';
-import { PortfolioProvider } from './context/PortfolioContext';
 
-function App() {
-  const [currentView, setCurrentView] = useState('portfolio');
-
-  const renderContent = () => {
-    switch(currentView) {
-      case 'portfolio':
-        return <Home />;
-      case 'explorer':
-        return <Explorer />;
-      case 'cost-advice':
-        return <CostAdvicePage onViewChange={setCurrentView} />;
-      default:
-        return <Home />;
-    }
-  };
-
+const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CloudProviderProvider>
-        <FormTableProvider>
-          <PortfolioProvider>
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: '100vh', 
-              backgroundColor: '#f5f5f5'
-            }}>
-              <TopNavBar onViewChange={setCurrentView} currentView={currentView} />
-              <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                {renderContent()}
-              </Box>
-              {/* Only show NotificationBar on portfolio view */}
-              {currentView === 'portfolio' && <NotificationBar onViewChange={setCurrentView} />}
-              <Footer />
-            </Box>
-          </PortfolioProvider>
-        </FormTableProvider>
-      </CloudProviderProvider>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="explorer" element={<Explorer />} />
+        <Route path="cost-advice" element={<CostAdvice />} />
+        <Route path="cloud-usage" element={<CloudUsageReport />} />
+        {/* Redirect any unknown routes to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
-}
+};
 
 export default App;

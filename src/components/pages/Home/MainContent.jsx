@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import TopFormSection from '../../pages/Home/TopFormSection';
-import CostAdvice from '../../pages/CostAdvice';
 import { Box } from '@mui/material';
 
 const MainContent = () => {
-  const [currentView, setCurrentView] = useState('main');
+  const navigate = useNavigate();
 
   const handleNavigateToCostAdvice = () => {
-    setCurrentView('costAdvice');
+    navigate('/cost-advice');
   };
 
-  const handleNavigateBack = () => {
-    setCurrentView('main');
+  const handleNavigateToCloudUsage = () => {
+    navigate('/cloud-usage');
   };
 
   return (
     <Box sx={{ 
       p: 3,
       flexGrow: 1,
+      marginLeft: '20px',
       width: '80%',
       backgroundColor: '#f5f5f5',
     }}>
-      {currentView === 'main' ? (
-        <TopFormSection onCostAdviceClick={handleNavigateToCostAdvice} />
-      ) : (
-        <CostAdvice onClose={handleNavigateBack} />
-      )}
+      <TopFormSection 
+        onCostAdviceClick={handleNavigateToCostAdvice}
+        onCloudUsageClick={handleNavigateToCloudUsage}
+      />
     </Box>
   );
 };

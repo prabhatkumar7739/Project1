@@ -17,7 +17,14 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
       sx={{
         width: "100%",
         "& .MuiOutlinedInput-root": {
-          height: "40px"
+          height: "40px",
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "black",
+            borderWidth: "2px"
+          }
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "black"
         }
       }}
     >

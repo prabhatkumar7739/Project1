@@ -14,6 +14,7 @@ const CostAdvicePage = ({ onViewChange }) => {
     <div style={{ 
       display: 'flex',
       flexGrow: 1,
+      marginLeft: '20px',
       backgroundColor: '#f5f5f5',
       height: '80vh',
       overflow: 'hidden',

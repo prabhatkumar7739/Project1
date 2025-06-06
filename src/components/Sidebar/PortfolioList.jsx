@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
-import {List, ListItem, ListItemText, Box, Typography, useTheme, ListItemIcon, Paper,} from "@mui/material";
+import React, { useEffect } from "react";
+import {List, ListItem, ListItemText, Box, Typography, useTheme, ListItemIcon, Paper, IconButton, Tooltip} from "@mui/material";
 import DescriptionIcon from '@mui/icons-material/Description';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FolderIcon from '@mui/icons-material/Folder';
+import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { useFormTable } from '../../context/FormTableContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function PortfolioList() {
-  const [activePortfolio, setActivePortfolio] = useState("UIAuto1488");
-  const { portfolioList, addPortfolio } = usePortfolio();
+  const { portfolioList, addPortfolio, activePortfolio, setActivePortfolio } = usePortfolio();
   const { setTableData, setIsTableCreated } = useFormTable();
   const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Listen for save portfolio events
   useEffect(() => {
@@ -24,10 +29,11 @@ export default function PortfolioList() {
     return () => {
       window.removeEventListener('saveToPortfolio', handleSavePortfolio);
     };
-  }, [addPortfolio]);
+  }, [addPortfolio, setActivePortfolio]);
 
   // Handle portfolio click
-  const handlePortfolioClick = (portfolioName) => {
+  const handlePortfolioClick = (portfolio) => {
+    const portfolioName = typeof portfolio === 'string' ? portfolio : portfolio.name;
     setActivePortfolio(portfolioName);
     
     // Get stored data for this portfolio from localStorage
@@ -41,10 +47,18 @@ export default function PortfolioList() {
       setIsTableCreated(false);
     }
 
-    // Dispatch event to update portfolio name field
+    // Dispatch event to update portfolio name field and enable buttons
     window.dispatchEvent(new CustomEvent('updatePortfolioName', {
-      detail: { portfolioName }
+      detail: { 
+        portfolioName,
+        enableButtons: true
+      }
     }));
+
+    // Check current location and navigate if needed
+    if (['/cost-advice', '/cloud-usage'].includes(location.pathname)) {
+      navigate('/');
+    }
   };
 
   return (
@@ -69,12 +83,14 @@ export default function PortfolioList() {
             <ListItem
               key={portfolioName}
               button
-              onClick={() => handlePortfolioClick(portfolioName)}
+              onClick={() => handlePortfolioClick(portfolio)}
               sx={{
                 py: 1,
                 px: 2,
                 color: isActive ? '#fff' : '#000',
                 backgroundColor: isActive ? '#000' : 'transparent',
+                borderRadius: '6px',
+                mb: 0.5,
                 '& .MuiListItemIcon-root': {
                   color: isActive ? '#fff' : '#666',
                   minWidth: 36

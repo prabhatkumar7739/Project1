@@ -13,7 +13,7 @@ const providerLinks = {
     text: 'List of Azure Regions'
   },
   GCP: {
-    url: 'https://cloud.google.com/compute/docs/regions-zones',
+    url: 'https://cca-prod.amd.com/regionLists?providerName=GCP',
     text: 'List of GCP Regions'
   }
 };

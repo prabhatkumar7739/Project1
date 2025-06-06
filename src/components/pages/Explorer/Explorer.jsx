@@ -336,6 +336,15 @@ const Explorer = () => {
             minWidth: 250,
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: '#e0e0e0',
+            },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'black',
+                borderWidth: '2px'
+              }
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'black'
             }
           }}
         >
@@ -358,6 +367,15 @@ const Explorer = () => {
             minWidth: 250,
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: '#e0e0e0',
+            },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'black',
+                borderWidth: '2px'
+              }
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'black'
             }
           }}
         >
@@ -384,15 +402,19 @@ const Explorer = () => {
             maxWidth: 250,
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: 'gray',
+                borderColor: '#e0e0e0',
               },
               '&:hover fieldset': {
-                borderColor: 'gray',
+                borderColor: '#666666'
               },
               '&.Mui-focused fieldset': {
-                borderColor: 'gray',
+                borderColor: 'black',
+                borderWidth: '2px'
               }
             },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'black'
+            }
           }}
         />
 
