@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Divider,
@@ -23,6 +23,13 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Generate unique options from table data
+  const tableOptions = useMemo(() => ({
+    size: [...new Set(tableData.map(row => row.size))],
+    region: [...new Set(tableData.map(row => row.region))],
+    pricingModel: [...new Set(tableData.map(row => row.pricingModel))]
+  }), [tableData]);
 
   const handleChange = (field, type, value) => {
     setFormValues(prev => ({
@@ -105,7 +112,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
                   }}
                 >
                   <MenuItem value="" disabled>From</MenuItem>
-                  {options.map((opt) => (
+                  {tableOptions[key].map((opt) => (
                     <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                   ))}
                 </Select>

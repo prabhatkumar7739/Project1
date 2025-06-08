@@ -5,11 +5,11 @@ import { useCloudProvider } from '../../context/CloudProviderContext';
 
 const providerLinks = {
   AWS: {
-    url: 'https://cca-prod.amd.com/regionLists?providerName=AWS',
+    url: 'https://cca-prod.amd.com/regionLists?providerName=aws',
     text: 'List of AWS Regions'
   },
   Azure: {
-    url: 'https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/',
+    url: 'https://cca-prod.amd.com/regionLists?providerName=azure',
     text: 'List of Azure Regions'
   },
   GCP: {

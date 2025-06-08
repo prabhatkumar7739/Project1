@@ -45,6 +45,11 @@ const PortfolioTableBody = ({
   // List of editable fields
   const editableFields = ['region', 'size', 'quantity', 'hours'];
 
+  // Medium compact size
+  const cellHeight = '38px';
+  const cellFontSize = '1rem';
+  const cellMinWidth = '90px';
+
   const getOptionsForField = (field) => {
     if (field === 'region') return regionOptions[selectedProvider] || [];
     if (field === 'size') return sizeOptions[selectedProvider] || [];
@@ -89,6 +94,7 @@ const PortfolioTableBody = ({
     const value = row[field];
     const isEditable = editableFields.includes(field);
     const isDropdown = field === 'region' || field === 'size';
+    const isNumberField = field === 'quantity' || field === 'hours';
 
     if (isEditing && isDropdown) {
       return (
@@ -97,7 +103,7 @@ const PortfolioTableBody = ({
           onChange={(e) => handleEditSave(actualIndex, e.target.value)}
           onClose={() => handleEditCancel()}
           autoFocus
-          variant="outlined"
+          variant="filled"
           IconComponent={KeyboardArrowDownIcon}
           MenuProps={{
             PaperProps: {
@@ -105,12 +111,13 @@ const PortfolioTableBody = ({
                 backgroundColor: '#121212',
                 color: 'white',
                 '& .MuiMenuItem-root': {
-                  fontSize: '14px',
+                  fontSize: cellFontSize,
+                  minHeight: cellHeight,
                   '&:hover': {
-                    backgroundColor: 'rgba(0, 176, 255, 0.08)'
+                    backgroundColor: 'rgba(255,255,255,0.08)'
                   },
                   '&.Mui-selected': {
-                    backgroundColor: 'rgba(0, 176, 255, 0.16)'
+                    backgroundColor: 'rgba(255,255,255,0.16)'
                   }
                 }
               }
@@ -118,27 +125,63 @@ const PortfolioTableBody = ({
           }}
           sx={{
             color: 'white',
-            backgroundColor: '#121212',
-            width: '100%',
-            height: '32px',
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00B0FF',
-              borderWidth: '1px'
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00B0FF',
-              borderWidth: '1px'
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00B0FF',
-              borderWidth: '1px'
-            },
-            '& .MuiSelect-icon': {
-              color: 'rgba(255, 255, 255, 0.7)',
-              right: '7px'
+            backgroundColor: '#3c3c3c',
+            borderRadius: '10px 10px 0 0',
+            boxShadow: 'none',
+            height: cellHeight,
+            minWidth: cellMinWidth,
+            fontSize: cellFontSize,
+            pl: 1,
+            pr: 2,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            transition: 'background 0.2s',
+            '& .MuiSelect-filled': {
+              backgroundColor: 'transparent',
+              borderRadius: '10px 10px 0 0',
+              padding: 0,
             },
             '& .MuiSelect-select': {
-              padding: '4px 8px'
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: cellFontSize,
+              color: 'white',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              padding: 0,
+              height: cellHeight,
+              minWidth: cellMinWidth,
+            },
+            '& .MuiSelect-icon': {
+              color: '#bcbcbc',
+              right: '10px',
+            },
+            '&:before': {
+              borderBottom: '2px solid #fff',
+            },
+            '&:after': {
+              borderBottom: '2px solid #fff',
+            },
+            '& .MuiFilledInput-underline:before': {
+              borderBottom: '2px solid #fff',
+            },
+            '& .MuiFilledInput-underline:after': {
+              borderBottom: '2px solid #fff',
+            },
+          }}
+          inputProps={{
+            sx: {
+              padding: 0,
+              height: cellHeight,
+              minWidth: cellMinWidth,
+              fontSize: cellFontSize,
+              color: 'white',
+              borderRadius: '10px 10px 0 0',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }
           }}
         >
@@ -151,7 +194,90 @@ const PortfolioTableBody = ({
       );
     }
 
-    if (isEditing && !isDropdown) {
+    if (isEditing && isNumberField) {
+      return (
+        <TextField
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onKeyDown={(e) => handleKeyPress(e, actualIndex)}
+          onBlur={() => handleBlur(actualIndex)}
+          autoFocus
+          type="number"
+          variant="filled"
+          inputProps={{
+            min: 0,
+            style: {
+              padding: 0,
+              height: cellHeight,
+              minWidth: cellMinWidth,
+              fontSize: cellFontSize,
+              color: 'white',
+              borderRadius: '10px 10px 0 0',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              backgroundColor: 'transparent',
+              textAlign: 'left',
+              MozAppearance: 'textfield',
+            }
+          }}
+          InputProps={{
+            sx: {
+              '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                WebkitAppearance: 'none',
+                margin: 0,
+              },
+              '& input[type=number]': {
+                MozAppearance: 'textfield',
+              },
+            }
+          }}
+          sx={{
+            backgroundColor: '#3c3c3c',
+            borderRadius: '10px 10px 0 0',
+            boxShadow: 'none',
+            height: cellHeight,
+            minWidth: cellMinWidth,
+            fontSize: cellFontSize,
+            color: 'white',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            pl: 1,
+            pr: 1,
+            '& .MuiFilledInput-root': {
+              backgroundColor: 'transparent',
+              borderRadius: '10px 10px 0 0',
+              fontSize: cellFontSize,
+              color: 'white',
+              height: cellHeight,
+              minWidth: cellMinWidth,
+              '&:before': {
+                borderBottom: '2px solid #fff',
+              },
+              '&:after': {
+                borderBottom: '2px solid #fff',
+              },
+              '& input': {
+                padding: 0,
+                height: cellHeight,
+                minWidth: cellMinWidth,
+                fontSize: cellFontSize,
+                color: 'white',
+                borderRadius: '10px 10px 0 0',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                backgroundColor: 'transparent',
+                textAlign: 'left'
+              },
+            },
+          }}
+        />
+      );
+    }
+
+    if (isEditing && !isDropdown && !isNumberField) {
       return (
         <TextField
           value={editValue}
@@ -160,16 +286,47 @@ const PortfolioTableBody = ({
           onBlur={() => handleBlur(actualIndex)}
           autoFocus
           size="small"
-          type={field === 'quantity' || field === 'hours' ? 'number' : 'text'}
+          variant="filled"
           sx={{
-            '& .MuiOutlinedInput-root': {
+            backgroundColor: '#3c3c3c',
+            borderRadius: '10px 10px 0 0',
+            boxShadow: 'none',
+            height: cellHeight,
+            minWidth: cellMinWidth,
+            fontSize: cellFontSize,
+            color: 'white',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            pl: 1,
+            pr: 1,
+            '& .MuiFilledInput-root': {
+              backgroundColor: 'transparent',
+              borderRadius: '10px 10px 0 0',
+              fontSize: cellFontSize,
               color: 'white',
-              '& fieldset': { borderColor: '#00B0FF' },
-              '&:hover fieldset': { borderColor: '#00B0FF' },
-              backgroundColor: 'rgba(0, 176, 255, 0.1)',
+              height: cellHeight,
+              minWidth: cellMinWidth,
+              '&:before': {
+                borderBottom: '2px solid #fff',
+              },
+              '&:after': {
+                borderBottom: '2px solid #fff',
+              },
+              '& input': {
+                padding: 0,
+                height: cellHeight,
+                minWidth: cellMinWidth,
+                fontSize: cellFontSize,
+                color: 'white',
+                borderRadius: '10px 10px 0 0',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                backgroundColor: 'transparent',
+                textAlign: 'left'
+              },
             },
-            '& input': { padding: '4px 8px' },
-            width: '100px',
           }}
         />
       );
@@ -180,26 +337,39 @@ const PortfolioTableBody = ({
         onDoubleClick={() => handleDoubleClick(actualIndex, field, value)}
         style={{ 
           cursor: isEditable ? 'pointer' : 'default',
-          padding: '4px',
+          padding: '4px 0',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          height: cellHeight,
+          fontSize: cellFontSize,
+          minWidth: cellMinWidth
         }}
       >
-        <span>{value}</span>
+        <span
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            color: 'white'
+          }}
+        >{value}</span>
       </div>
     );
   };
 
   return (
-    <Table>
+    <Table size="small">
       <TableHead>
-        <TableRow>
-          <TableCell padding="checkbox">
+        <TableRow
+          sx={{ height: cellHeight, minHeight: cellHeight, maxHeight: cellHeight }}
+        >
+          <TableCell padding="checkbox" sx={{ height: cellHeight, p: '6px 8px' }}>
             <Checkbox
               checked={selected.length === data.length}
               onChange={handleSelectAllClick}
-              sx={{ color: 'white' }}
+              sx={{ color: 'white', p: 0.5 }}
+              size="small"
             />
           </TableCell>
           {[
@@ -217,8 +387,11 @@ const PortfolioTableBody = ({
               sx={{ 
                 color: '#00B0FF', 
                 fontWeight: 'bold',
-                padding: head === '' ? '0 8px' : undefined,
-                width: head === '' ? '40px' : undefined
+                padding: head === '' ? '0 6px' : '6px 12px',
+                width: head === '' ? '40px' : undefined,
+                height: cellHeight,
+                fontSize: cellFontSize,
+                minWidth: cellMinWidth
               }}
             >
               {head}
@@ -236,27 +409,35 @@ const PortfolioTableBody = ({
               <TableRow 
                 key={actualIndex} 
                 hover
-                sx={{ '&:hover': { backgroundColor: 'rgba(0, 176, 255, 0.08)' } }}
+                sx={{ 
+                  '&:hover': { backgroundColor: 'rgba(0, 176, 255, 0.08)' },
+                  height: cellHeight,
+                  minHeight: cellHeight,
+                  maxHeight: cellHeight
+                }}
               >
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" sx={{ height: cellHeight, p: '6px 8px' }}>
                   <Checkbox
                     checked={isSelected(actualIndex)}
                     onChange={() => handleClick(actualIndex)}
-                    sx={{ color: 'white' }}
+                    sx={{ color: 'white', p: 0.5 }}
+                    size="small"
                   />
                 </TableCell>
-                <TableCell sx={{ color: 'white' }}>{row.uuid}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{selectedProvider}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{renderCell(row, 'region', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{renderCell(row, 'size', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{renderCell(row, 'quantity', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{renderCell(row, 'hours', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{row.pricingModel}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{row.uuid}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{selectedProvider}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'region', actualIndex)}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'size', actualIndex)}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'quantity', actualIndex)}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'hours', actualIndex)}</TableCell>
+                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{row.pricingModel}</TableCell>
                 <TableCell 
                   align="center" 
                   sx={{ 
-                    padding: '0 8px',
-                    width: '40px'
+                    padding: '0 6px',
+                    width: '40px',
+                    height: cellHeight,
+                    fontSize: cellFontSize
                   }}
                 >
                   {isRowEditing && (
@@ -265,7 +446,7 @@ const PortfolioTableBody = ({
                       onClick={handleEditCancel}
                       sx={{ 
                         color: '#fff',
-                        padding: '4px',
+                        padding: '2px',
                         '&:hover': {
                           backgroundColor: 'rgba(255, 255, 255, 0.1)'
                         }
