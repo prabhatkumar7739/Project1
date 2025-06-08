@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   Menu,
+  Dialog,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
@@ -14,10 +15,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import amdlogo from "../../assets/amdlogo.png";
 import UserMenu from "./UserMenu";
 import SupportPopover from "./SupportPopover";
+import ReleaseNotes from "../ReleaseNotes";
 
 const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [supportAnchorEl, setSupportAnchorEl] = useState(null);
+  const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
 
   const open = Boolean(anchorEl);
   const isSupportOpen = Boolean(supportAnchorEl);
@@ -36,6 +39,14 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
 
   const handleSupportClose = () => {
     setSupportAnchorEl(null);
+  };
+
+  const handleReleaseNotesOpen = () => {
+    setIsReleaseNotesOpen(true);
+  };
+
+  const handleReleaseNotesClose = () => {
+    setIsReleaseNotesOpen(false);
   };
 
   return (
@@ -89,7 +100,7 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
         </Box>
 
         <Box display="flex" alignItems="center" gap={1}>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleReleaseNotesOpen}>
             <DescriptionIcon />
           </IconButton>
 
@@ -154,6 +165,16 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           >
             <UserMenu onClose={handleMenuClose} />
           </Menu>
+
+          {/* Release Notes Dialog */}
+          <Dialog
+            open={isReleaseNotesOpen}
+            onClose={handleReleaseNotesClose}
+            maxWidth="lg"
+            fullWidth
+          >
+            <ReleaseNotes handleClose={handleReleaseNotesClose} />
+          </Dialog>
         </Box>
       </Toolbar>
     </AppBar>

@@ -10,6 +10,7 @@ import {
   IconButton,
   InputAdornment,
   Paper,
+  Divider
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -92,8 +93,8 @@ const CloudUsageReport = ({ onClose }) => {
   return (
     <Box sx={{ 
       display: 'flex',
-      minHeight: '100vh',
-      width: '100%'
+      height: 'calc(100vh - 150px)', 
+      width: '100%',
     }}>
       <Sidebar />
       <Box sx={{ 
@@ -112,7 +113,9 @@ const CloudUsageReport = ({ onClose }) => {
           pb: 2,
           px: 2
         }}>
-          <Typography variant="h5" sx={{ fontSize: '1.1rem', fontWeight: 500 }}>Add Portfolio</Typography>
+          <Typography variant="h5" sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Add Portfolio</Typography>
+
+
           <IconButton onClick={handleClose} sx={{ p: 0, mr: -1 }}>
             <CloseIcon />
           </IconButton>
@@ -131,105 +134,76 @@ const CloudUsageReport = ({ onClose }) => {
             />
           </Box>
 
-          <Typography sx={{ mb: 2, fontWeight: 400 }}>
-            Secrets
-          </Typography>
+          <Typography sx={{ mb: 1.5, fontWeight: 'bold' }}>
+  Secrets
+</Typography>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <TextField
-                fullWidth
-                label="Client ID"
-                required
-                value={formData.clientId}
-                onChange={handleChange('clientId')}
-                type={showClientId ? 'text' : 'password'}
-                size="small"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowClientId(!showClientId)}
-                        edge="end"
-                        sx={{ color: 'rgba(0, 0, 0, 0.54)' }}
-                      >
-                        {showClientId ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={commonInputStyles}
-              />
+          <Divider sx={{ mb: 2 }} />
 
-              <TextField
-                fullWidth
-                label="Client Email"
-                required
-                value={formData.clientEmail}
-                onChange={handleChange('clientEmail')}
-                size="small"
-                sx={commonInputStyles}
-              />
-            </Box>
-
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <TextField
-                fullWidth
-                label="Project ID"
-                required
-                value={formData.projectId}
-                onChange={handleChange('projectId')}
-                type={showProjectId ? 'text' : 'password'}
-                size="small"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowProjectId(!showProjectId)}
-                        edge="end"
-                        sx={{ color: 'rgba(0, 0, 0, 0.54)' }}
-                      >
-                        {showProjectId ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={commonInputStyles}
-              />
-
-              <FormControl fullWidth size="small">
-                <InputLabel id="region-label" required>Region</InputLabel>
-                <Select
-                  labelId="region-label"
-                  value={formData.region}
-                  label="Region"
-                  onChange={handleChange('region')}
-                  sx={commonSelectStyles}
-                >
-                  <MenuItem value="us-east1">us-east1</MenuItem>
-                  <MenuItem value="us-west1">us-west1</MenuItem>
-                  <MenuItem value="europe-west1">europe-west1</MenuItem>
-                  <MenuItem value="asia-east1">asia-east1</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <TextField
+              fullWidth
+              label="Access ID"
+              required
+              value={formData.clientId}
+              onChange={handleChange('clientId')}
+              type={showClientId ? 'text' : 'password'}
+              size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowClientId(!showClientId)}
+                      edge="end"
+                      sx={{ color: 'rgba(0, 0, 0, 0.54)' }}
+                    >
+                      {showClientId ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={commonInputStyles}
+            />
 
             <TextField
               fullWidth
-              label="Private key"
+              label="Access Secret"
               required
-              multiline
-              rows={4}
-              value={formData.privateKey}
-              onChange={handleChange('privateKey')}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#e0e0e0',
-                  },
-                },
+              value={formData.projectId}
+              onChange={handleChange('projectId')}
+              type={showProjectId ? 'text' : 'password'}
+              size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowProjectId(!showProjectId)}
+                      edge="end"
+                      sx={{ color: 'rgba(0, 0, 0, 0.54)' }}
+                    >
+                      {showProjectId ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
+              sx={commonInputStyles}
             />
+
+            <FormControl fullWidth size="small">
+              <InputLabel id="region-label" required>Region</InputLabel>
+              <Select
+                labelId="region-label"
+                value={formData.region}
+                label="Region"
+                onChange={handleChange('region')}
+                sx={commonSelectStyles}
+              >
+                <MenuItem value="us-east1">us-east1</MenuItem>
+                <MenuItem value="us-west1">us-west1</MenuItem>
+                <MenuItem value="europe-west1">europe-west1</MenuItem>
+                <MenuItem value="asia-east1">asia-east1</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         </Paper>
       </Box>
@@ -237,4 +211,4 @@ const CloudUsageReport = ({ onClose }) => {
   );
 };
 
-export default CloudUsageReport; 
+export default CloudUsageReport;

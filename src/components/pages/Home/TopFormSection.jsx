@@ -27,6 +27,8 @@ import { useFormTable } from '../../../context/FormTableContext';
 import FindReplaceDialog from './FindReplaceDialog';
 import CustomTooltip from '../../tooltips/CustomTooltip';
 import { formTooltips, buttonTooltips } from '../../tooltips/tooltipConfig';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from '@mui/material';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
@@ -86,7 +88,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
   const { setIsFormFilled, setIsTableCreated, tableData, setTableData } = useFormTable();
 
-  // Listen for portfolio selection
   React.useEffect(() => {
     const handlePortfolioSelection = (event) => {
       const { portfolioName } = event.detail;
@@ -99,7 +100,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     };
   }, []);
 
-  // Add event listener for clearing table data
   React.useEffect(() => {
     const handleClearTableData = () => {
       if (window.performance.navigation.type === 1) {
@@ -120,17 +120,21 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     };
   }, [setTableData]);
 
-  // Check if form is filled whenever any field changes
   React.useEffect(() => {
-    // All fields except portfolio name and UUID are required for adding instance
     const isFormComplete = region && size && pricingModel && quantity && hours;
     setIsFormFilled(isFormComplete);
   }, [region, size, pricingModel, quantity, hours, setIsFormFilled]);
 
   const handleAdd = () => {
+    if (!portfolioName.trim()) {
+      setErrorOpen(true);
+      setUploadError('Please enter a portfolio name with at least 3 characters');
+      return;
+    }
+
     if (region && size && pricingModel && quantity && hours) {
       const newRow = {
-        uuid: uuid || uuidv4(),  // Use provided UUID or generate a new one
+        uuid: uuid || uuidv4(),
         region,
         size,
         quantity,
@@ -143,14 +147,12 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         if (newData.length > 0) {
           setIsTableCreated(true);
         }
-        // Save to localStorage
-        if (portfolioName) {  // Only save to localStorage if portfolio name exists
+        if (portfolioName) {
           localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(newData));
         }
         return newData;
       });
 
-      // Clear instance fields but keep portfolio name and table
       setRegion('');
       setSize('');
       setPricingModel('');
@@ -158,24 +160,22 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
       setQuantity('');
       setHours('');
 
-      // Show success alert
       setSuccessOpen(true);
     } else {
       setErrorOpen(true);
+      setUploadError('Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).');
     }
   };
 
   const handleReplaceAll = (updatedData) => {
-    // Save to localStorage if portfolio name exists
     if (portfolioName) {
       localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(updatedData));
     }
     setTableData(updatedData);
-    setSuccessOpen(true); // Show success message
+    setSuccessOpen(true);
   };
 
   const handleUploadClick = () => {
-    // Dummy data
     const dummyData = [{
       uuid: 'f7b20c7d-cd5a-4949-bb6f-f320379d6848',
       region: 'us-west',
@@ -185,15 +185,11 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
       pricingModel: 'on-demand'
     }];
 
-    // Set the dummy file name
     setSelectedFileName('Instance.xlsx');
-    
-    // Set the table data
     setTableData(dummyData);
     setIsTableCreated(true);
     setSuccessOpen(true);
 
-    // Save to localStorage if portfolio name exists
     if (portfolioName) {
       localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(dummyData));
     }
@@ -201,7 +197,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
   return (
     <>
-      {/* Top Section */}
       <Box sx={{ 
         display: 'flex', 
         alignItems: 'center',
@@ -224,7 +219,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           />
         </CustomTooltip>
 
-        {/* Upload button in center with filename */}
         <Box sx={{ 
           position: 'absolute',
           left: '50%',
@@ -264,14 +258,13 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           </CustomTooltip>
         </Box>
 
-        {/* Template button and Cloud Usage Reports */}
         <Box sx={{ 
           marginLeft: 'auto',
           display: 'flex',
           alignItems: 'center',
           gap: 6
         }}>
-          <Box sx={{ mr: 26 }}> {/* Added margin to move Template slightly right */}
+          <Box sx={{ mr: 26 }}>
             <CustomTooltip message={buttonTooltips.template}>
               <Button 
                 component="a" 
@@ -312,7 +305,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
       <Divider sx={{ my: 1, width: '100%' }} />
 
-      {/* Input Fields */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, [
@@ -435,10 +427,8 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         </Grid>
       </Grid>
 
-      {/* Table appears here if data exists */}
       {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={setTableData} />}
 
-      {/* Error Snackbar */}
       <Snackbar
         open={errorOpen}
         autoHideDuration={4000}
@@ -477,7 +467,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         </Box>
       </Snackbar>
 
-      {/* Success Snackbar - update message */}
       <Snackbar
         open={successOpen}
         autoHideDuration={4000}
@@ -534,90 +523,129 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         />
       </Dialog>
 
-{/* Help Dialog */}
-<Dialog 
-  open={openHelpDialog} 
-  onClose={() => setOpenHelpDialog(false)}
-  maxWidth="md"
-  fullWidth
-  PaperProps={{
-    sx: {
-      borderRadius: '12px',
-      boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.15)',
-      overflow: 'hidden'
-    }
-  }}
->
-  <DialogTitle sx={{ 
-    p: 3,
-    backgroundColor: '#f8f9fa',
-    borderBottom: '1px solid #e9ecef',
-    fontSize: '1.25rem',
-    fontWeight: 700,
-    color: '#212529'
-  }}>
-    How data corrections are applied
-  </DialogTitle>
-  <Divider />
-  <DialogContent sx={{ p: 3 }}>
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5, fontSize: '1rem' }}>
-        1. Cloud Selection:
-      </Typography>
-      <Typography variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-        If the cloud is empty, invalid, or unsupported, it will be replaced with the default CSP selected.
-      </Typography>
-    </Box>
+      <Dialog
+        open={openHelpDialog}
+        onClose={() => setOpenHelpDialog(false)}
+        maxWidth={false}
+        PaperProps={{
+          sx: {
+            borderRadius: '4px',
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.15)',
+            overflow: 'hidden',
+            width: '700px',
+            maxWidth: '90%'
+          }
+        }}
+      >
+        <DialogTitle
+          sx={{
+            px: 2,
+            py: 1,
+            mb: 0,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#212529',
+            minHeight: '42px'
+          }}
+        >
+          How data corrections are applied
+          <IconButton
+            onClick={() => setOpenHelpDialog(false)}
+            sx={{ color: '#000', padding: '4px' }}
+          >
+            <CloseIcon sx={{ fontSize: 22 }} />
+          </IconButton>
+        </DialogTitle>
+        <Divider sx={{ m: 0 }} />
+       
+        <DialogContent
+          sx={{
+            letterSpacing: '0.03125em',
+            lineHeight: 'inherit',
+            padding: '16px 24px 24px'
+          }}
+        >
+          <Box>
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: '#212529' }}>
+                1. Cloud Selection:
+              </Typography>
+              <Box sx={{ mt: 0.5 }}>
+                <Typography variant="body2" sx={{ color: '#212529' }}>
+                  If the cloud is empty, invalid, or unsupported, it will be replaced with the default CSP selected.
+                </Typography>
+              </Box>
+            </Box>
 
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5, fontSize: '1rem' }}>
-        2. Quantity:
-      </Typography>
-      <Box component="ul" sx={{ pl: 2, m: 0, '& li': { mb: 1 } }}>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          The quantity should be a positive number. If a floating-point number is provided, it will be rounded off.
-        </Typography>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the value is not mentioned, it will default to 1.
-        </Typography>
-      </Box>
-    </Box>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: '#212529' }}>
+                2. Quantity:
+              </Typography>
+              <ul style={{ margin: '8px 0 0 20px', padding: 0 }}>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    The quantity should be a positive number. If a floating-point number is provided, it will be rounded off.
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the value is not mentioned, it will default to 1.
+                  </Typography>
+                </li>
+              </ul>
+            </Box>
 
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5, fontSize: '1rem' }}>
-        3. Number of Hours per Month:
-      </Typography>
-      <Box component="ul" sx={{ pl: 2, m: 0, '& li': { mb: 1 } }}>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the value is empty, it will be set to (quantity * 730). For example, if the quantity is 5 and the number of hours per month is not mentioned, it will be auto-corrected to (5 * 730) = 3650.
-        </Typography>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the value exceeds (quantity * 730), it will automatically be set to (quantity * 730).
-        </Typography>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the value is a floating-point number, it will be rounded off.
-        </Typography>
-      </Box>
-    </Box>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: '#212529' }}>
+                3. Number of Hours per Month:
+              </Typography>
+              <ul style={{ margin: '8px 0 0 20px', padding: 0 }}>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the value is empty, it will be set to (quantity * 730).
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the value exceeds (quantity * 730), it will automatically be set to (quantity * 730).
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the value is a floating-point number, it will be rounded off.
+                  </Typography>
+                </li>
+              </ul>
+            </Box>
 
-    <Box>
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5, fontSize: '1rem' }}>
-        4. Pricing Model:
-      </Typography>
-      <Box component="ul" sx={{ pl: 2, m: 0, '& li': { mb: 1 } }}>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          Currently, only two pricing models are supported: on-demand and reserved.
-        </Typography>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the pricing model is empty, it will default to on-demand.
-        </Typography>
-        <Typography component="li" variant="body2" sx={{ color: '#495057', lineHeight: 1.6 }}>
-          If the value is something other than the supported options, the user can replace it with on-demand or reserved using the "find and replace" option.
-        </Typography>
-      </Box>
-    </Box>
-  </DialogContent>
-</Dialog>
+            <Box>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: '#212529' }}>
+                4. Pricing Model:
+              </Typography>
+              <ul style={{ margin: '8px 0 0 20px', padding: 0 }}>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    Currently, only two pricing models are supported: on-demand and reserved.
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the pricing model is empty, it will default to on-demand.
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" sx={{ color: '#212529' }}>
+                    If the value is something other than the supported options, the user can replace it with on-demand or reserved using the "find and replace" option.
+                  </Typography>
+                </li>
+              </ul>
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

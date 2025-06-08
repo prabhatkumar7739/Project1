@@ -21,12 +21,17 @@ const NotificationBar = ({ onViewChange }) => {
   const navigate = useNavigate();
   const { areButtonsEnabled, resetTable, tableData, setTableData } = useFormTable();
   const { removePortfolio, portfolioList, activePortfolio } = usePortfolio();
+  
+  // State variables
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [validationError, setValidationError] = useState(false);
   const [savedPortfolioName, setSavedPortfolioName] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
+  // Event listeners
   useEffect(() => {
     const handlePortfolioSelect = (event) => {
       if (event.detail.portfolioName) {
@@ -61,6 +66,7 @@ const NotificationBar = ({ onViewChange }) => {
     setIsSaved(false);
   }, [tableData]);
 
+  // Handler functions
   const handleCancelClick = () => {
     setIsDialogOpen(true);
   };
@@ -86,13 +92,26 @@ const NotificationBar = ({ onViewChange }) => {
       resetTable();
       setSavedPortfolioName('');
       setDeleteDialogOpen(false);
-      setSaveSuccess(true);
+      setDeleteSuccess(true);
     }
   };
 
   const handleSave = () => {
     const portfolioNameInput = document.getElementById('portfolio-name');
     const portfolioName = portfolioNameInput ? portfolioNameInput.value : '';
+
+    // Validate portfolio name
+    if (!portfolioName || portfolioName.trim().length < 3) {
+      setValidationError(true);
+      return;
+    }
+
+    // Validate allowed characters
+    const validChars = /^[a-zA-Z0-9_-]+$/;
+    if (!validChars.test(portfolioName)) {
+      setValidationError(true);
+      return;
+    }
 
     if (portfolioName && tableData.length > 0) {
       setSavedPortfolioName(portfolioName);
@@ -109,6 +128,7 @@ const NotificationBar = ({ onViewChange }) => {
     }
   };
 
+  // Button styles
   const buttonBaseStyle = {
     minWidth: '140px',
     borderRadius: '4px',
@@ -118,6 +138,7 @@ const NotificationBar = ({ onViewChange }) => {
 
   return (
     <>
+      {/* Main notification bar */}
       <Box
         sx={{
           backgroundColor: '#f0f0f0',
@@ -215,6 +236,7 @@ const NotificationBar = ({ onViewChange }) => {
         </Box>
       </Box>
 
+      {/* Discard Changes Dialog */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Discard Changes?</DialogTitle>
         <DialogContent>
@@ -232,6 +254,7 @@ const NotificationBar = ({ onViewChange }) => {
         </DialogActions>
       </Dialog>
 
+      {/* Delete Portfolio Dialog */}
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Delete Portfolio?</DialogTitle>
         <DialogContent>
@@ -249,12 +272,134 @@ const NotificationBar = ({ onViewChange }) => {
         </DialogActions>
       </Dialog>
 
+      {/* Validation Error Snackbar */}
+      <Snackbar
+        open={validationError}
+        autoHideDuration={6000}
+        onClose={() => setValidationError(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#b4001e',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '600px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>
+            Please enter a portfolio name with at least 3 characters. Only letters, numbers, 
+            underscores (_), and hyphens (-) are allowed; no other special characters.
+          </span>
+          <Button
+            onClick={() => setValidationError(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
+
+      {/* Save Success Snackbar */}
       <Snackbar
         open={saveSuccess}
-        autoHideDuration={3000}
+        autoHideDuration={4000}
         onClose={() => setSaveSuccess(false)}
-        message={savedPortfolioName ? "Portfolio deleted successfully" : "Portfolio saved successfully"}
-      />
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>{`Portfolio ${savedPortfolioName} saved successfully`}</span>
+          <Button
+            onClick={() => setSaveSuccess(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
+
+      {/* Delete Success Snackbar */}
+      <Snackbar
+        open={deleteSuccess}
+        autoHideDuration={4000}
+        onClose={() => setDeleteSuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            width: '100%',
+            maxWidth: '420px',
+            fontWeight: '500',
+            fontSize: '14px'
+          }}
+        >
+          <span>{`Portfolio ${savedPortfolioName} deleted successfully`}</span>
+          <Button
+            onClick={() => setDeleteSuccess(false)}
+            sx={{
+              color: '#fff',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontSize: '12px',
+              padding: '4px 8px',
+              minWidth: 'auto',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Snackbar>
     </>
   );
 };
