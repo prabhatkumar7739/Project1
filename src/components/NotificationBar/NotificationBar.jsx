@@ -7,7 +7,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar
+  Snackbar,
+  Divider
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -136,6 +137,26 @@ const NotificationBar = ({ onViewChange }) => {
     color: '#ffffff'
   };
 
+  // Custom styles for the delete dialog buttons
+  const deleteCancelButtonStyle = {
+    backgroundColor: '#a40020',
+    color: '#fff',
+    fontWeight: 'bold',
+    borderRadius: '6px',
+    minWidth: '100px',
+    textTransform: 'none',
+    '&:hover': { backgroundColor: '#7b0016' }
+  };
+  const deleteButtonStyle = {
+    backgroundColor: '#000',
+    color: '#fff',
+    fontWeight: 'bold',
+    borderRadius: '6px',
+    minWidth: '100px',
+    textTransform: 'none',
+    '&:hover': { backgroundColor: '#333' }
+  };
+
   return (
     <>
       {/* Main notification bar */}
@@ -178,6 +199,7 @@ const NotificationBar = ({ onViewChange }) => {
 
           {savedPortfolioName && (
             <Button
+            id="deletePortfolio"
               startIcon={<DeleteIcon />}
               onClick={handleDeletePortfolio}
               sx={{
@@ -196,6 +218,7 @@ const NotificationBar = ({ onViewChange }) => {
           )}
 
           <Button
+          id="savePortfolio"
             startIcon={<SaveIcon />}
             disabled={!areButtonsEnabled || isSaved}
             onClick={handleSave}
@@ -214,6 +237,7 @@ const NotificationBar = ({ onViewChange }) => {
           </Button>
 
           <Button
+          id="costAdvice"
             startIcon={<AttachMoneyIcon />}
             disabled={!savedPortfolioName}
             onClick={() => {
@@ -237,7 +261,7 @@ const NotificationBar = ({ onViewChange }) => {
       </Box>
 
       {/* Discard Changes Dialog */}
-      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+      {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Discard Changes?</DialogTitle>
         <DialogContent>
           <Typography>
@@ -245,32 +269,167 @@ const NotificationBar = ({ onViewChange }) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
+          <Button id="cancelDeletePortfolio" onClick={handleDialogClose} color="primary">
             Cancel
           </Button>
           <Button onClick={handleConfirmDiscard} color="error">
             Discard
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+    <Dialog
+  open={isDialogOpen}
+  onClose={handleDialogClose}
+  PaperProps={{
+    sx: {
+      width: 440,
+      minHeight: 140, // reduced height
+      borderRadius: '10px',
+      px: 2,
+      py: 1,
+    },
+  }}
+>
+  <DialogTitle
+    sx={{
+      fontWeight: 700,
+      fontSize: 20,
+      color: '#111',
+      p: 0,
+      pt: 1.5,
+      pb: 0.5, // tighter padding
+    }}
+  >
+    Unsaved Changes
+  </DialogTitle>
 
-      {/* Delete Portfolio Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Delete Portfolio?</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this portfolio? This action cannot be undone.
+  <Divider sx={{ mb: 1.2, borderBottomWidth: 2, borderColor: '#d9d9d9' }} />
+
+  <DialogContent sx={{ pt: 0, pb: 0.5 }}>
+    <Typography sx={{ color: '#4f4f4f', fontWeight: 600, mb: 0.25 }}>
+      You have unsaved changes.
+    </Typography>
+    <Typography sx={{ color: '#4f4f4f', fontWeight: 600 }}>
+      Are you sure you want to discard changes?
+    </Typography>
+  </DialogContent>
+
+  <DialogActions
+    sx={{
+      justifyContent: 'flex-end',
+      mt: 1.5,
+      pr: 1,
+      pb: 1,
+    }}
+  >
+    <Button
+      onClick={handleDialogClose}
+      sx={{
+        backgroundColor: '#a40020',
+        color: '#fff',
+        fontWeight: 'bold',
+        borderRadius: '6px',
+        minWidth: '90px',
+        textTransform: 'none',
+        '&:hover': { backgroundColor: '#7b0016' },
+      }}
+    >
+      No
+    </Button>
+    <Button
+      onClick={handleConfirmDiscard}
+      sx={{
+        backgroundColor: '#000',
+        color: '#fff',
+        fontWeight: 'bold',
+        borderRadius: '6px',
+        minWidth: '90px',
+        textTransform: 'none',
+        ml: 2,
+        '&:hover': { backgroundColor: '#333' },
+      }}
+    >
+      Yes
+    </Button>
+  </DialogActions>
+</Dialog>
+
+
+      {/* Delete Portfolio Dialog (Custom Styled) */}
+      {/* <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle sx={{ fontWeight: 700, fontSize: 22, color: '#111', pb: 0 }}>
+          Confirm Delete Portfolio
+        </DialogTitle>
+        <Divider sx={{ mb: 1.5, borderBottomWidth: 2, borderColor: '#d9d9d9' }} />
+        <DialogContent sx={{ pt: 0, pb: 2 }}>
+          <Typography sx={{ color: '#7a7a7a', fontWeight: 600, fontSize: 16, mb: 2 }}>
+            Are you sure you want to delete this Portfolio?
           </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end'}}>
+            <Button
+              id="cancelDeletePortfolio"
+              onClick={() => setDeleteDialogOpen(false)}
+              sx={deleteCancelButtonStyle}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleConfirmDelete}
+              sx={deleteButtonStyle}
+            >
+              Delete
+            </Button>
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </Dialog> */}
+<Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+  <DialogTitle sx={{ 
+    fontWeight: 700, 
+    fontSize: 22, 
+    color: '#111', 
+    pb: 0 
+  }}>
+    Confirm Delete Portfolio
+  </DialogTitle>
+  <Divider sx={{ 
+    mb: 1.5, 
+    borderBottomWidth: 2, 
+    borderColor: '#d9d9d9' 
+  }} />
+  <DialogContent sx={{ 
+    pt: 0, 
+    pb: 2 
+  }}>
+    <Typography sx={{ 
+      color: '#7a7a7a', 
+      fontWeight: 600, 
+      fontSize: 16, 
+      mb: 2 
+    }}>
+      Are you sure you want to delete this Portfolio?
+    </Typography>
+    <Box sx={{ 
+      display: 'flex', 
+      gap: 2, 
+      justifyContent: 'flex-end',
+      marginRight: '1px'
+    }}>
+      <Button
+        id="cancelDeletePortfolio"
+        onClick={() => setDeleteDialogOpen(false)}
+        sx={deleteCancelButtonStyle}
+      >
+        Cancel
+      </Button>
+      <Button 
+        onClick={handleConfirmDelete}
+        sx={deleteButtonStyle}
+      >
+        Delete
+      </Button>
+    </Box>
+  </DialogContent>
+</Dialog>
 
       {/* Validation Error Snackbar */}
       <Snackbar

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Divider,
   useTheme,
   IconButton,
-  Select,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import SidebarSelect from "./SidebarSelect";
@@ -15,16 +14,19 @@ const drawerWidth = "17%";
 
 const selectOptions = [
   {
-    label: "Service Provider",
+    label: "Cloud",
     options: [
       { label: "AWS", value: "AWS" },
-      { label: "Azure", value: "Azure" },
+      { label: "AZURE", value: "AZURE" },
       { label: "GCP", value: "GCP" },
     ],
   },
   {
-    label: "Telemetry Collector",
-    options: [{ label: "Datalog", value: "datalog" }],
+    label: "Telemetry Connector",
+    options: [
+      { label: "Datadog", value: "Datadog" },
+      { label: "AWS CloudWatch", value: "AWS CloudWatch" },
+    ],
   },
 ];
 

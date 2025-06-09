@@ -58,8 +58,8 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
             alt="AMD Logo"
             style={{ height: 32, marginRight: 60 }}
           />
-          <Typography 
-            variant="h6" 
+          <Typography
+            variant="h6"
             sx={{
               fontFamily: "'Titillium Web', sans-serif",
               fontWeight: 600,
@@ -70,9 +70,11 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           >
             EPYC Cloud Cost Advisor
           </Typography>
-          <Button 
-            color="inherit" 
-            sx={{ 
+          <Button
+
+            // id="step-one-target"  
+            color="inherit"
+            sx={{
               textDecoration: currentView === 'portfolio' ? "underline" : "none",
               mr: 2,
               fontFamily: "'Titillium Web', sans-serif",
@@ -84,9 +86,9 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           >
             Manage Portfolio
           </Button>
-          <Button 
+          <Button
             color="inherit"
-            sx={{ 
+            sx={{
               textDecoration: currentView === 'explorer' ? "underline" : "none",
               fontFamily: "'Titillium Web', sans-serif",
               fontWeight: 400,
@@ -100,13 +102,14 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
         </Box>
 
         <Box display="flex" alignItems="center" gap={1}>
-          <IconButton color="inherit" onClick={handleReleaseNotesOpen}>
+          <IconButton  id="step-one-target" color="inherit" onClick={handleReleaseNotesOpen}>
+            
             <DescriptionIcon />
           </IconButton>
 
           {/* Support Button */}
-          <IconButton color="inherit" onClick={handleSupportClick}>
-            <HeadsetMicIcon />
+          <IconButton color="inherit"  id="step-three-target" onClick={handleSupportClick}>
+            <HeadsetMicIcon/>
           </IconButton>
           <SupportPopover
             anchorEl={supportAnchorEl}
@@ -115,6 +118,7 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
 
           {/* User Menu */}
           <IconButton
+          id="step-four-target"
             color="inherit"
             onClick={handleMenuClick}
             aria-controls="user-menu"
@@ -122,8 +126,8 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
           >
             <AccountCircleIcon />
           </IconButton>
-          <Typography 
-            variant="body2" 
+          <Typography
+            variant="body2"
             sx={{
               fontFamily: "'Titillium Web', sans-serif",
               fontWeight: 400,

@@ -95,7 +95,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <FormControl fullWidth size="small">
-                <Select
+                <Select id="instanceTypeTargetFrom"
                   value={formValues[key].from}
                   onChange={(e) => handleChange(key, 'from', e.target.value)}
                   displayEmpty
@@ -121,7 +121,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
               <ArrowRightAltIcon sx={{ color: "#555" }} />
 
               <FormControl fullWidth size="small">
-                <Select
+                <Select id="instanceTypeTargetTo"
                   value={formValues[key].to}
                   onChange={(e) => handleChange(key, 'to', e.target.value)}
                   displayEmpty
@@ -137,7 +137,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
                     }
                   }}
                 >
-                  <MenuItem value="" disabled>To</MenuItem>
+                  <MenuItem  value="" disabled>To</MenuItem>
                   {options.map((opt) => (
                     <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                   ))}
@@ -171,7 +171,7 @@ const FindReplaceDialog = ({ onClose, tableData, onReplaceAll }) => {
         >
           Cancel
         </Button>
-        <Button
+        <Button id="ReplaceAllButton"
           variant="contained"
           onClick={handleSubmit}
           disabled={!isValid}

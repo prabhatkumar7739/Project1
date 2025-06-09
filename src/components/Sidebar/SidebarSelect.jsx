@@ -6,6 +6,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Divider,
 } from "@mui/material";
 
 const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
@@ -30,6 +31,7 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
     >
       <InputLabel>Service Provider</InputLabel>
       <Select
+        id="step-six-target"
         value={value}
         onChange={onValueChange}
         label={label}
@@ -43,12 +45,33 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
           },
         }}
       >
-        {options.map((group) => [
+        {options.map((group, idx) => [
+          idx === 1 && (
+            <Divider
+              key="divider"
+              sx={{
+                my: 1,
+                borderColor: "#bdbdbd",
+              }}
+            />
+          ),
           <ListSubheader
             key={group.label}
+            disableSticky
+            disableHighlight
             sx={{
               color: theme.palette.dark,
               fontSize: "16px",
+              fontWeight: "bold",
+              backgroundColor: "#fff !important",
+              "&.Mui-focusVisible, &:hover, &:focus": {
+                backgroundColor: "#fff !important",
+                pointerEvents: "none"
+              },
+              "&.Mui-selected": {
+                backgroundColor: "#fff !important",
+              },
+              cursor: "default"
             }}
           >
             {group.label}
@@ -57,7 +80,18 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
             <MenuItem
               key={option.value}
               value={option.value}
-              sx={{ height: "40px" }}
+              sx={{ 
+                height: "40px",
+                "&:hover": {
+                  backgroundColor: "transparent", // Remove hover background
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "transparent", // Remove selected background
+                  "&:hover": {
+                    backgroundColor: "transparent", // Remove hover on selected
+                  },
+                },
+              }}
             >
               {option.label}
             </MenuItem>

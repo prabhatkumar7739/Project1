@@ -36,7 +36,8 @@ const CostAdviceNotificationBar = () => {
         Note: Cloud service providers (CSPs) offer spot instances at discounted rates, but pricing is dynamic and depends on current demand and capacity. Availability is not guaranteed, and instances can be reclaimed by the CSP at any time use only for workloads that can handle interruptions.
       </Typography>
 
-      <Button
+      <Button 
+      id='close'
         startIcon={<CloseIcon />}
         onClick={handleClose}
         sx={{

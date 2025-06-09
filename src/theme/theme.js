@@ -70,6 +70,27 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: "'Titillium Web', sans-serif",
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#e0e0e0'
+            },
+            '&:hover fieldset': {
+              borderColor: '#666666'
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#e0e0e0 !important',
+              borderWidth: '1px !important'
+            }
+          },
+          '& .MuiInputLabel-root': {
+            color: '#666666',
+            '&.Mui-focused': {
+              color: '#666666'
+            }
+          },
+          '& .MuiOutlinedInput-input': {
+            color: '#666666'
+          }
         },
       },
     },

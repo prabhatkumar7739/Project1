@@ -59,7 +59,10 @@ const PortfolioTableBody = ({
   const handleDoubleClick = (rowIndex, field, value) => {
     if (editableFields.includes(field)) {
       setEditingCell({ rowIndex, field });
-      setEditValue(value);
+      // Always use the current value from data, not the passed value
+      const currentValue = data[rowIndex][field];
+      // Convert to string for consistent handling, but preserve empty string if null/undefined
+      setEditValue(currentValue !== null && currentValue !== undefined ? currentValue.toString() : '');
     }
   };
 
@@ -99,7 +102,7 @@ const PortfolioTableBody = ({
     if (isEditing && isDropdown) {
       return (
         <Select
-          value={editValue}
+          value={editValue || ''} // Ensure we don't pass undefined
           onChange={(e) => handleEditSave(actualIndex, e.target.value)}
           onClose={() => handleEditCancel()}
           autoFocus
@@ -197,7 +200,7 @@ const PortfolioTableBody = ({
     if (isEditing && isNumberField) {
       return (
         <TextField
-          value={editValue}
+          value={editValue || ''} // Ensure we don't pass undefined
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={(e) => handleKeyPress(e, actualIndex)}
           onBlur={() => handleBlur(actualIndex)}
@@ -280,7 +283,7 @@ const PortfolioTableBody = ({
     if (isEditing && !isDropdown && !isNumberField) {
       return (
         <TextField
-          value={editValue}
+          value={editValue || ''} // Ensure we don't pass undefined
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={(e) => handleKeyPress(e, actualIndex)}
           onBlur={() => handleBlur(actualIndex)}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './components/pages/Home/Home';
@@ -6,7 +6,16 @@ import CostAdvice from './components/pages/CostAdvice';
 import CloudUsageReport from './components/pages/CloudUsageReport/CloudUsageReport';
 import Explorer from './components/pages/Explorer/Explorer';
 
+
 const App = () => {
+   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      import("@/tour/tour").then((tour) => {
+        tour.default.start();
+      });
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

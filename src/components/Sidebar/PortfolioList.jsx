@@ -86,15 +86,19 @@ export default function PortfolioList() {
                 button
                 onClick={() => handlePortfolioClick(portfolio)}
                 sx={{
-                  py: 1,
-                  px: 2,
+                  py: 0.5, // compact vertical padding
+                  px: 0.5, // compact horizontal padding
                   color: isActive ? '#fff' : '#000',
                   backgroundColor: isActive ? '#000' : '#fff',
-                  borderRadius: '6px',
-                  mb: 0.5,
+                  borderRadius: '4px',
+                  mb: 0.25,
+                  alignItems: "center",
                   '& .MuiListItemIcon-root': {
                     color: isActive ? '#fff' : '#666',
-                    minWidth: 30
+                    minWidth: 0,
+                    marginRight: "4px",
+                    display: "flex",
+                    alignItems: "center",
                   },
                   '&:hover': {
                     backgroundColor: isActive ? '#222' : '#e8e8e8',
@@ -106,20 +110,21 @@ export default function PortfolioList() {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="caption" noWrap>
                       {portfolioName}
                       {provider && (
                         <Typography
                           component="span"
-                          fontSize={12}
+                          fontSize={10}
                           color={isActive ? '#fff' : 'text.secondary'}
-                          sx={{ ml: 1 }}
+                          sx={{ ml: 0.5 }}
                         >
                           ({provider})
                         </Typography>
                       )}
                     </Typography>
                   }
+                  sx={{ marginLeft: 0 }}
                 />
               </ListItem>
             </Tooltip>

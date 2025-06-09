@@ -50,7 +50,7 @@ const UserMenu = ({ onClose }) => {
         <ListItemIcon>
           <LogoutIcon fontSize="medium" sx={{ color: "#fff" }} />
         </ListItemIcon>
-        <ListItemText>Logout</ListItemText>
+        <ListItemText id="logout-link">Logout</ListItemText>
       </MenuItem>
       <OnlineDocumentationDialog open={docOpen} onClose={() => setDocOpen(false)} />
       <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />

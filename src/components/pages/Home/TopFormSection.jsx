@@ -126,45 +126,40 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
   }, [region, size, pricingModel, quantity, hours, setIsFormFilled]);
 
   const handleAdd = () => {
-    if (!portfolioName.trim()) {
+    // Check if required fields are filled
+    if (!region || !size || !quantity || !hours || !pricingModel) {
       setErrorOpen(true);
-      setUploadError('Please enter a portfolio name with at least 3 characters');
       return;
     }
 
-    if (region && size && pricingModel && quantity && hours) {
-      const newRow = {
-        uuid: uuid || uuidv4(),
-        region,
-        size,
-        quantity,
-        hours,
-        pricingModel
-      };
+    const newRow = {
+      uuid: uuid || uuidv4(),
+      region,
+      size,
+      quantity,
+      hours,
+      pricingModel
+    };
 
-      setTableData(prev => {
-        const newData = [...prev, newRow];
-        if (newData.length > 0) {
-          setIsTableCreated(true);
-        }
-        if (portfolioName) {
-          localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(newData));
-        }
-        return newData;
-      });
+    setTableData(prev => {
+      const newData = [...prev, newRow];
+      if (newData.length > 0) {
+        setIsTableCreated(true);
+      }
+      if (portfolioName) {
+        localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(newData));
+      }
+      return newData;
+    });
 
-      setRegion('');
-      setSize('');
-      setPricingModel('');
-      setUUID('');
-      setQuantity('');
-      setHours('');
+    setRegion('');
+    setSize('');
+    setPricingModel('');
+    setUUID('');
+    setQuantity('');
+    setHours('');
 
-      setSuccessOpen(true);
-    } else {
-      setErrorOpen(true);
-      setUploadError('Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).');
-    }
+    setSuccessOpen(true);
   };
 
   const handleReplaceAll = (updatedData) => {
@@ -209,6 +204,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             id="portfolio-name"
             label="Portfolio Name*"
             variant="outlined"
+            name="portfolioName"
             size="small"
             value={portfolioName}
             onChange={(e) => setPortfolioName(e.target.value)}
@@ -242,6 +238,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           )}
           <CustomTooltip message={buttonTooltips.upload}>
             <Button 
+            id="uploadInstances"
               variant="contained" 
               startIcon={<FileUploadOutlined />} 
               onClick={handleUploadClick}
@@ -267,6 +264,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           <Box sx={{ mr: 26 }}>
             <CustomTooltip message={buttonTooltips.template}>
               <Button 
+              id="step-five-target"
                 component="a" 
                 href="/PortfolioTemplate.xlsx" 
                 download="PortfolioTemplate.xlsx" 
@@ -305,7 +303,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
       <Divider sx={{ my: 1, width: '100%' }} />
 
-      <Grid container spacing={2} sx={{ mb: 2 }}>
+      <Grid id="portfolio-data" container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, [
             { label: 'africa-south1', value: 'africa-south1' },
@@ -339,7 +337,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} sx={{ mb: 2 }}>
+      <Grid id="portfolio-data1" container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={4}>
           <CustomTooltip message={formTooltips.quantity}>
             <TextField
@@ -366,11 +364,12 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
               value={hours}
               onChange={(e) => setHours(e.target.value)}
               required
+              name='region'
             />
           </CustomTooltip>
         </Grid>
 
-        <Grid item xs={12} sm={4}>
+        <Grid  item xs={12} sm={4}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {textFieldProps('Pricing Model*', pricingModel, (e) => setPricingModel(e.target.value), 200, [
               { label: 'ondemand', value: 'ondemand' },
@@ -379,7 +378,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             ], formTooltips.pricingModel)}
 
             <CustomTooltip message={buttonTooltips.add}>
-              <Button
+              <Button id='addinstance'
                 variant="contained"
                 sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
                 onClick={handleAdd}
@@ -389,7 +388,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             </CustomTooltip>
 
             <CustomTooltip message={buttonTooltips.findReplace}>
-              <Button
+              <Button id="findAndReplace"
                 variant="contained"
                 sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
                 onClick={() => setFindReplaceOpen(true)}
@@ -426,6 +425,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           </Box>
         </Grid>
       </Grid>
+  
 
       {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={setTableData} />}
 
@@ -450,7 +450,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             fontSize: '14px'
           }}
         >
-          <span>{uploadError || 'Please fill in all required fields (Region, Size, Quantity, Hours, and Pricing Model).'}</span>
+          <span>{uploadError || 'Please enter the required fields.'}</span>
           <Button
             onClick={() => setErrorOpen(false)}
             sx={{

@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogContent,
   List,
+  Divider,
   ListItem,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -268,6 +269,18 @@ const CostAdvice = ({ onClose }) => {
     });
   }, [transformedData, searchTerm]);
 
+  // Pagination calculation
+  const totalRows = filteredData.length;
+  const pageStart = totalRows === 0 ? 0 : 1;
+  const pageEnd = Math.min(itemsPerPage, totalRows);
+
+  // Memoize the visible rows based on pagination
+  const visibleRows = useMemo(() => {
+    const startIndex = 0;
+    const endIndex = Math.min(itemsPerPage, filteredData.length);
+    return filteredData.slice(startIndex, endIndex);
+  }, [filteredData, itemsPerPage]);
+
   // Memoized event handlers
   const handleSavingsTypeChange = useCallback((e) => {
     setSavingsType(e.target.value);
@@ -353,13 +366,6 @@ const CostAdvice = ({ onClose }) => {
     }
   };
 
-  // Memoize the visible rows based on pagination
-  const visibleRows = useMemo(() => {
-    const startIndex = 0;
-    const endIndex = Math.min(itemsPerPage, filteredData.length);
-    return filteredData.slice(startIndex, endIndex);
-  }, [filteredData, itemsPerPage]);
-
   const handleErrorDialogOpen = () => {
     setOpenErrorDialog(true);
   };
@@ -401,7 +407,6 @@ const CostAdvice = ({ onClose }) => {
         overflow: 'auto',
         height: '100vh'
       }}>
-        {/* Main Content */}
         <Box sx={{
           width: '100%',
           color: '#333333',
@@ -409,180 +414,12 @@ const CostAdvice = ({ onClose }) => {
           flexDirection: 'column',
           minWidth: '1200px'
         }}>
-          {/* Header Section */}
-          {/* <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            mb: 2.5
-          }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Typography variant="h6" sx={{ 
-                color: '#333333',
-                fontWeight: 'normal',
-                fontSize: '1.25rem',
-                mb: 1
-              }}>
-                Cost Advice
-              </Typography>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <FormControl size="small" sx={{ width: 180 }}>
-                  <InputLabel sx={{ 
-                    color: '#666666',
-                    fontSize: '0.875rem',
-                    '&.Mui-focused': { color: 'black' }
-                  }}>
-                    Savings Type
-                  </InputLabel>
-                  <Select
-                    value={savingsType}
-                    onChange={handleSavingsTypeChange}
-                    label="Savings Type"
-                    sx={{
-                      bgcolor: '#ffffff',
-                      fontSize: '0.875rem',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#e0e0e0'
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#666666'
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'black',
-                        borderWidth: '2px'
-                      },
-                      '& .MuiSvgIcon-root': {
-                        color: '#666666'
-                      }
-                    }}
-                  >
-                    <MenuItem value="All">All</MenuItem>
-                    <MenuItem value="Savings Type 1">Savings Type 1</MenuItem>
-                    <MenuItem value="Savings Type 2">Savings Type 2</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <IconButton 
-                  onClick={handleCostAdviceDialogOpen}
-                  size="small" 
-                  sx={{ 
-                    p: 0.75,
-                    color: '#666666',
-                    bgcolor: '#ffffff',
-                    border: '1px solid #e0e0e0',
-                    '&:hover': {
-                      bgcolor: '#f5f5f5',
-                      borderColor: '#666666'
-                    }
-                  }}
-                >
-                  <CustomTooltip message="What's this?">
-                    <QuestionMarkIcon sx={{ fontSize: '1rem' }} />
-                  </CustomTooltip>
-                </IconButton>
-
-                <Box sx={{ display: 'flex', gap: 2, ml: 1 }}>
-                  <Link 
-                    onClick={handleErrorDialogOpen}
-                    sx={{ 
-                      color: '#202020',
-                      textDecoration: 'none',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                      '&:hover': {
-                        textDecoration: 'underline'
-                      }
-                    }}
-                  >
-                    Input Errors Explanation
-                  </Link>
-                  <Link 
-                    onClick={handleEIADialogOpen}
-                    sx={{ 
-                      color: '#202020',
-                      textDecoration: 'none',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                      '&:hover': {
-                        textDecoration: 'underline'
-                      }
-                    }}
-                  >
-                    When is EIA Recommended?
-                  </Link>
-                </Box>
-              </Box>
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column', gap: 1.5 }}>
-              <Button
-                variant="outlined"
-                startIcon={isExporting ? <CircularProgress size={20} /> : <FileDownloadIcon />}
-                disabled={isExporting}
-                onClick={handleExport}
-                sx={{
-                  height: 32,
-                  px: 2,
-                  textTransform: 'none',
-                  color: '#333333',
-                  bgcolor: '#ffffff',
-                  fontSize: '0.875rem',
-                  borderColor: '#e0e0e0',
-                  '&:hover': {
-                    bgcolor: '#f5f5f5',
-                    borderColor: '#666666'
-                  }
-                }}
-              >
-                {isExporting ? 'Exporting...' : 'Export'}
-              </Button>
-
-              <TextField
-                placeholder="Search..."
-                size="small"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                sx={{
-                  width: 220,
-                  '& .MuiOutlinedInput-root': {
-                    height: 32,
-                    fontSize: '0.875rem',
-                    bgcolor: '#ffffff',
-                    '& fieldset': {
-                      borderColor: '#e0e0e0'
-                    },
-                    '&:hover fieldset': {
-                      borderColor: '#666666'
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'black',
-                      borderWidth: '2px'
-                    },
-                    '& input::placeholder': {
-                      color: '#666666',
-                      opacity: 1
-                    }
-                  }
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon sx={{ fontSize: '1.25rem', color: '#666666' }} />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
-          </Box> */}
-          {/* Header Section */}
           <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             mb: 2.5
           }}>
-            {/* Left Side */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="h6" sx={{
                 color: '#333333',
@@ -593,7 +430,9 @@ const CostAdvice = ({ onClose }) => {
               </Typography>
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <FormControl size="medium" sx={{ width: 280 }}>
+                <FormControl
+                  id="Allseving"
+                  size="medium" sx={{ width: 280 }}>
                   <InputLabel sx={{
                     color: '#666666',
                     fontSize: '1rem',
@@ -625,9 +464,10 @@ const CostAdvice = ({ onClose }) => {
                       }
                     }}
                   >
-                    <MenuItem value="All">All</MenuItem>
-                    <MenuItem value="Savings Type 1">Savings Type 1</MenuItem>
-                    <MenuItem value="Savings Type 2">Savings Type 2</MenuItem>
+                     <MenuItem value="All">All</MenuItem>
+  <MenuItem value="Hourly Cost Optimization">Hourly Cost Optimization</MenuItem>
+  <MenuItem value="Modernize">Modernize</MenuItem>
+  <MenuItem value="Modernize & Downsize">Modernize & Downsize</MenuItem>
                   </Select>
                 </FormControl>
 
@@ -651,7 +491,7 @@ const CostAdvice = ({ onClose }) => {
                 </IconButton>
 
                 <Box sx={{ display: 'flex', gap: 2.5, ml: 1 }}>
-                  <Link
+                  <Link id="input-errors-explanation"
                     onClick={handleErrorDialogOpen}
                     sx={{
                       color: '#202020',
@@ -663,7 +503,7 @@ const CostAdvice = ({ onClose }) => {
                   >
                     Input Errors Explanation
                   </Link>
-                  <Link
+                  <Link id="eai-recommended"
                     onClick={handleEIADialogOpen}
                     sx={{
                       color: '#202020',
@@ -679,9 +519,9 @@ const CostAdvice = ({ onClose }) => {
               </Box>
             </Box>
 
-            {/* Right Side */}
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
               <Button
+                id="btn-cost-advice-export"
                 variant="outlined"
                 startIcon={isExporting ? <CircularProgress size={22} /> : <FileDownloadIcon sx={{ fontSize: '1.25rem' }} />}
                 disabled={isExporting}
@@ -721,8 +561,8 @@ const CostAdvice = ({ onClose }) => {
                       borderColor: '#666666'
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: 'black',
-                      borderWidth: '2px'
+                      borderColor: '#e0e0e0',
+                      borderWidth: '1px'
                     },
                     '& input::placeholder': {
                       color: '#666666',
@@ -740,9 +580,6 @@ const CostAdvice = ({ onClose }) => {
               />
             </Box>
           </Box>
-
-
-
 
           {/* Table Section */}
           <Box>
@@ -891,9 +728,115 @@ const CostAdvice = ({ onClose }) => {
 
                 {/* Table Body */}
                 <TableBody>
-                  {visibleRows.map((row, index) => (
+                  {visibleRows.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={29}
+                        sx={{
+                          textAlign: 'center',
+                          color: '#ffffff',
+                          bgcolor: '#222',
+                          fontSize: '1.2rem',
+                          py: 4,
+                        }}
+                      >
+                        No Data Found
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    visibleRows.map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          '& td': COMMON_STYLES.tableCell,
+                          '&:hover td': {
+                            bgcolor: '#1e1e1e'
+                          }
+                        }}
+                      >
+                        {/* Current Section Data */}
+                        <TableCell sx={{
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 1,
+                          bgcolor: '#000000',
+                          borderRight: '1px solid #ffffff40',
+                          minWidth: '120px',
+                          '&:hover': {
+                            bgcolor: '#1e1e1e'
+                          }
+                        }}>{row.current.region}</TableCell>
+                        <TableCell sx={{
+                          position: 'sticky',
+                          left: '120px',
+                          zIndex: 1,
+                          bgcolor: '#000000',
+                          borderRight: '1px solid #ffffff40',
+                          minWidth: '120px',
+                          '&:hover': {
+                            bgcolor: '#1e1e1e'
+                          }
+                        }}>{row.current.instance}</TableCell>
+                        <TableCell sx={{
+                          position: 'sticky',
+                          left: '240px',
+                          zIndex: 1,
+                          bgcolor: '#000000',
+                          borderRight: '1px solid #ffffff40',
+                          minWidth: '120px',
+                          '&:hover': {
+                            bgcolor: '#1e1e1e'
+                          }
+                        }}>{row.current.monthlyCost}</TableCell>
+                        <TableCell sx={{
+                          position: 'sticky',
+                          left: '360px',
+                          zIndex: 1,
+                          bgcolor: '#000000',
+                          borderRight: '1px solid #ffffff40',
+                          minWidth: '120px',
+                          '&:hover': {
+                            bgcolor: '#1e1e1e'
+                          }
+                        }}>{row.current.annualCost}</TableCell>
+                        <TableCell>{row.current.uuid}</TableCell>
+                        <TableCell>{row.current.cloud}</TableCell>
+                        <TableCell>{row.current.quantity}</TableCell>
+                        <TableCell>{row.current.pricingModel}</TableCell>
+                        <TableCell>{row.current.vcpu}</TableCell>
+                        <TableCell>{row.current.remark}</TableCell>
+
+                        {/* Hourly Cost Optimization Data */}
+                        <TableCell>{row.hourlyCostOpt.instance}</TableCell>
+                        <TableCell>{row.hourlyCostOpt.vcpu}</TableCell>
+                        <TableCell>{row.hourlyCostOpt.monthlyCost}</TableCell>
+                        <TableCell>{row.hourlyCostOpt.annualCost}</TableCell>
+                        <TableCell>{row.hourlyCostOpt.savings}</TableCell>
+                        <TableCell>{row.hourlyCostOpt.performanceImprovement}</TableCell>
+
+                        {/* Modernize Data */}
+                        <TableCell>{row.modernize.instance}</TableCell>
+                        <TableCell>{row.modernize.vcpu}</TableCell>
+                        <TableCell>{row.modernize.monthlyCost}</TableCell>
+                        <TableCell>{row.modernize.annualCost}</TableCell>
+                        <TableCell>{row.modernize.savings}</TableCell>
+                        <TableCell>{row.modernize.performanceImprovement}</TableCell>
+
+                        {/* Modernize & Downsize Data */}
+                        <TableCell>{row.modernizeDownsize.instance}</TableCell>
+                        <TableCell>{row.modernizeDownsize.vcpu}</TableCell>
+                        <TableCell>{row.modernizeDownsize.monthlyCost}</TableCell>
+                        <TableCell>{row.modernizeDownsize.annualCost}</TableCell>
+                        <TableCell>{row.modernizeDownsize.annualSavings}</TableCell>
+                        <TableCell>{row.modernizeDownsize.savings}</TableCell>
+                        <TableCell>{row.modernizeDownsize.performanceImprovement}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+
+                  {/* Grand Total Row */}
+                  {visibleRows.length > 0 && (
                     <TableRow
-                      key={index}
                       sx={{
                         '& td': COMMON_STYLES.tableCell,
                         '&:hover td': {
@@ -901,7 +844,6 @@ const CostAdvice = ({ onClose }) => {
                         }
                       }}
                     >
-                      {/* Current Section Data */}
                       <TableCell sx={{
                         position: 'sticky',
                         left: 0,
@@ -912,7 +854,7 @@ const CostAdvice = ({ onClose }) => {
                         '&:hover': {
                           bgcolor: '#1e1e1e'
                         }
-                      }}>{row.current.region}</TableCell>
+                      }}>Grand Total</TableCell>
                       <TableCell sx={{
                         position: 'sticky',
                         left: '120px',
@@ -923,7 +865,7 @@ const CostAdvice = ({ onClose }) => {
                         '&:hover': {
                           bgcolor: '#1e1e1e'
                         }
-                      }}>{row.current.instance}</TableCell>
+                      }}>-</TableCell>
                       <TableCell sx={{
                         position: 'sticky',
                         left: '240px',
@@ -934,7 +876,7 @@ const CostAdvice = ({ onClose }) => {
                         '&:hover': {
                           bgcolor: '#1e1e1e'
                         }
-                      }}>{row.current.monthlyCost}</TableCell>
+                      }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
                       <TableCell sx={{
                         position: 'sticky',
                         left: '360px',
@@ -945,182 +887,98 @@ const CostAdvice = ({ onClose }) => {
                         '&:hover': {
                           bgcolor: '#1e1e1e'
                         }
-                      }}>{row.current.annualCost}</TableCell>
-                      <TableCell>{row.current.uuid}</TableCell>
-                      <TableCell>{row.current.cloud}</TableCell>
-                      <TableCell>{row.current.quantity}</TableCell>
-                      <TableCell>{row.current.pricingModel}</TableCell>
-                      <TableCell>{row.current.vcpu}</TableCell>
-                      <TableCell>{row.current.remark}</TableCell>
-
-                      {/* Hourly Cost Optimization Data */}
-                      <TableCell>{row.hourlyCostOpt.instance}</TableCell>
-                      <TableCell>{row.hourlyCostOpt.vcpu}</TableCell>
-                      <TableCell>{row.hourlyCostOpt.monthlyCost}</TableCell>
-                      <TableCell>{row.hourlyCostOpt.annualCost}</TableCell>
-                      <TableCell>{row.hourlyCostOpt.savings}</TableCell>
-                      <TableCell>{row.hourlyCostOpt.performanceImprovement}</TableCell>
-
-                      {/* Modernize Data */}
-                      <TableCell>{row.modernize.instance}</TableCell>
-                      <TableCell>{row.modernize.vcpu}</TableCell>
-                      <TableCell>{row.modernize.monthlyCost}</TableCell>
-                      <TableCell>{row.modernize.annualCost}</TableCell>
-                      <TableCell>{row.modernize.savings}</TableCell>
-                      <TableCell>{row.modernize.performanceImprovement}</TableCell>
-
-                      {/* Modernize & Downsize Data */}
-                      <TableCell>{row.modernizeDownsize.instance}</TableCell>
-                      <TableCell>{row.modernizeDownsize.vcpu}</TableCell>
-                      <TableCell>{row.modernizeDownsize.monthlyCost}</TableCell>
-                      <TableCell>{row.modernizeDownsize.annualCost}</TableCell>
-                      <TableCell>{row.modernizeDownsize.annualSavings}</TableCell>
-                      <TableCell>{row.modernizeDownsize.savings}</TableCell>
-                      <TableCell>{row.modernizeDownsize.performanceImprovement}</TableCell>
+                      }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{grandTotals.quantity}</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{grandTotals.vcpu}</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{grandTotals.optVcpu}</TableCell>
+                      <TableCell>{grandTotals.optMonthlyCost.toFixed(2)}</TableCell>
+                      <TableCell>{grandTotals.optAnnualCost.toFixed(2)}</TableCell>
+                      <TableCell>20</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{grandTotals.modVcpu}</TableCell>
+                      <TableCell>{grandTotals.modMonthlyCost.toFixed(2)}</TableCell>
+                      <TableCell>{grandTotals.modAnnualCost.toFixed(2)}</TableCell>
+                      <TableCell>27</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{grandTotals.downVcpu}</TableCell>
+                      <TableCell>{grandTotals.downMonthlyCost.toFixed(2)}</TableCell>
+                      <TableCell>{grandTotals.downAnnualCost.toFixed(2)}</TableCell>
+                      <TableCell>{grandTotals.downAnnualSavings.toFixed(2)}</TableCell>
+                      <TableCell>60</TableCell>
+                      <TableCell>-</TableCell>
                     </TableRow>
-                  ))}
-
-                  {/* Grand Total Row */}
-                  <TableRow
-                    sx={{
-                      '& td': COMMON_STYLES.tableCell,
-                      '&:hover td': {
-                        bgcolor: '#1e1e1e'
-                      }
-                    }}
-                  >
-                    <TableCell sx={{
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 1,
-                      bgcolor: '#000000',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px',
-                      '&:hover': {
-                        bgcolor: '#1e1e1e'
-                      }
-                    }}>Grand Total</TableCell>
-                    <TableCell sx={{
-                      position: 'sticky',
-                      left: '120px',
-                      zIndex: 1,
-                      bgcolor: '#000000',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px',
-                      '&:hover': {
-                        bgcolor: '#1e1e1e'
-                      }
-                    }}>-</TableCell>
-                    <TableCell sx={{
-                      position: 'sticky',
-                      left: '240px',
-                      zIndex: 1,
-                      bgcolor: '#000000',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px',
-                      '&:hover': {
-                        bgcolor: '#1e1e1e'
-                      }
-                    }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
-                    <TableCell sx={{
-                      position: 'sticky',
-                      left: '360px',
-                      zIndex: 1,
-                      bgcolor: '#000000',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px',
-                      '&:hover': {
-                        bgcolor: '#1e1e1e'
-                      }
-                    }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>{grandTotals.quantity}</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>{grandTotals.vcpu}</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>{grandTotals.optVcpu}</TableCell>
-                    <TableCell>{grandTotals.optMonthlyCost.toFixed(2)}</TableCell>
-                    <TableCell>{grandTotals.optAnnualCost.toFixed(2)}</TableCell>
-                    <TableCell>20</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>{grandTotals.modVcpu}</TableCell>
-                    <TableCell>{grandTotals.modMonthlyCost.toFixed(2)}</TableCell>
-                    <TableCell>{grandTotals.modAnnualCost.toFixed(2)}</TableCell>
-                    <TableCell>27</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>{grandTotals.downVcpu}</TableCell>
-                    <TableCell>{grandTotals.downMonthlyCost.toFixed(2)}</TableCell>
-                    <TableCell>{grandTotals.downAnnualCost.toFixed(2)}</TableCell>
-                    <TableCell>{grandTotals.downAnnualSavings.toFixed(2)}</TableCell>
-                    <TableCell>60</TableCell>
-                    <TableCell>-</TableCell>
-                  </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
 
-            {/* Pagination */}
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: 2,
-              color: '#ffffff',
-              bgcolor: '#000000',
-              p: 2
-            }}>
-              <Typography variant="body2" sx={{ color: '#ffffff' }}>
-                Items per page:
-              </Typography>
-              <Select
-                value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(e.target.value)}
-                size="small"
-                sx={{
-                  minWidth: 70,
-                  color: '#ffffff',
-                  bgcolor: '#000000',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff40'
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff80'
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff',
-                    borderWidth: '2px'
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#ffffff'
-                  }
-                }}
-              >
-                <MenuItem value={10} sx={{ color: '#000000' }}>10</MenuItem>
-                <MenuItem value={25} sx={{ color: '#000000' }}>25</MenuItem>
-                <MenuItem value={50} sx={{ color: '#000000' }}>50</MenuItem>
-              </Select>
-              <Typography variant="body2" sx={{ color: '#ffffff' }}>
-                1-1 of 1
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton size="small" disabled sx={COMMON_STYLES.button}>
-                  <FirstPageIcon />
-                </IconButton>
-                <IconButton size="small" disabled sx={COMMON_STYLES.button}>
-                  <NavigateBeforeIcon />
-                </IconButton>
-                <IconButton size="small" disabled sx={COMMON_STYLES.button}>
-                  <NavigateNextIcon />
-                </IconButton>
-                <IconButton size="small" disabled sx={COMMON_STYLES.button}>
-                  <LastPageIcon />
-                </IconButton>
+            {/* Pagination: show only if there is data */}
+            {visibleRows.length > 0 && (
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: 2,
+                color: '#ffffff',
+                bgcolor: '#000000',
+                p: 2
+              }}>
+                <Typography variant="body2" sx={{ color: '#ffffff' }}>
+                  Items per page:
+                </Typography>
+                <Select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(e.target.value)}
+                  size="small"
+                  sx={{
+                    minWidth: 70,
+                    color: '#ffffff',
+                    bgcolor: '#000000',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#ffffff40'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#ffffff80'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#ffffff',
+                      borderWidth: '2px'
+                    },
+                    '& .MuiSvgIcon-root': {
+                      color: '#ffffff'
+                    }
+                  }}
+                >
+                  <MenuItem value={10} sx={{ color: '#000000' }}>10</MenuItem>
+                  <MenuItem value={25} sx={{ color: '#000000' }}>25</MenuItem>
+                  <MenuItem value={50} sx={{ color: '#000000' }}>50</MenuItem>
+                </Select>
+                <Typography variant="body2" sx={{ color: '#ffffff' }}>
+                  {pageStart}-{pageEnd} of {totalRows}
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <IconButton size="small" disabled sx={COMMON_STYLES.button}>
+                    <FirstPageIcon />
+                  </IconButton>
+                  <IconButton size="small" disabled sx={COMMON_STYLES.button}>
+                    <NavigateBeforeIcon />
+                  </IconButton>
+                  <IconButton size="small" disabled sx={COMMON_STYLES.button}>
+                    <NavigateNextIcon />
+                  </IconButton>
+                  <IconButton size="small" disabled sx={COMMON_STYLES.button}>
+                    <LastPageIcon />
+                  </IconButton>
+                </Box>
               </Box>
-            </Box>
+            )}
           </Box>
         </Box>
 
@@ -1130,59 +988,74 @@ const CostAdvice = ({ onClose }) => {
           onClose={handleErrorDialogClose}
           PaperProps={{
             sx: {
-              maxWidth: '600px',
+              maxWidth: 'none',
+              width: '900px',
               borderRadius: '4px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              p: 0
             }
           }}
         >
-          <DialogTitle sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            color: '#333',
-            bgcolor: '#f5f5f5',
-            borderBottom: '1px solid #e0e0e0',
-            py: 1.5,
-            px: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            Invalid or Unsupported Scenarios:
+          <DialogTitle
+            sx={{
+              fontSize: '1.3rem',
+              fontWeight: 700,
+              color: '#222',
+              bgcolor: '#fff',
+              borderBottom: 'none',
+              py: 2,
+              px: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              ml: 3
+            }}
+          >
+            <Box>
+              Invalid or Unsupported Scenarios:
+              <Typography
+                component="div"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '1rem',
+                  color: '#666',
+                  mt: 0.5,
+                }}
+              >
+                Region or Instance input data is invalid or specifies an unsupported instance type
+              </Typography>
+            </Box>
             <IconButton
               onClick={handleErrorDialogClose}
-              size="small"
+              size="medium"
               sx={{
-                width: '24px',
-                height: '24px',
+                ml: 2,
                 bgcolor: '#fff',
-                border: '1px solid #ddd',
+                border: '1px solid #eee',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                 borderRadius: '50%',
+                width: 40,
+                height: 40,
+                p: 0,
                 '&:hover': {
                   bgcolor: '#f5f5f5'
                 }
               }}
             >
-              ✕
+              <span style={{ fontSize: 22, fontWeight: 400, color: '#222' }}>×</span>
             </IconButton>
           </DialogTitle>
-          <DialogContent sx={{ p: 2 }}>
-            <Typography sx={{
-              mb: 2,
-              color: '#666',
-              fontSize: '0.875rem'
-            }}>
-              Region or Instance input data is invalid or specifies an unsupported instance type
-            </Typography>
+          <Divider sx={{ my: 0, mx: 3 }} />
+          <DialogContent sx={{ p: 3, pt: 2, ml: 3 }}>
             <List sx={{
-              pl: 2,
+              pl: 0,
               '& .MuiListItem-root': {
                 display: 'list-item',
                 listStyleType: 'disc',
-                pl: 1,
-                py: 0.25,
-                fontSize: '0.875rem',
-                color: '#666'
+                pl: 0,
+                py: 0.5,
+                fontSize: '1rem',
+                color: '#444',
               }
             }}>
               <ListItem>Instances for which performance data is unavailable.</ListItem>
@@ -1199,63 +1072,79 @@ const CostAdvice = ({ onClose }) => {
           onClose={handleEIADialogClose}
           PaperProps={{
             sx: {
-              maxWidth: '600px',
+              maxWidth: '900px',
+              width: '900px',
               borderRadius: '4px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              p: 0
             }
           }}
         >
-          <DialogTitle sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            color: '#333',
-            bgcolor: '#f5f5f5',
-            borderBottom: '1px solid #e0e0e0',
-            py: 1.5,
-            px: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            When is EIA recommended?
+          <DialogTitle
+            sx={{
+              fontSize: '1.3rem',
+              fontWeight: 700,
+              color: '#222',
+              bgcolor: '#fff',
+              borderBottom: 'none',
+              py: 2,
+              px: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              ml: 3
+            }}
+          >
+            <Box>
+              When is EIA recommended?
+            </Box>
             <IconButton
               onClick={handleEIADialogClose}
-              size="small"
+              size="medium"
               sx={{
-                width: '24px',
-                height: '24px',
+                ml: 2,
                 bgcolor: '#fff',
-                border: '1px solid #ddd',
+                border: '1px solid #eee',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                 borderRadius: '50%',
+                width: 40,
+                height: 40,
+                p: 0,
                 '&:hover': {
                   bgcolor: '#f5f5f5'
                 }
               }}
             >
-              ✕
+              <span style={{ fontSize: 22, fontWeight: 400, color: '#222' }}>×</span>
             </IconButton>
           </DialogTitle>
-          <DialogContent sx={{ p: 2 }}>
+          <Divider sx={{ my: 0, mx: 3 }} />
+          <DialogContent sx={{ p: 3, pt: 2, ml: 3 }}>
             <List sx={{
-              pl: 2,
+              pl: 0,
               '& .MuiListItem-root': {
                 display: 'list-item',
                 listStyleType: 'disc',
-                pl: 1,
-                py: 0.25,
-                fontSize: '0.875rem',
-                color: '#666'
+                pl: 0,
+                py: 0.5,
+                fontSize: '1rem',
+                color: '#444',
               }
             }}>
-              <ListItem>EIA is recommended when a more technical analysis is needed for an optimized recommendation.</ListItem>
-              <ListItem>For disk (d) or network-enhanced (n) instances.</ListItem>
-              <ListItem>When savings are not projected on modernized instances powered by AMD EPYC™ processors.</ListItem>
+              <ListItem>
+                EIA is recommended when a more technical analysis is needed for an optimized recommendation.
+              </ListItem>
+              <ListItem>
+                For disk (d) or network-enhanced (n) instances.
+              </ListItem>
+              <ListItem>
+                When savings are not projected on modernized instances powered by AMD EPYC™ processors.
+              </ListItem>
             </List>
           </DialogContent>
         </Dialog>
-
         {/* Cost Advice Help Dialog */}
-        <Dialog
+        {/* <Dialog
           open={openCostAdviceDialog}
           onClose={handleCostAdviceDialogClose}
           PaperProps={{
@@ -1375,7 +1264,122 @@ const CostAdvice = ({ onClose }) => {
               </Link>
             </Box>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
+        <Dialog
+  open={openCostAdviceDialog}
+  onClose={handleCostAdviceDialogClose}
+  PaperProps={{
+    sx: {
+      maxWidth: '1000px',
+      width: '1000px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+    }
+  }}
+>
+  <DialogTitle
+    sx={{
+      fontSize: '1.25rem',   // Larger
+      fontWeight: 500,
+      color: '#222',
+      bgcolor: '#fff',
+      borderBottom: 'none',
+      py: 2,
+      px: 3,
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }}
+  >
+    <span>All the recommendations are based on the competitive performance analysis across and within processor offerings</span>
+    <IconButton
+      onClick={handleCostAdviceDialogClose}
+      size="small"
+      sx={{
+        width: 32,
+        height: 32,
+        bgcolor: '#fff',
+        border: '1px solid #ddd',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+        borderRadius: '50%',
+        p: 0.5,
+        ml: 1,
+        '&:hover': { bgcolor: '#f5f5f5' }
+      }}
+    >
+      <CloseIcon sx={{ fontSize: 22, color: '#444' }} />
+    </IconButton>
+  </DialogTitle>
+  <Divider sx={{ m: 0 }} />
+  <DialogContent sx={{ p: 4, pt: 3 }}>
+    <List sx={{
+      pl: 2,
+      '& .MuiListItem-root': {
+        display: 'list-item',
+        py: 1.5,
+        color: '#333',
+        fontSize: '1.15rem'
+      }
+    }}>
+      <ListItem>
+        <Typography component="span" sx={{ fontWeight: 700 }}>
+          Hourly Cost Optimization:
+        </Typography>
+        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+          Recommendation to lower hourly costs by using 5th generation AMD processors (Milan, EPYC 7R13 series) for high efficiency and the same performance.
+        </Typography>
+      </ListItem>
+      <ListItem>
+        <Typography component="span" sx={{ fontWeight: 700 }}>
+          Modernize:
+        </Typography>
+        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+          Recommendation for using the latest AMD processors (Genoa, EPYC 9004 series) for increased performance ~2X uplift.
+        </Typography>
+      </ListItem>
+      <ListItem>
+        <Typography component="span" sx={{ fontWeight: 700 }}>
+          Modernize & Downsize:
+        </Typography>
+        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+          Recommendation to use the latest AMD processors and smaller instance sizes for the same performance and cost savings.
+        </Typography>
+      </ListItem>
+    </List>
+    <List sx={{ pl: 2 }}>
+      <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
+        <Link
+          href="https://www.amd.com/en/products/processors/server/epyc/aws.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            color: '#222',
+            textDecoration: 'none',
+            fontSize: '1.1rem',
+            '&:hover': { textDecoration: 'underline' }
+          }}
+        >
+          https://www.amd.com/en/products/processors/server/epyc/aws.html
+        </Link>
+      </ListItem>
+      <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
+        <Link
+          href="https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            color: '#222',
+            textDecoration: 'none',
+            fontSize: '1.1rem',
+            '&:hover': { textDecoration: 'underline' }
+          }}
+        >
+          https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html
+        </Link>
+      </ListItem>
+    </List>
+  </DialogContent>
+</Dialog>
       </Box>
     </div>
   );
