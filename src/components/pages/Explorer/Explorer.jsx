@@ -464,11 +464,51 @@ const Explorer = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Region</TableCell>
-                  <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Generation</TableCell>
-                  <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Instance Type</TableCell>
-                  <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>vCPU</TableCell>
-                  <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Memory (GiB)</TableCell>
+                  <TableCell sx={{ 
+                    color: '#00B0FF', 
+                    padding: '8px 12px',
+                    height: '36px',
+                    fontSize: '0.92rem',
+                    lineHeight: '1.3',
+                    bgcolor: '#1e1e1e',
+                    fontWeight: 'bold'
+                  }}>Region</TableCell>
+                  <TableCell sx={{ 
+                    color: '#00B0FF', 
+                    padding: '8px 12px',
+                    height: '36px',
+                    fontSize: '0.92rem',
+                    lineHeight: '1.3',
+                    bgcolor: '#1e1e1e',
+                    fontWeight: 'bold'
+                  }}>Generation</TableCell>
+                  <TableCell sx={{ 
+                    color: '#00B0FF', 
+                    padding: '8px 12px',
+                    height: '36px',
+                    fontSize: '0.92rem',
+                    lineHeight: '1.3',
+                    bgcolor: '#1e1e1e',
+                    fontWeight: 'bold'
+                  }}>Instance Type</TableCell>
+                  <TableCell sx={{ 
+                    color: '#00B0FF', 
+                    padding: '8px 12px',
+                    height: '36px',
+                    fontSize: '0.92rem',
+                    lineHeight: '1.3',
+                    bgcolor: '#1e1e1e',
+                    fontWeight: 'bold'
+                  }}>vCPU</TableCell>
+                  <TableCell sx={{ 
+                    color: '#00B0FF', 
+                    padding: '8px 12px',
+                    height: '36px',
+                    fontSize: '0.92rem',
+                    lineHeight: '1.3',
+                    bgcolor: '#1e1e1e',
+                    fontWeight: 'bold'
+                  }}>Memory (GiB)</TableCell>
                   <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Ondemand Price ($)</TableCell>
                   <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Reserved Price ($)</TableCell>
                   <TableCell sx={{ color: '#00B0FF', padding: '8px 16px' }}>Spot Price ($)</TableCell>

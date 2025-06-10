@@ -10,9 +10,17 @@ import {
   IconButton,
   Select,
   MenuItem,
+  TableContainer,
+  Paper,
+  Box,
+  Typography
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useCloudProvider } from '../../context/CloudProviderContext';
 
 // Cloud provider specific options
@@ -28,6 +36,34 @@ const sizeOptions = {
   Azure: ['Standard_B1s', 'Standard_B2s', 'Standard_B4ms']
 };
 
+const commonCellStyle = {
+  whiteSpace: 'nowrap',
+  color: '#ffffff',
+  bgcolor: '#000000',
+  padding: '8px 12px',
+  fontSize: '0.86rem',
+  height: '36px',
+  lineHeight: '1.3'
+};
+
+const commonHeaderStyle = {
+  ...commonCellStyle,
+  bgcolor: '#1e1e1e',
+  color: '#00B0FF',
+  fontWeight: 'bold',
+  fontSize: '0.92rem'
+};
+
+const paginationButtonStyle = {
+  color: '#ffffff',
+  '&.Mui-disabled': {
+    color: '#ffffff80'
+  },
+  '&:hover': {
+    bgcolor: '#333333'
+  }
+};
+
 const PortfolioTableBody = ({
   data,
   page,
@@ -37,6 +73,8 @@ const PortfolioTableBody = ({
   handleClick,
   isSelected,
   onDataChange,
+  onRowsPerPageChange,
+  onPageChange
 }) => {
   const { selectedProvider } = useCloudProvider();
   const [editingCell, setEditingCell] = useState({ rowIndex: null, field: null });
@@ -45,9 +83,9 @@ const PortfolioTableBody = ({
   // List of editable fields
   const editableFields = ['region', 'size', 'quantity', 'hours'];
 
-  // Medium compact size
-  const cellHeight = '38px';
-  const cellFontSize = '1rem';
+  // Medium size
+  const cellHeight = '36px';
+  const cellFontSize = '0.86rem';
   const cellMinWidth = '90px';
 
   const getOptionsForField = (field) => {
@@ -56,13 +94,16 @@ const PortfolioTableBody = ({
     return [];
   };
 
-  const handleDoubleClick = (rowIndex, field, value) => {
+  const handleDoubleClick = (rowIndex, field) => {
     if (editableFields.includes(field)) {
       setEditingCell({ rowIndex, field });
-      // Always use the current value from data, not the passed value
+
       const currentValue = data[rowIndex][field];
-      // Convert to string for consistent handling, but preserve empty string if null/undefined
-      setEditValue(currentValue !== null && currentValue !== undefined ? currentValue.toString() : '');
+      setEditValue(
+        currentValue !== null && currentValue !== undefined
+          ? String(currentValue)
+          : ''
+      );
     }
   };
 
@@ -102,7 +143,7 @@ const PortfolioTableBody = ({
     if (isEditing && isDropdown) {
       return (
         <Select
-          value={editValue || ''} // Ensure we don't pass undefined
+          value={editValue || ''}
           onChange={(e) => handleEditSave(actualIndex, e.target.value)}
           onClose={() => handleEditCancel()}
           autoFocus
@@ -200,7 +241,7 @@ const PortfolioTableBody = ({
     if (isEditing && isNumberField) {
       return (
         <TextField
-          value={editValue || ''} // Ensure we don't pass undefined
+          value={editValue || ''}
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={(e) => handleKeyPress(e, actualIndex)}
           onBlur={() => handleBlur(actualIndex)}
@@ -283,7 +324,7 @@ const PortfolioTableBody = ({
     if (isEditing && !isDropdown && !isNumberField) {
       return (
         <TextField
-          value={editValue || ''} // Ensure we don't pass undefined
+          value={editValue || ''}
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={(e) => handleKeyPress(e, actualIndex)}
           onBlur={() => handleBlur(actualIndex)}
@@ -337,7 +378,7 @@ const PortfolioTableBody = ({
 
     return (
       <div 
-        onDoubleClick={() => handleDoubleClick(actualIndex, field, value)}
+        onDoubleClick={() => handleDoubleClick(actualIndex, field)}
         style={{ 
           cursor: isEditable ? 'pointer' : 'default',
           padding: '4px 0',
@@ -361,109 +402,226 @@ const PortfolioTableBody = ({
     );
   };
 
+  // Calculate pagination values
+  const totalRows = data.length;
+  const pageStart = totalRows === 0 ? 0 : page * rowsPerPage + 1;
+  const pageEnd = Math.min((page + 1) * rowsPerPage, totalRows);
+
   return (
-    <Table size="small">
-      <TableHead>
-        <TableRow
-          sx={{ height: cellHeight, minHeight: cellHeight, maxHeight: cellHeight }}
-        >
-          <TableCell padding="checkbox" sx={{ height: cellHeight, p: '6px 8px' }}>
-            <Checkbox
-              checked={selected.length === data.length}
-              onChange={handleSelectAllClick}
-              sx={{ color: 'white', p: 0.5 }}
-              size="small"
-            />
-          </TableCell>
-          {[
-            'UUID / Instance Name',
-            'Cloud',
-            'Region',
-            'Size',
-            'Quantity',
-            'Total Number of Hours per Month',
-            'Pricing Model',
-            '', // Empty header for close button column
-          ].map((head) => (
-            <TableCell 
-              key={head} 
-              sx={{ 
-                color: '#00B0FF', 
-                fontWeight: 'bold',
-                padding: head === '' ? '0 6px' : '6px 12px',
-                width: head === '' ? '40px' : undefined,
-                height: cellHeight,
-                fontSize: cellFontSize,
-                minWidth: cellMinWidth
-              }}
-            >
-              {head}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data
-          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          .map((row, idx) => {
-            const actualIndex = page * rowsPerPage + idx;
-            const isRowEditing = editingCell.rowIndex === actualIndex;
-            return (
-              <TableRow 
-                key={actualIndex} 
-                hover
-                sx={{ 
-                  '&:hover': { backgroundColor: 'rgba(0, 176, 255, 0.08)' },
-                  height: cellHeight,
-                  minHeight: cellHeight,
-                  maxHeight: cellHeight
-                }}
-              >
-                <TableCell padding="checkbox" sx={{ height: cellHeight, p: '6px 8px' }}>
-                  <Checkbox
-                    checked={isSelected(actualIndex)}
-                    onChange={() => handleClick(actualIndex)}
-                    sx={{ color: 'white', p: 0.5 }}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{row.uuid}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{selectedProvider}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'region', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'size', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'quantity', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{renderCell(row, 'hours', actualIndex)}</TableCell>
-                <TableCell sx={{ color: 'white', height: cellHeight, fontSize: cellFontSize, p: '6px 12px' }}>{row.pricingModel}</TableCell>
-                <TableCell 
-                  align="center" 
-                  sx={{ 
-                    padding: '0 6px',
-                    width: '40px',
-                    height: cellHeight,
-                    fontSize: cellFontSize
+    <>
+      <TableContainer component={Paper} sx={{
+        maxHeight: 'calc(100vh - 280px)',
+        bgcolor: '#000000',
+        borderRadius: 0,
+        '& .MuiTable-root': {
+          borderCollapse: 'collapse'
+        }
+      }}>
+        <Table stickyHeader size="small" sx={{
+          minWidth: 650,
+          bgcolor: '#000000'
+        }}>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox" sx={commonHeaderStyle}>
+                <Checkbox
+                  indeterminate={selected.length > 0 && selected.length < data.length}
+                  checked={data.length > 0 && selected.length === data.length}
+                  onChange={handleSelectAllClick}
+                  sx={{
+                    color: '#ffffff',
+                    '&.Mui-checked': { color: '#00B0FF' },
+                    '&.MuiCheckbox-indeterminate': { color: '#00B0FF' },
+                    padding: '0px'
                   }}
-                >
-                  {isRowEditing && (
-                    <IconButton
-                      size="small"
-                      onClick={handleEditCancel}
-                      sx={{ 
-                        color: '#fff',
-                        padding: '2px',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                        }
+                />
+              </TableCell>
+              <TableCell sx={commonHeaderStyle}>UUID / Instance Name</TableCell>
+              <TableCell sx={commonHeaderStyle}>Cloud</TableCell>
+              <TableCell sx={commonHeaderStyle}>Region</TableCell>
+              <TableCell sx={commonHeaderStyle}>Size</TableCell>
+              <TableCell sx={commonHeaderStyle}>Quantity</TableCell>
+              <TableCell sx={commonHeaderStyle}>Total Number of Hours per Month</TableCell>
+              <TableCell sx={commonHeaderStyle}>Pricing Model</TableCell>
+              <TableCell sx={{ ...commonHeaderStyle, width: '40px', padding: '0 6px' }}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const actualIndex = page * rowsPerPage + index;
+                const isItemSelected = isSelected(actualIndex);
+                const isRowEditing = editingCell.rowIndex === actualIndex;
+
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={actualIndex}
+                    selected={isItemSelected}
+                    sx={{
+                      cursor: 'pointer',
+                      '&.Mui-selected, &.Mui-selected:hover': {
+                        backgroundColor: 'rgba(0, 176, 255, 0.08) !important'
+                      },
+                      '&:hover': {
+                        backgroundColor: '#1e1e1e !important'
+                      }
+                    }}
+                  >
+                    <TableCell padding="checkbox" sx={commonCellStyle}>
+                      <Checkbox
+                        checked={isItemSelected}
+                        onChange={() => handleClick(actualIndex)}
+                        sx={{
+                          color: '#ffffff',
+                          '&.Mui-checked': { color: '#00B0FF' },
+                          padding: '0px'
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell sx={commonCellStyle}>{row.uuid}</TableCell>
+                    <TableCell sx={commonCellStyle}>{selectedProvider}</TableCell>
+                    <TableCell
+                      sx={commonCellStyle}
+                      onDoubleClick={() => handleDoubleClick(actualIndex, 'region')}
+                    >
+                      {renderCell(row, 'region', actualIndex)}
+                    </TableCell>
+                    <TableCell
+                      sx={commonCellStyle}
+                      onDoubleClick={() => handleDoubleClick(actualIndex, 'size')}
+                    >
+                      {renderCell(row, 'size', actualIndex)}
+                    </TableCell>
+                    <TableCell
+                      sx={commonCellStyle}
+                      onDoubleClick={() => handleDoubleClick(actualIndex, 'quantity')}
+                    >
+                      {renderCell(row, 'quantity', actualIndex)}
+                    </TableCell>
+                    <TableCell
+                      sx={commonCellStyle}
+                      onDoubleClick={() => handleDoubleClick(actualIndex, 'hours')}
+                    >
+                      {renderCell(row, 'hours', actualIndex)}
+                    </TableCell>
+                    <TableCell sx={commonCellStyle}>{row.pricingModel}</TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        ...commonCellStyle,
+                        width: '40px',
+                        padding: '0 6px'
                       }}
                     >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-      </TableBody>
-    </Table>
+                      {isRowEditing && (
+                        <IconButton
+                          size="small"
+                          onClick={handleEditCancel}
+                          sx={{
+                            color: '#fff',
+                            padding: '2px',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                            }
+                          }}
+                        >
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Pagination Controls */}
+      {data.length > 0 && (
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: 2,
+          color: '#ffffff',
+          bgcolor: '#000000',
+          p: 2
+        }}>
+          <Typography variant="body2" sx={{ color: '#ffffff' }}>
+            Items per page:
+          </Typography>
+          <Select
+            value={rowsPerPage}
+            onChange={(e) => onRowsPerPageChange(e.target.value)}
+            size="small"
+            sx={{
+              minWidth: 70,
+              color: '#ffffff',
+              bgcolor: '#000000',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffffff40'
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffffff80'
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffffff',
+                borderWidth: '2px'
+              },
+              '& .MuiSvgIcon-root': {
+                color: '#ffffff'
+              }
+            }}
+          >
+            <MenuItem value={10} sx={{ color: '#000000' }}>10</MenuItem>
+            <MenuItem value={25} sx={{ color: '#000000' }}>25</MenuItem>
+            <MenuItem value={50} sx={{ color: '#000000' }}>50</MenuItem>
+          </Select>
+          <Typography variant="body2" sx={{ color: '#ffffff' }}>
+            {pageStart}-{pageEnd} of {totalRows}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <IconButton
+              size="small"
+              onClick={() => onPageChange(0)}
+              disabled={page === 0}
+              sx={paginationButtonStyle}
+            >
+              <FirstPageIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => onPageChange(page - 1)}
+              disabled={page === 0}
+              sx={paginationButtonStyle}
+            >
+              <NavigateBeforeIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => onPageChange(page + 1)}
+              disabled={pageEnd >= totalRows}
+              sx={paginationButtonStyle}
+            >
+              <NavigateNextIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => onPageChange(Math.ceil(totalRows / rowsPerPage) - 1)}
+              disabled={pageEnd >= totalRows}
+              sx={paginationButtonStyle}
+            >
+              <LastPageIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      )}
+    </>
   );
 };
 

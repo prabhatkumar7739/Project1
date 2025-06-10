@@ -145,13 +145,18 @@ function ReleaseNotes({ handleClose }) {
                 borderCollapse: "separate",
                 border: `1px solid ${BORDER_COLOR}`,
                 "& .MuiTableCell-root": {
-                  border: `1px solid ${BORDER_COLOR} !important`,
-                  verticalAlign: "top",
-                  padding: "4px 8px",
-                  fontSize: COMMON_FONT_SIZE,
-                  height: 28,
-                  lineHeight: 1.2,
-                  textAlign: "center",
+                  padding: '8px 12px',
+                  height: '36px',
+                  fontSize: '0.86rem',
+                  lineHeight: '1.3',
+                  color: '#ffffff',
+                  bgcolor: '#000000'
+                },
+                "& .MuiTableHead-root .MuiTableCell-root": {
+                  color: '#00B0FF',
+                  bgcolor: '#1e1e1e',
+                  fontSize: '0.92rem',
+                  fontWeight: 'bold'
                 },
               }}
             >

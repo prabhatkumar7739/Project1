@@ -55,11 +55,10 @@ const COMMON_STYLES = {
     whiteSpace: 'nowrap',
     color: '#ffffff',
     bgcolor: '#000000',
-    borderBottom: '1px solid #ffffff20',
-    padding: '12px 16px',
-    borderRight: '1px solid #ffffff40',
-    margin: 0,
-    lineHeight: '1.5',
+    padding: '8px 12px',
+    fontSize: '0.86rem',
+    height: '36px',
+    lineHeight: '1.3'
   },
   stickyCell: {
     position: 'sticky',
@@ -70,12 +69,14 @@ const COMMON_STYLES = {
     }
   },
   headerCell: {
-    bgcolor: '#1e1e1e',
+    whiteSpace: 'nowrap',
     color: '#00B0FF',
-    fontWeight: 'bold',
-    borderBottom: '1px solid #ffffff40',
-    borderRight: '1px solid #ffffff40',
-    margin: 0,
+    bgcolor: '#1e1e1e',
+    padding: '8px 12px',
+    fontSize: '0.92rem',
+    height: '36px',
+    lineHeight: '1.3',
+    fontWeight: 'bold'
   },
   button: {
     color: '#ffffff',
@@ -587,23 +588,34 @@ const CostAdvice = ({ onClose }) => {
               <Table size="small" sx={{
                 minWidth: 2500,
                 bgcolor: '#000000',
-                borderCollapse: 'collapse'
+                borderCollapse: 'collapse',
+                '& th, & td': {
+                  ...COMMON_STYLES.tableCell
+                }
               }}>
                 {/* Table Headers */}
                 <TableHead>
                   <TableRow>
-                    <TableCell
-                      colSpan={10}
+                    <TableCell 
+                      colSpan={10} 
                       sx={{
-                        bgcolor: '#1e1e1e',
-                        color: '#00B0FF',
-                        fontWeight: 'bold',
-                        borderBottom: '1px solid #ffffff40',
+                        ...COMMON_STYLES.headerCell,
                         position: 'sticky',
                         left: 0,
-                        zIndex: 2,
+                        zIndex: 3,
+                        textAlign: 'center',
+                        bgcolor: '#1e1e1e',
                         borderRight: '1px solid #ffffff40',
-                        textAlign: 'center'
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          left: 0,
+                          top: 0,
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: '#1e1e1e',
+                          zIndex: -1
+                        }
                       }}
                     >
                       Current
@@ -611,12 +623,10 @@ const CostAdvice = ({ onClose }) => {
                     <TableCell
                       colSpan={6}
                       sx={{
-                        bgcolor: '#1e1e1e',
-                        color: '#00B0FF',
-                        fontWeight: 'bold',
-                        borderBottom: '1px solid #ffffff40',
+                        ...COMMON_STYLES.headerCell,
+                        textAlign: 'center',
                         borderRight: '1px solid #ffffff40',
-                        textAlign: 'center'
+                        bgcolor: '#1e1e1e'
                       }}
                     >
                       Hourly Cost Optimization *
@@ -624,12 +634,10 @@ const CostAdvice = ({ onClose }) => {
                     <TableCell
                       colSpan={6}
                       sx={{
-                        bgcolor: '#1e1e1e',
-                        color: '#00B0FF',
-                        fontWeight: 'bold',
-                        borderBottom: '1px solid #ffffff40',
+                        ...COMMON_STYLES.headerCell,
+                        textAlign: 'center',
                         borderRight: '1px solid #ffffff40',
-                        textAlign: 'center'
+                        bgcolor: '#1e1e1e'
                       }}
                     >
                       Modernize *
@@ -637,11 +645,9 @@ const CostAdvice = ({ onClose }) => {
                     <TableCell
                       colSpan={7}
                       sx={{
-                        bgcolor: '#1e1e1e',
-                        color: '#00B0FF',
-                        fontWeight: 'bold',
-                        borderBottom: '1px solid #ffffff40',
-                        textAlign: 'center'
+                        ...COMMON_STYLES.headerCell,
+                        textAlign: 'center',
+                        bgcolor: '#1e1e1e'
                       }}
                     >
                       Modernize & Downsize *
@@ -649,80 +655,99 @@ const CostAdvice = ({ onClose }) => {
                   </TableRow>
                   <TableRow sx={{
                     '& th': {
-                      fontWeight: 'bold',
-                      whiteSpace: 'nowrap',
-                      color: '#00B0FF',
-                      bgcolor: '#1e1e1e',
-                      borderBottom: '1px solid #ffffff40',
-                      padding: '12px 16px',
-                      borderRight: '1px solid #ffffff40',
-                      margin: 0
+                      ...COMMON_STYLES.headerCell
                     }
                   }}>
                     {/* Current Section Headers */}
                     <TableCell sx={{
+                      ...COMMON_STYLES.headerCell,
                       position: 'sticky',
                       left: 0,
                       zIndex: 2,
-                      bgcolor: '#1e1e1e',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px'
+                      minWidth: '120px',
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        right: 0,
+                        top: 0,
+                        height: '100%',
+                        width: '1px',
+                        backgroundColor: '#ffffff40',
+                        zIndex: 3
+                      }
                     }}>Region</TableCell>
                     <TableCell sx={{
+                      ...COMMON_STYLES.headerCell,
                       position: 'sticky',
                       left: '120px',
                       zIndex: 2,
-                      bgcolor: '#1e1e1e',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px'
+                      minWidth: '120px',
+                      borderLeft: 'none',
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        right: 0,
+                        top: 0,
+                        height: '100%',
+                        width: '1px',
+                        backgroundColor: '#ffffff40',
+                        zIndex: 3
+                      }
                     }}>Instance</TableCell>
                     <TableCell sx={{
+                      ...COMMON_STYLES.headerCell,
                       position: 'sticky',
                       left: '240px',
                       zIndex: 2,
-                      bgcolor: '#1e1e1e',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px'
+                      minWidth: '120px',
+                      borderLeft: 'none',
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        right: 0,
+                        top: 0,
+                        height: '100%',
+                        width: '1px',
+                        backgroundColor: '#ffffff40',
+                        zIndex: 3
+                      }
                     }}>Monthly Cost ($)</TableCell>
                     <TableCell sx={{
+                      ...COMMON_STYLES.headerCell,
                       position: 'sticky',
                       left: '360px',
                       zIndex: 2,
-                      bgcolor: '#1e1e1e',
-                      borderRight: '1px solid #ffffff40',
-                      minWidth: '120px'
+                      minWidth: '120px',
+                      borderLeft: 'none'
                     }}>Annual Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '150px' }}>UUID/Instance Name</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>Cloud</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>Quantity</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Pricing Model</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>vCPU(s)</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>Remark</TableCell>
-
+                    <TableCell>UUID/Instance Name</TableCell>
+                    <TableCell>Cloud</TableCell>
+                    <TableCell>Quantity</TableCell>
+                    <TableCell>Pricing Model</TableCell>
+                    <TableCell>vCPU(s)</TableCell>
+                    <TableCell>Remark</TableCell>
                     {/* Hourly Cost Optimization Headers */}
-                    <TableCell sx={{ minWidth: '150px' }}>Instance</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>vCPU(s)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Monthly Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Annual Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '100px' }}>Savings (%)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Performance Improvement</TableCell>
-
+                    <TableCell>Instance</TableCell>
+                    <TableCell>vCPU(s)</TableCell>
+                    <TableCell>Monthly Cost ($)</TableCell>
+                    <TableCell>Annual Cost ($)</TableCell>
+                    <TableCell>Savings (%)</TableCell>
+                    <TableCell>Performance Improvement</TableCell>
                     {/* Modernize Headers */}
-                    <TableCell sx={{ minWidth: '150px' }}>Instance</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>vCPU(s)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Monthly Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Annual Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '100px' }}>Savings (%)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Performance Improvement</TableCell>
-
+                    <TableCell>Instance</TableCell>
+                    <TableCell>vCPU(s)</TableCell>
+                    <TableCell>Monthly Cost ($)</TableCell>
+                    <TableCell>Annual Cost ($)</TableCell>
+                    <TableCell>Savings (%)</TableCell>
+                    <TableCell>Performance Improvement</TableCell>
                     {/* Modernize & Downsize Headers */}
-                    <TableCell sx={{ minWidth: '150px' }}>Instance</TableCell>
-                    <TableCell sx={{ minWidth: '80px' }}>vCPU(s)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Monthly Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Annual Cost ($)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Annual Savings ($)</TableCell>
-                    <TableCell sx={{ minWidth: '100px' }}>Savings (%)</TableCell>
-                    <TableCell sx={{ minWidth: '120px' }}>Performance Improvement</TableCell>
+                    <TableCell>Instance</TableCell>
+                    <TableCell>vCPU(s)</TableCell>
+                    <TableCell>Monthly Cost ($)</TableCell>
+                    <TableCell>Annual Cost ($)</TableCell>
+                    <TableCell>Annual Savings ($)</TableCell>
+                    <TableCell>Savings (%)</TableCell>
+                    <TableCell>Performance Improvement</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -733,11 +758,12 @@ const CostAdvice = ({ onClose }) => {
                       <TableCell
                         colSpan={29}
                         sx={{
+                          ...COMMON_STYLES.tableCell,
                           textAlign: 'center',
                           color: '#ffffff',
                           bgcolor: '#222',
-                          fontSize: '1.2rem',
-                          py: 4,
+                          fontSize: '1.1rem',
+                          py: 3,
                         }}
                       >
                         No Data Found
@@ -748,7 +774,9 @@ const CostAdvice = ({ onClose }) => {
                       <TableRow
                         key={index}
                         sx={{
-                          '& td': COMMON_STYLES.tableCell,
+                          '& td': {
+                            ...COMMON_STYLES.tableCell
+                          },
                           '&:hover td': {
                             bgcolor: '#1e1e1e'
                           }
@@ -756,48 +784,65 @@ const CostAdvice = ({ onClose }) => {
                       >
                         {/* Current Section Data */}
                         <TableCell sx={{
+                          ...COMMON_STYLES.tableCell,
                           position: 'sticky',
                           left: 0,
                           zIndex: 1,
-                          bgcolor: '#000000',
-                          borderRight: '1px solid #ffffff40',
                           minWidth: '120px',
-                          '&:hover': {
-                            bgcolor: '#1e1e1e'
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            height: '100%',
+                            width: '1px',
+                            backgroundColor: '#ffffff40',
+                            zIndex: 3
                           }
                         }}>{row.current.region}</TableCell>
                         <TableCell sx={{
+                          ...COMMON_STYLES.tableCell,
                           position: 'sticky',
                           left: '120px',
                           zIndex: 1,
-                          bgcolor: '#000000',
-                          borderRight: '1px solid #ffffff40',
                           minWidth: '120px',
-                          '&:hover': {
-                            bgcolor: '#1e1e1e'
+                          borderLeft: 'none',
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            height: '100%',
+                            width: '1px',
+                            backgroundColor: '#ffffff40',
+                            zIndex: 3
                           }
                         }}>{row.current.instance}</TableCell>
                         <TableCell sx={{
+                          ...COMMON_STYLES.tableCell,
                           position: 'sticky',
                           left: '240px',
                           zIndex: 1,
-                          bgcolor: '#000000',
-                          borderRight: '1px solid #ffffff40',
                           minWidth: '120px',
-                          '&:hover': {
-                            bgcolor: '#1e1e1e'
+                          borderLeft: 'none',
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            height: '100%',
+                            width: '1px',
+                            backgroundColor: '#ffffff40',
+                            zIndex: 3
                           }
                         }}>{row.current.monthlyCost}</TableCell>
                         <TableCell sx={{
+                          ...COMMON_STYLES.tableCell,
                           position: 'sticky',
                           left: '360px',
                           zIndex: 1,
-                          bgcolor: '#000000',
-                          borderRight: '1px solid #ffffff40',
                           minWidth: '120px',
-                          '&:hover': {
-                            bgcolor: '#1e1e1e'
-                          }
+                          borderLeft: 'none'
                         }}>{row.current.annualCost}</TableCell>
                         <TableCell>{row.current.uuid}</TableCell>
                         <TableCell>{row.current.cloud}</TableCell>
@@ -805,7 +850,6 @@ const CostAdvice = ({ onClose }) => {
                         <TableCell>{row.current.pricingModel}</TableCell>
                         <TableCell>{row.current.vcpu}</TableCell>
                         <TableCell>{row.current.remark}</TableCell>
-
                         {/* Hourly Cost Optimization Data */}
                         <TableCell>{row.hourlyCostOpt.instance}</TableCell>
                         <TableCell>{row.hourlyCostOpt.vcpu}</TableCell>
@@ -813,7 +857,6 @@ const CostAdvice = ({ onClose }) => {
                         <TableCell>{row.hourlyCostOpt.annualCost}</TableCell>
                         <TableCell>{row.hourlyCostOpt.savings}</TableCell>
                         <TableCell>{row.hourlyCostOpt.performanceImprovement}</TableCell>
-
                         {/* Modernize Data */}
                         <TableCell>{row.modernize.instance}</TableCell>
                         <TableCell>{row.modernize.vcpu}</TableCell>
@@ -821,7 +864,6 @@ const CostAdvice = ({ onClose }) => {
                         <TableCell>{row.modernize.annualCost}</TableCell>
                         <TableCell>{row.modernize.savings}</TableCell>
                         <TableCell>{row.modernize.performanceImprovement}</TableCell>
-
                         {/* Modernize & Downsize Data */}
                         <TableCell>{row.modernizeDownsize.instance}</TableCell>
                         <TableCell>{row.modernizeDownsize.vcpu}</TableCell>
@@ -838,56 +880,18 @@ const CostAdvice = ({ onClose }) => {
                   {visibleRows.length > 0 && (
                     <TableRow
                       sx={{
-                        '& td': COMMON_STYLES.tableCell,
+                        '& td': {
+                          ...COMMON_STYLES.tableCell
+                        },
                         '&:hover td': {
                           bgcolor: '#1e1e1e'
                         }
                       }}
                     >
-                      <TableCell sx={{
-                        position: 'sticky',
-                        left: 0,
-                        zIndex: 1,
-                        bgcolor: '#000000',
-                        borderRight: '1px solid #ffffff40',
-                        minWidth: '120px',
-                        '&:hover': {
-                          bgcolor: '#1e1e1e'
-                        }
-                      }}>Grand Total</TableCell>
-                      <TableCell sx={{
-                        position: 'sticky',
-                        left: '120px',
-                        zIndex: 1,
-                        bgcolor: '#000000',
-                        borderRight: '1px solid #ffffff40',
-                        minWidth: '120px',
-                        '&:hover': {
-                          bgcolor: '#1e1e1e'
-                        }
-                      }}>-</TableCell>
-                      <TableCell sx={{
-                        position: 'sticky',
-                        left: '240px',
-                        zIndex: 1,
-                        bgcolor: '#000000',
-                        borderRight: '1px solid #ffffff40',
-                        minWidth: '120px',
-                        '&:hover': {
-                          bgcolor: '#1e1e1e'
-                        }
-                      }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
-                      <TableCell sx={{
-                        position: 'sticky',
-                        left: '360px',
-                        zIndex: 1,
-                        bgcolor: '#000000',
-                        borderRight: '1px solid #ffffff40',
-                        minWidth: '120px',
-                        '&:hover': {
-                          bgcolor: '#1e1e1e'
-                        }
-                      }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: 0, zIndex: 1, minWidth: '120px' }}>Grand Total</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '120px', zIndex: 1, minWidth: '120px' }}>-</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '240px', zIndex: 1, minWidth: '120px' }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '360px', zIndex: 1, minWidth: '120px' }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>{grandTotals.quantity}</TableCell>
@@ -1144,127 +1148,6 @@ const CostAdvice = ({ onClose }) => {
           </DialogContent>
         </Dialog>
         {/* Cost Advice Help Dialog */}
-        {/* <Dialog
-          open={openCostAdviceDialog}
-          onClose={handleCostAdviceDialogClose}
-          PaperProps={{
-            sx: {
-              maxWidth: '800px',
-              borderRadius: '4px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-            }
-          }}
-        >
-          <DialogTitle sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            color: '#333',
-            bgcolor: '#f5f5f5',
-            borderBottom: '1px solid #e0e0e0',
-            py: 1.5,
-            px: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            Cost Advice Recommendations
-            <IconButton
-              onClick={handleCostAdviceDialogClose}
-              size="small"
-              sx={{
-                width: '24px',
-                height: '24px',
-                bgcolor: '#fff',
-                border: '1px solid #ddd',
-                borderRadius: '50%',
-                '&:hover': {
-                  bgcolor: '#f5f5f5'
-                }
-              }}
-            >
-              ✕
-            </IconButton>
-          </DialogTitle>
-          <DialogContent sx={{ p: 2 }}>
-            <Typography sx={{
-              mb: 2,
-              color: '#666',
-              fontSize: '0.875rem'
-            }}>
-              All the recommendations are based on the competitive performance analysis across and within processor offerings
-            </Typography>
-
-            <List sx={{
-              pl: 2,
-              '& .MuiListItem-root': {
-                display: 'block',
-                py: 1.5,
-                color: '#333'
-              }
-            }}>
-              <ListItem>
-                <Typography component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                  Hourly Cost Optimization:
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#666' }}>
-                  Recommendation to lower hourly costs by using 5th generation AMD processors (Milan, EPYC 7R13 series) for high efficiency and the same performance.
-                </Typography>
-              </ListItem>
-
-              <ListItem>
-                <Typography component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                  Modernize:
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#666' }}>
-                  Recommendation for using the latest AMD processors (Genoa, EPYC 9004 series) for increased performance –2X uplift.
-                </Typography>
-              </ListItem>
-
-              <ListItem>
-                <Typography component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                  Modernize & Downsize:
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#666' }}>
-                  Recommendation to use the latest AMD processors and smaller instance sizes for the same performance and cost savings.
-                </Typography>
-              </ListItem>
-            </List>
-
-            <Box sx={{ mt: 2 }}>
-              <Link
-                href="https://www.amd.com/en/products/processors/server/epyc/aws.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  display: 'block',
-                  color: '#333333',
-                  textDecoration: 'none',
-                  mb: 1,
-                  '&:hover': {
-                    textDecoration: 'underline'
-                  }
-                }}
-              >
-                https://www.amd.com/en/products/processors/server/epyc/aws.html
-              </Link>
-              <Link
-                href="https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  display: 'block',
-                  color: '#333333',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline'
-                  }
-                }}
-              >
-                https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html
-              </Link>
-            </Box>
-          </DialogContent>
-        </Dialog> */}
         <Dialog
   open={openCostAdviceDialog}
   onClose={handleCostAdviceDialogClose}

@@ -45,8 +45,8 @@ const CostAdviceNotificationBar = () => {
           borderRadius: '4px',
           textTransform: 'none',
           color: '#ffffff',
-          backgroundColor: '#d48a94',
-          '&:hover': { backgroundColor: '#b8747c' }
+          backgroundColor: '#b00020',
+          '&:hover': { backgroundColor: '#b00020' }
         }}
       >
         Close
