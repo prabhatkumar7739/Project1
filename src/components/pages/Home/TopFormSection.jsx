@@ -29,6 +29,7 @@ import CustomTooltip from '../../tooltips/CustomTooltip';
 import { formTooltips, buttonTooltips } from '../../tooltips/tooltipConfig';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
+import { useCloudProvider } from '../../../context/CloudProviderContext';
 
 const commonBtnStyle = {
   backgroundColor: 'black',
@@ -47,6 +48,30 @@ const commonTextFieldStyle = {
   '& .MuiInputLabel-root.Mui-focused': {
     color: 'black'
   }
+};
+
+const REGIONS_BY_PROVIDER = {
+  'AWS': [
+    { label: 'af-south-1', value: 'af-south-1' },
+    { label: 'ap-east-1', value: 'ap-east-1' },
+    { label: 'ap-northeast-1', value: 'ap-northeast-1' },
+    { label: 'ap-northeast-2', value: 'ap-northeast-2' },
+    { label: 'ap-northeast-3', value: 'ap-northeast-3' }
+  ],
+  'AZURE': [
+    { label: 'australiacentral', value: 'australiacentral' },
+    { label: 'australiacentral2', value: 'australiacentral2' },
+    { label: 'australiaeast', value: 'australiaeast' },
+    { label: 'australiasoutheast', value: 'australiasoutheast' },
+    { label: 'brazilsouth', value: 'brazilsouth' }
+  ],
+  'GCP': [
+    { label: 'africa-south1', value: 'africa-south1' },
+    { label: 'asia-east1', value: 'asia-east1' },
+    { label: 'asia-east2', value: 'asia-east2' },
+    { label: 'asia-northeast1', value: 'asia-northeast1' },
+    { label: 'asia-northeast2', value: 'asia-northeast2' }
+  ]
 };
 
 const textFieldProps = (label, value, onChange, width = 200, options = [], tooltipText) => (
@@ -113,6 +138,7 @@ const textFieldProps = (label, value, onChange, width = 200, options = [], toolt
 );
 
 const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
+  const { selectedProvider } = useCloudProvider();
   const [region, setRegion] = useState('');
   const [size, setSize] = useState('');
   const [pricingModel, setPricingModel] = useState('');
@@ -165,6 +191,10 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     const isFormComplete = region && size && pricingModel && quantity && hours;
     setIsFormFilled(isFormComplete);
   }, [region, size, pricingModel, quantity, hours, setIsFormFilled]);
+
+  React.useEffect(() => {
+    setRegion('');
+  }, [selectedProvider]);
 
   const handleAdd = () => {
     // Check if required fields are filled
@@ -351,16 +381,12 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
       <Divider sx={{ my: 1, width: '100%' }} />
 
-      <Grid id="portfolio-data" container spacing={2} sx={{ mb: 2 }}>
+      <Grid container spacing={1} sx={{ mb: 1 }}>
         <Grid item xs={12} sm={4}>
-          {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, [
-            { label: 'africa-south1', value: 'africa-south1' },
-            { label: 'asia-east1', value: 'asia-east1' },
-            { label: 'asia-east2', value: 'asia-east2' },
-            { label: 'asia-northeast1', value: 'asia-northeast1' },
-            { label: 'asia-northeast2', value: 'asia-northeast2' },
-            { label: 'asia-northeast3', value: 'asia-northeast3' }
-          ], formTooltips.region)}
+          {textFieldProps('Region*', region, (e) => setRegion(e.target.value), 200, 
+            REGIONS_BY_PROVIDER[selectedProvider] || REGIONS_BY_PROVIDER['AWS'],
+            formTooltips.region
+          )}
         </Grid>
 
         <Grid item xs={12} sm={4}>
@@ -385,7 +411,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
         </Grid>
       </Grid>
 
-      <Grid id="portfolio-data1" container spacing={2} sx={{ mb: 2 }}>
+      <Grid container spacing={1} sx={{ mb: 1 }}>
         <Grid item xs={12} sm={4}>
           <CustomTooltip message={formTooltips.quantity}>
             <TextField
@@ -412,12 +438,11 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
               value={hours}
               onChange={(e) => setHours(e.target.value)}
               required
-              name='region'
             />
           </CustomTooltip>
         </Grid>
 
-        <Grid  item xs={12} sm={4}>
+        <Grid item xs={12} sm={4} >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {textFieldProps('Pricing Model*', pricingModel, (e) => setPricingModel(e.target.value), 200, [
               { label: 'ondemand', value: 'ondemand' },
@@ -426,7 +451,8 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             ], formTooltips.pricingModel)}
 
             <CustomTooltip message={buttonTooltips.add}>
-              <Button id='addinstance'
+              <Button
+                id='addinstance'
                 variant="contained"
                 sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
                 onClick={handleAdd}
@@ -436,7 +462,8 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
             </CustomTooltip>
 
             <CustomTooltip message={buttonTooltips.findReplace}>
-              <Button id="findAndReplace"
+              <Button
+                id="findAndReplace"
                 variant="contained"
                 sx={{ ...commonBtnStyle, height: '40px', padding: '8px' }}
                 onClick={() => setFindReplaceOpen(true)}
