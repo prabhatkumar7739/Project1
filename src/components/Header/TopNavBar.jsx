@@ -176,6 +176,13 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
             onClose={handleReleaseNotesClose}
             maxWidth="lg"
             fullWidth
+            PaperProps={{
+              sx: {
+                minHeight: '80vh',
+                maxHeight: '90vh',
+                bgcolor: '#ffffff'
+              }
+            }}
           >
             <ReleaseNotes handleClose={handleReleaseNotesClose} />
           </Dialog>

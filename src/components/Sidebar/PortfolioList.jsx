@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function PortfolioList() {
   const { portfolioList, addPortfolio, activePortfolio, setActivePortfolio } = usePortfolio();
-  const { setTableData, setIsTableCreated } = useFormTable();
+  const { setTableData, setIsTableCreated, updateFormData } = useFormTable();
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,6 +39,17 @@ export default function PortfolioList() {
   const handlePortfolioClick = (portfolio) => {
     const portfolioName = typeof portfolio === 'string' ? portfolio : portfolio.name;
     setActivePortfolio(portfolioName);
+
+    // Fill form with dummy data
+    const dummyFormData = {
+      portfolioName: portfolioName,
+      clientId: 'AKIAXXXXXXXXXXXXXXXX',
+      clientEmail: 'user@example.com',
+      projectId: 'project-123456',
+      region: 'us-east-1',
+      privateKey: '-----BEGIN PRIVATE KEY-----\nXXXXXXXXXXXX\n-----END PRIVATE KEY-----'
+    };
+    updateFormData(dummyFormData);
 
     const storedData = localStorage.getItem(`portfolio_${portfolioName}`);
     if (storedData) {

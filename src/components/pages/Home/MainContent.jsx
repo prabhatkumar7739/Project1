@@ -16,10 +16,9 @@ const MainContent = () => {
 
   return (
     <Box sx={{ 
-      p: 3,
+      p: 2,
       flexGrow: 1,
-      marginLeft: '20px',
-      width: '80%',
+      width: '100%',
       backgroundColor: '#f5f5f5',
     }}>
       <TopFormSection 

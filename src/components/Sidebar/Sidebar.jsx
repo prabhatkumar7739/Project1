@@ -17,11 +17,9 @@ export default function Sidebar() {
           id="btn-dashboard-sidebarHideShow-toggle"
           onClick={toggleDrawer(true)}
           sx={{
-            maxHeight: "5vh",
-            maxWidth: "2vw",
+            maxWidth: "10px",
             position: "fixed",
             top: 80,
-            left: 10,
             zIndex: 1300,
             "&:hover": {
               backgroundColor: "transparent",

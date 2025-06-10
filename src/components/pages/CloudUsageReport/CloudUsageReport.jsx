@@ -26,7 +26,7 @@ const drawerWidth = "17%";
 const CloudUsageReport = ({ onClose }) => {
   const navigate = useNavigate();
   const { formData, updateFormData, tableData, setTableData } = useFormTable();
-  const { setActivePortfolio } = usePortfolio();
+  const { portfolioList, setActivePortfolio } = usePortfolio();
   const [localFormData, setLocalFormData] = useState({
     portfolioName: '',
     clientId: '',
@@ -76,6 +76,22 @@ const CloudUsageReport = ({ onClose }) => {
     updateFormData(newFormData);
   };
 
+  const handlePortfolioClick = () => {
+    // Fill form with dummy data
+    const dummyFormData = {
+      portfolioName: 'Portfolio-' + Math.floor(Math.random() * 1000),
+      clientId: 'AKIAXXXXXXXXXXXXXXXX',
+      clientEmail: 'user@example.com',
+      projectId: 'project-123456',
+      region: 'us-east1',
+      privateKey: '-----BEGIN PRIVATE KEY-----\nXXXXXXXXXXXX\n-----END PRIVATE KEY-----'
+    };
+    
+    setLocalFormData(dummyFormData);
+    updateFormData(dummyFormData);
+    setActivePortfolio(dummyFormData.portfolioName);
+  };
+
   const handleReset = () => {
     const emptyForm = {
       portfolioName: '',
@@ -115,7 +131,6 @@ const CloudUsageReport = ({ onClose }) => {
         }}>
           <Typography variant="h5" sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Add Portfolio</Typography>
 
-
           <IconButton onClick={handleClose} sx={{ p: 0, mr: -1 }}>
             <CloseIcon />
           </IconButton>
@@ -127,16 +142,17 @@ const CloudUsageReport = ({ onClose }) => {
               fullWidth
               label="Portfolio Name"
               required
-              value={formData.portfolioName}
+              value={localFormData.portfolioName}
               onChange={handleChange('portfolioName')}
+              onClick={handlePortfolioClick}
               size="small"
               sx={commonInputStyles}
             />
           </Box>
 
           <Typography sx={{ mb: 1.5, fontWeight: 'bold' }}>
-  Secrets
-</Typography>
+            Secrets
+          </Typography>
 
           <Divider sx={{ mb: 2 }} />
 
@@ -145,7 +161,7 @@ const CloudUsageReport = ({ onClose }) => {
               fullWidth
               label="Access ID"
               required
-              value={formData.clientId}
+              value={localFormData.clientId}
               onChange={handleChange('clientId')}
               type={showClientId ? 'text' : 'password'}
               size="small"
@@ -169,7 +185,7 @@ const CloudUsageReport = ({ onClose }) => {
               fullWidth
               label="Access Secret"
               required
-              value={formData.projectId}
+              value={localFormData.projectId}
               onChange={handleChange('projectId')}
               type={showProjectId ? 'text' : 'password'}
               size="small"
@@ -193,7 +209,7 @@ const CloudUsageReport = ({ onClose }) => {
               <InputLabel id="region-label" required>Region</InputLabel>
               <Select
                 labelId="region-label"
-                value={formData.region}
+                value={localFormData.region}
                 label="Region"
                 onChange={handleChange('region')}
                 sx={commonSelectStyles}

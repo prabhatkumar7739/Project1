@@ -25,24 +25,33 @@ const PortfolioTableFooter = ({ selected, onDeleteClick }) => {
   return (
     <Box
       sx={{
-        mt: 1,
-        pl: 0,
-        pt: 0,
+        pl: 2,
+        pt: 1.5,
         pr: 2,
         pb: 1.5,
-        backgroundColor: '#f2f2f2',
-        borderRadius: '0 0 4px 4px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#f2f2f2',
+        borderRadius: '0 0 4px 4px'
       }}
     >
       <Button
         variant="contained"
-        color="error"
         startIcon={<Delete />}
         onClick={onDeleteClick}
         disabled={selected.length === 0}
+        sx={{
+          backgroundColor: '#c1022b',
+          color: '#ffffff',
+          textTransform: 'none',
+          '&:hover': { backgroundColor: '#a10024' },
+          '&.Mui-disabled': {
+            backgroundColor: '#c1022b',
+            opacity: 0.6,
+            color: '#ffffff'
+          }
+        }}
       >
         Delete ({selected.length})
       </Button>
@@ -51,7 +60,12 @@ const PortfolioTableFooter = ({ selected, onDeleteClick }) => {
         target="_blank"
         rel="noopener"
         underline="hover"
-        sx={{ fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}
+        sx={{ 
+          fontWeight: 'bold', 
+          display: 'inline-flex', 
+          alignItems: 'center',
+          color: '#666666'
+        }}
       >
         {text} →
       </Link>

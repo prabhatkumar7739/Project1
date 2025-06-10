@@ -4,20 +4,24 @@ import {
   Button,
   Typography,
   Stack,
-  Snackbar
+  Snackbar,
+  Alert
 } from '@mui/material';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import ScienceIcon from '@mui/icons-material/Science';
 import { useFormTable } from '../../context/FormTableContext';
+import { usePortfolio } from '../../context/PortfolioContext';
 import { useNavigate } from 'react-router-dom';
 
 const CloudUsageReportNotificationBar = () => {
   const navigate = useNavigate();
   const { formData, updateFormData, resetTable } = useFormTable();
+  const { addPortfolio, portfolioList } = usePortfolio();
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [testSuccess, setTestSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleReset = () => {
     const emptyForm = {
@@ -41,18 +45,75 @@ const CloudUsageReportNotificationBar = () => {
     navigate('/');
   };
 
+  const validateForm = () => {
+    if (!formData.portfolioName || formData.portfolioName.trim() === '') {
+      setError('Portfolio name is required');
+      return false;
+    }
+    if (!formData.clientId || formData.clientId.trim() === '') {
+      setError('Client ID is required');
+      return false;
+    }
+    if (!formData.clientEmail || formData.clientEmail.trim() === '') {
+      setError('Client Email is required');
+      return false;
+    }
+    if (!formData.projectId || formData.projectId.trim() === '') {
+      setError('Project ID is required');
+      return false;
+    }
+    if (!formData.region || formData.region.trim() === '') {
+      setError('Region is required');
+      return false;
+    }
+    if (!formData.privateKey || formData.privateKey.trim() === '') {
+      setError('Private Key is required');
+      return false;
+    }
+    
+    // Check if portfolio name already exists
+    if (portfolioList.some(p => p.name === formData.portfolioName)) {
+      setError('Portfolio name already exists');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSave = () => {
-    console.log('Saving form data:', formData);
-    setSaveSuccess(true);
+    setError('');
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      // Add to portfolio list
+      addPortfolio({
+        name: formData.portfolioName,
+        data: formData
+      });
+
+      setSaveSuccess(true);
+      
+      // Navigate back to main page after successful save
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    } catch (err) {
+      setError('Failed to save portfolio. Please try again.');
+    }
   };
 
   const handleTest = () => {
-    console.log('Testing connection with:', formData);
+    if (!validateForm()) {
+      return;
+    }
     setTestSuccess(true);
   };
 
   const buttonBaseStyle = {
-    minWidth: '140px',
+    minWidth: '100px',
     borderRadius: '4px',
     textTransform: 'none',
     color: '#ffffff'
@@ -78,11 +139,11 @@ const CloudUsageReportNotificationBar = () => {
         zIndex: 1000,
         boxShadow: '0 -2px 4px rgba(0,0,0,0.05)'
       }}>
-        <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+        <Typography variant="body2">
           Note: On click of SAVE button, you are authorizing us to fetch all the instances available in the region to us
         </Typography>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={0.5}>
           <Button
             startIcon={<RestartAltIcon />}
             onClick={handleReset}
@@ -129,21 +190,38 @@ const CloudUsageReportNotificationBar = () => {
         </Stack>
       </Box>
 
-      {/* Save Success Snackbar */}
-      <Snackbar
-        open={saveSuccess}
-        autoHideDuration={3000}
+      {/* Success Snackbar */}
+      <Snackbar 
+        open={saveSuccess} 
+        autoHideDuration={3000} 
         onClose={() => setSaveSuccess(false)}
-        message="Form data saved successfully"
-      />
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Portfolio saved successfully
+        </Alert>
+      </Snackbar>
+
+      {/* Error Snackbar */}
+      <Snackbar 
+        open={!!error} 
+        autoHideDuration={3000} 
+        onClose={() => setError('')}
+      >
+        <Alert severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
 
       {/* Test Success Snackbar */}
       <Snackbar
         open={testSuccess}
         autoHideDuration={3000}
         onClose={() => setTestSuccess(false)}
-        message="Connection tested successfully"
-      />
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Connection tested successfully
+        </Alert>
+      </Snackbar>
     </>
   );
 };

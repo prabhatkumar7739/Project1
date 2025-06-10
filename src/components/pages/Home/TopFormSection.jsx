@@ -58,8 +58,51 @@ const textFieldProps = (label, value, onChange, width = 200, options = [], toolt
         select={!!options.length}
         value={value}
         onChange={onChange}
-        sx={{ width, ...commonTextFieldStyle }}
+        sx={{ 
+          width, 
+          ...commonTextFieldStyle,
+          '& .MuiSelect-select': {
+            color: 'black'
+          }
+        }}
         size="small"
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                maxHeight: 300,
+                backgroundColor: '#ffffff',
+                marginTop: '8px',
+                boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.2)',
+                '& .MuiMenuItem-root': {
+                  padding: '8px 16px',
+                  color: 'black',
+                  fontSize: '14px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.08)'
+                  }
+                }
+              }
+            },
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'left'
+            },
+            transformOrigin: {
+              vertical: 'top',
+              horizontal: 'left'
+            },
+            style: { zIndex: 9999 },
+            slotProps: {
+              paper: {
+                elevation: 8
+              }
+            }
+          }
+        }}
       >
         {options.map((opt) => (
           <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
@@ -92,6 +135,14 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     const handlePortfolioSelection = (event) => {
       const { portfolioName } = event.detail;
       setPortfolioName(portfolioName);
+      
+      // Load data from localStorage when portfolio is selected
+      const savedData = localStorage.getItem(`portfolio_${portfolioName}`);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        setTableData(parsedData);
+        setIsTableCreated(parsedData.length > 0);
+      }
     };
 
     window.addEventListener('updatePortfolioName', handlePortfolioSelection);
@@ -102,23 +153,31 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
 
   React.useEffect(() => {
     const handleClearTableData = () => {
-      if (window.performance.navigation.type === 1) {
-        setTableData([]);
-        setRegion('');
-        setSize('');
-        setPricingModel('');
-        setUUID('');
-        setQuantity('');
-        setHours('');
-        setPortfolioName('');
-      }
+      setTableData([]);
+      setRegion('');
+      setSize('');
+      setPricingModel('');
+      setUUID('');
+      setQuantity('');
+      setHours('');
+      setPortfolioName('');
     };
+
+    // Load saved data on refresh if portfolio is selected
+    if (portfolioName) {
+      const savedData = localStorage.getItem(`portfolio_${portfolioName}`);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        setTableData(parsedData);
+        setIsTableCreated(parsedData.length > 0);
+      }
+    }
 
     window.addEventListener('clearTableData', handleClearTableData);
     return () => {
       window.removeEventListener('clearTableData', handleClearTableData);
     };
-  }, [setTableData]);
+  }, [portfolioName]);
 
   React.useEffect(() => {
     const isFormComplete = region && size && pricingModel && quantity && hours;
@@ -160,6 +219,14 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     setHours('');
 
     setSuccessOpen(true);
+  };
+
+  const handleTableDataChange = (newData) => {
+    setTableData(newData);
+    // Update localStorage whenever table data changes
+    if (portfolioName) {
+      localStorage.setItem(`portfolio_${portfolioName}`, JSON.stringify(newData));
+    }
   };
 
   const handleReplaceAll = (updatedData) => {
@@ -215,56 +282,54 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
           />
         </CustomTooltip>
 
-        <Box sx={{ 
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
+        <Box sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: 2
+          width: '100%',
+          justifyContent: 'space-between'
         }}>
-          {selectedFileName && (
-            <Typography
-              variant="body1"
-              sx={{
-                fontWeight: 500,
-                color: 'black',
-                textDecoration: 'underline',
-                cursor: 'default'
-              }}
-            >
-              {selectedFileName}
-            </Typography>
-          )}
-          <CustomTooltip message={buttonTooltips.upload}>
-            <Button 
-            id="uploadInstances"
-              variant="contained" 
-              startIcon={<FileUploadOutlined />} 
-              onClick={handleUploadClick}
-              sx={{ 
-                bgcolor: 'black',
-                color: 'white',
-                '&:hover': { bgcolor: '#333' },
-                textTransform: 'none',
-                minWidth: '120px'
-              }}
-            >
-              Upload
-            </Button>
-          </CustomTooltip>
-        </Box>
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            ml: 2
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {selectedFileName && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: 500,
+                    color: 'black',
+                    textDecoration: 'underline',
+                    cursor: 'default'
+                  }}
+                >
+                  {selectedFileName}
+                </Typography>
+              )}
+              <CustomTooltip message={buttonTooltips.upload}>
+                <Button 
+                  id="uploadInstances"
+                  variant="contained" 
+                  startIcon={<FileUploadOutlined />} 
+                  onClick={handleUploadClick}
+                  sx={{ 
+                    bgcolor: 'black',
+                    color: 'white',
+                    '&:hover': { bgcolor: '#333' },
+                    textTransform: 'none',
+                    minWidth: '120px'
+                  }}
+                >
+                  Upload
+                </Button>
+              </CustomTooltip>
+            </Box>
 
-        <Box sx={{ 
-          marginLeft: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 6
-        }}>
-          <Box sx={{ mr: 26 }}>
             <CustomTooltip message={buttonTooltips.template}>
               <Button 
-              id="step-five-target"
+                id="step-five-target"
                 component="a" 
                 href="/PortfolioTemplate.xlsx" 
                 download="PortfolioTemplate.xlsx" 
@@ -292,7 +357,8 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
                 textDecoration: 'underline',
                 textUnderlineOffset: '4px',
                 whiteSpace: 'nowrap',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                mr: 3
               }}
             >
               Cloud Usage Reports
@@ -427,7 +493,7 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
       </Grid>
   
 
-      {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={setTableData} />}
+      {tableData.length > 0 && <PortfolioTable data={tableData} onDataChange={handleTableDataChange} />}
 
       <Snackbar
         open={errorOpen}

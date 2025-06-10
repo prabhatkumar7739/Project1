@@ -55,10 +55,14 @@ const COMMON_STYLES = {
     whiteSpace: 'nowrap',
     color: '#ffffff',
     bgcolor: '#000000',
-    padding: '8px 12px',
+    borderBottom: '1px solid #ffffff20',
+    padding: '4px 8px',
     fontSize: '0.86rem',
-    height: '36px',
-    lineHeight: '1.3'
+    borderRight: '1px solid #ffffff40',
+    margin: 0,
+    lineHeight: '1.2',
+    minHeight: 0,
+    height: '28px',
   },
   stickyCell: {
     position: 'sticky',
@@ -69,14 +73,17 @@ const COMMON_STYLES = {
     }
   },
   headerCell: {
-    whiteSpace: 'nowrap',
-    color: '#00B0FF',
     bgcolor: '#1e1e1e',
-    padding: '8px 12px',
+    color: '#00B0FF',
+    fontWeight: 'bold',
+    borderBottom: '1px solid #ffffff40',
+    borderRight: '1px solid #ffffff40',
+    margin: 0,
+    padding: '4px 8px',
     fontSize: '0.92rem',
-    height: '36px',
-    lineHeight: '1.3',
-    fontWeight: 'bold'
+    minHeight: 0,
+    height: '28px',
+    lineHeight: '1.2',
   },
   button: {
     color: '#ffffff',
@@ -400,10 +407,9 @@ const CostAdvice = ({ onClose }) => {
     }}>
       <Sidebar />
       <Box sx={{
-        p: 3,
+        p: 1,
         flexGrow: 1,
-        marginLeft: '20px',
-        width: '80%',
+        width: '75%',
         backgroundColor: '#f5f5f5',
         overflow: 'auto',
         height: '100vh'
@@ -419,7 +425,7 @@ const CostAdvice = ({ onClose }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            mb: 2.5
+            p:1
           }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="h6" sx={{
@@ -659,67 +665,10 @@ const CostAdvice = ({ onClose }) => {
                     }
                   }}>
                     {/* Current Section Headers */}
-                    <TableCell sx={{
-                      ...COMMON_STYLES.headerCell,
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 2,
-                      minWidth: '120px',
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                        height: '100%',
-                        width: '1px',
-                        backgroundColor: '#ffffff40',
-                        zIndex: 3
-                      }
-                    }}>Region</TableCell>
-                    <TableCell sx={{
-                      ...COMMON_STYLES.headerCell,
-                      position: 'sticky',
-                      left: '120px',
-                      zIndex: 2,
-                      minWidth: '120px',
-                      borderLeft: 'none',
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                        height: '100%',
-                        width: '1px',
-                        backgroundColor: '#ffffff40',
-                        zIndex: 3
-                      }
-                    }}>Instance</TableCell>
-                    <TableCell sx={{
-                      ...COMMON_STYLES.headerCell,
-                      position: 'sticky',
-                      left: '240px',
-                      zIndex: 2,
-                      minWidth: '120px',
-                      borderLeft: 'none',
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                        height: '100%',
-                        width: '1px',
-                        backgroundColor: '#ffffff40',
-                        zIndex: 3
-                      }
-                    }}>Monthly Cost ($)</TableCell>
-                    <TableCell sx={{
-                      ...COMMON_STYLES.headerCell,
-                      position: 'sticky',
-                      left: '360px',
-                      zIndex: 2,
-                      minWidth: '120px',
-                      borderLeft: 'none'
-                    }}>Annual Cost ($)</TableCell>
+                    <TableCell sx={{ ...COMMON_STYLES.headerCell, position: 'sticky', left: 0, zIndex: 2, minWidth: '120px' }}>Region</TableCell>
+                    <TableCell sx={{ ...COMMON_STYLES.headerCell, position: 'sticky', left: '100px', zIndex: 2, minWidth: '120px' }}>Instance</TableCell>
+                    <TableCell sx={{ ...COMMON_STYLES.headerCell, position: 'sticky', left: '200px', zIndex: 2, minWidth: '120px' }}>Monthly Cost ($)</TableCell>
+                    <TableCell sx={{ ...COMMON_STYLES.headerCell, position: 'sticky', left: '320px', zIndex: 2, minWidth: '120px' }}>Annual Cost ($)</TableCell>
                     <TableCell>UUID/Instance Name</TableCell>
                     <TableCell>Cloud</TableCell>
                     <TableCell>Quantity</TableCell>
@@ -783,68 +732,11 @@ const CostAdvice = ({ onClose }) => {
                         }}
                       >
                         {/* Current Section Data */}
-                        <TableCell sx={{
-                          ...COMMON_STYLES.tableCell,
-                          position: 'sticky',
-                          left: 0,
-                          zIndex: 1,
-                          minWidth: '120px',
-                          '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            right: 0,
-                            top: 0,
-                            height: '100%',
-                            width: '1px',
-                            backgroundColor: '#ffffff40',
-                            zIndex: 3
-                          }
-                        }}>{row.current.region}</TableCell>
-                        <TableCell sx={{
-                          ...COMMON_STYLES.tableCell,
-                          position: 'sticky',
-                          left: '120px',
-                          zIndex: 1,
-                          minWidth: '120px',
-                          borderLeft: 'none',
-                          '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            right: 0,
-                            top: 0,
-                            height: '100%',
-                            width: '1px',
-                            backgroundColor: '#ffffff40',
-                            zIndex: 3
-                          }
-                        }}>{row.current.instance}</TableCell>
-                        <TableCell sx={{
-                          ...COMMON_STYLES.tableCell,
-                          position: 'sticky',
-                          left: '240px',
-                          zIndex: 1,
-                          minWidth: '120px',
-                          borderLeft: 'none',
-                          '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            right: 0,
-                            top: 0,
-                            height: '100%',
-                            width: '1px',
-                            backgroundColor: '#ffffff40',
-                            zIndex: 3
-                          }
-                        }}>{row.current.monthlyCost}</TableCell>
-                        <TableCell sx={{
-                          ...COMMON_STYLES.tableCell,
-                          position: 'sticky',
-                          left: '360px',
-                          zIndex: 1,
-                          minWidth: '120px',
-                          borderLeft: 'none'
-                        }}>{row.current.annualCost}</TableCell>
-                        <TableCell>{row.current.uuid}</TableCell>
+                        <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: 0, zIndex: 1, minWidth: '120px' }} title={row.current.region}>{row.current.region}</TableCell>
+                        <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '100px', zIndex: 1, minWidth: '120px' }} title={row.current.instance}>{row.current.instance}</TableCell>
+                        <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '200px', zIndex: 1, minWidth: '120px' }} title={row.current.monthlyCost}>{row.current.monthlyCost}</TableCell>
+                        <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '320px', zIndex: 1, minWidth: '120px' }} title={row.current.annualCost}>{row.current.annualCost}</TableCell>
+                        <TableCell title={row.current.uuid}>{row.current.uuid}</TableCell>
                         <TableCell>{row.current.cloud}</TableCell>
                         <TableCell>{row.current.quantity}</TableCell>
                         <TableCell>{row.current.pricingModel}</TableCell>
@@ -889,9 +781,9 @@ const CostAdvice = ({ onClose }) => {
                       }}
                     >
                       <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: 0, zIndex: 1, minWidth: '120px' }}>Grand Total</TableCell>
-                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '120px', zIndex: 1, minWidth: '120px' }}>-</TableCell>
-                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '240px', zIndex: 1, minWidth: '120px' }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
-                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '360px', zIndex: 1, minWidth: '120px' }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '100px', zIndex: 1, minWidth: '120px' }}>-</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '200px', zIndex: 1, minWidth: '120px' }}>{grandTotals.monthlyCost.toFixed(2)}</TableCell>
+                      <TableCell sx={{ ...COMMON_STYLES.tableCell, position: 'sticky', left: '320px', zIndex: 1, minWidth: '120px' }}>{grandTotals.annualCost.toFixed(2)}</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>{grandTotals.quantity}</TableCell>

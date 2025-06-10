@@ -13,7 +13,8 @@ import {
   TableContainer,
   Paper,
   Box,
-  Typography
+  Typography,
+  Tooltip
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -79,6 +80,8 @@ const PortfolioTableBody = ({
   const { selectedProvider } = useCloudProvider();
   const [editingCell, setEditingCell] = useState({ rowIndex: null, field: null });
   const [editValue, setEditValue] = useState('');
+  const [editIndex, setEditIndex] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(true);
 
   // List of editable fields
   const editableFields = ['region', 'size', 'quantity', 'hours'];
@@ -133,6 +136,10 @@ const PortfolioTableBody = ({
     handleEditSave(rowIndex);
   };
 
+  const handleDropdownClick = () => {
+    setShowTooltip(false);
+  };
+
   const renderCell = (row, field, actualIndex) => {
     const isEditing = editingCell.rowIndex === actualIndex && editingCell.field === field;
     const value = row[field];
@@ -145,7 +152,11 @@ const PortfolioTableBody = ({
         <Select
           value={editValue || ''}
           onChange={(e) => handleEditSave(actualIndex, e.target.value)}
-          onClose={() => handleEditCancel()}
+          onClose={() => {
+            handleEditCancel();
+            setShowTooltip(true);
+          }}
+          onClick={handleDropdownClick}
           autoFocus
           variant="filled"
           IconComponent={KeyboardArrowDownIcon}
@@ -154,6 +165,8 @@ const PortfolioTableBody = ({
               sx: {
                 backgroundColor: '#121212',
                 color: 'white',
+                maxHeight: '300px',
+                zIndex: 100000,
                 '& .MuiMenuItem-root': {
                   fontSize: cellFontSize,
                   minHeight: cellHeight,
@@ -164,6 +177,12 @@ const PortfolioTableBody = ({
                     backgroundColor: 'rgba(255,255,255,0.16)'
                   }
                 }
+              }
+            },
+            sx: {
+              zIndex: 100000,
+              '& .MuiPopover-root': {
+                zIndex: 100000
               }
             }
           }}
@@ -377,28 +396,23 @@ const PortfolioTableBody = ({
     }
 
     return (
-      <div 
-        onDoubleClick={() => handleDoubleClick(actualIndex, field)}
-        style={{ 
+      <TableCell
+        onClick={() => handleDoubleClick(actualIndex, field)}
+        sx={{
           cursor: isEditable ? 'pointer' : 'default',
-          padding: '4px 0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          padding: '4px 16px',
           height: cellHeight,
           fontSize: cellFontSize,
-          minWidth: cellMinWidth
+          color: 'white',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          maxWidth: '200px'
         }}
       >
-        <span
-          style={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            color: 'white'
-          }}
-        >{value}</span>
-      </div>
+        {value}
+      </TableCell>
     );
   };
 
@@ -421,21 +435,21 @@ const PortfolioTableBody = ({
           minWidth: 650,
           bgcolor: '#000000'
         }}>
-          <TableHead>
+      <TableHead>
             <TableRow>
               <TableCell padding="checkbox" sx={commonHeaderStyle}>
-                <Checkbox
+            <Checkbox
                   indeterminate={selected.length > 0 && selected.length < data.length}
                   checked={data.length > 0 && selected.length === data.length}
-                  onChange={handleSelectAllClick}
+              onChange={handleSelectAllClick}
                   sx={{
                     color: '#ffffff',
                     '&.Mui-checked': { color: '#00B0FF' },
                     '&.MuiCheckbox-indeterminate': { color: '#00B0FF' },
                     padding: '0px'
                   }}
-                />
-              </TableCell>
+            />
+          </TableCell>
               <TableCell sx={commonHeaderStyle}>UUID / Instance Name</TableCell>
               <TableCell sx={commonHeaderStyle}>Cloud</TableCell>
               <TableCell sx={commonHeaderStyle}>Region</TableCell>
@@ -444,25 +458,25 @@ const PortfolioTableBody = ({
               <TableCell sx={commonHeaderStyle}>Total Number of Hours per Month</TableCell>
               <TableCell sx={commonHeaderStyle}>Pricing Model</TableCell>
               <TableCell sx={{ ...commonHeaderStyle, width: '40px', padding: '0 6px' }}></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const actualIndex = page * rowsPerPage + index;
                 const isItemSelected = isSelected(actualIndex);
-                const isRowEditing = editingCell.rowIndex === actualIndex;
+            const isRowEditing = editingCell.rowIndex === actualIndex;
 
-                return (
-                  <TableRow
+            return (
+              <TableRow 
                     hover
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={actualIndex}
+                key={actualIndex} 
                     selected={isItemSelected}
-                    sx={{
+                sx={{ 
                       cursor: 'pointer',
                       '&.Mui-selected, &.Mui-selected:hover': {
                         backgroundColor: 'rgba(0, 176, 255, 0.08) !important'
@@ -470,19 +484,19 @@ const PortfolioTableBody = ({
                       '&:hover': {
                         backgroundColor: '#1e1e1e !important'
                       }
-                    }}
-                  >
+                }}
+              >
                     <TableCell padding="checkbox" sx={commonCellStyle}>
-                      <Checkbox
+                  <Checkbox
                         checked={isItemSelected}
-                        onChange={() => handleClick(actualIndex)}
+                    onChange={() => handleClick(actualIndex)}
                         sx={{
                           color: '#ffffff',
                           '&.Mui-checked': { color: '#00B0FF' },
                           padding: '0px'
                         }}
-                      />
-                    </TableCell>
+                  />
+                </TableCell>
                     <TableCell sx={commonCellStyle}>{row.uuid}</TableCell>
                     <TableCell sx={commonCellStyle}>{selectedProvider}</TableCell>
                     <TableCell
@@ -510,35 +524,35 @@ const PortfolioTableBody = ({
                       {renderCell(row, 'hours', actualIndex)}
                     </TableCell>
                     <TableCell sx={commonCellStyle}>{row.pricingModel}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
+                <TableCell 
+                  align="center" 
+                  sx={{ 
                         ...commonCellStyle,
-                        width: '40px',
+                    width: '40px',
                         padding: '0 6px'
+                  }}
+                >
+                  {isRowEditing && (
+                    <IconButton
+                      size="small"
+                      onClick={handleEditCancel}
+                      sx={{ 
+                        color: '#fff',
+                        padding: '2px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                        }
                       }}
                     >
-                      {isRowEditing && (
-                        <IconButton
-                          size="small"
-                          onClick={handleEditCancel}
-                          sx={{
-                            color: '#fff',
-                            padding: '2px',
-                            '&:hover': {
-                              backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                            }
-                          }}
-                        >
-                          <CloseIcon fontSize="small" />
-                        </IconButton>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+      </TableBody>
+    </Table>
       </TableContainer>
 
       {/* Pagination Controls */}

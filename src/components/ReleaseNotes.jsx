@@ -24,13 +24,13 @@ const BORDER_COLOR = "#BDBDBD";
 const COMMON_FONT_SIZE = "14px";
 
 const FeatureList = ({ features }) => (
-  <div style={{ whiteSpace: "pre-wrap", textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
+  <div style={{ whiteSpace: "pre-wrap", textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
     {features?.map((feature, idx) => (
       <div key={feature.label + idx} style={{ marginBottom: 4 }}>
         {feature.label && (
           <strong style={{ fontWeight: "bold", fontSize: COMMON_FONT_SIZE }}>{feature.label}:</strong>
         )}
-        <ul style={{ paddingLeft: 16, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
+        <ul style={{ paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
           {feature.values.map((val, i) => (
             <li
               key={i}
@@ -39,7 +39,7 @@ const FeatureList = ({ features }) => (
                 padding: 0,
                 margin: 0,
                 fontSize: COMMON_FONT_SIZE,
-                textAlign: "center",
+                textAlign: "left",
               }}
             >
               {val}
@@ -52,14 +52,14 @@ const FeatureList = ({ features }) => (
 );
 
 const UpcomingList = ({ items }) => (
-  <div style={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
-    <ul style={{ whiteSpace: "pre-wrap", paddingLeft: 16, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
+  <div style={{ textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
+    <ul style={{ whiteSpace: "pre-wrap", paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
       {items?.map((item, idx) => (
         <li key={item.label + idx} style={{ marginBottom: 4 }}>
           {item.label && (
             <strong style={{ fontWeight: "bold", fontSize: COMMON_FONT_SIZE }}>{item.label}:</strong>
           )}
-          <ul style={{ paddingLeft: 16, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
+          <ul style={{ paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
             {item.values.map((val, i) => (
               <li
                 key={i}
@@ -68,7 +68,7 @@ const UpcomingList = ({ items }) => (
                   padding: 0,
                   margin: 0,
                   fontSize: COMMON_FONT_SIZE,
-                  textAlign: "center",
+                  textAlign: "left",
                 }}
               >
                 {val}
@@ -84,6 +84,22 @@ const UpcomingList = ({ items }) => (
 function ReleaseNotes({ handleClose }) {
   const theme = useTheme();
 
+  if (!releaseNotesTableData || releaseNotesTableData.length === 0) {
+    return (
+      <>
+        <DialogTitle>Release Notes</DialogTitle>
+        <DialogContent>
+          <Typography>No release notes available.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </>
+    );
+  }
+
   return (
     <>
       <DialogTitle
@@ -92,6 +108,9 @@ function ReleaseNotes({ handleClose }) {
           textAlign: "center",
           pb: 0,
           fontSize: COMMON_FONT_SIZE,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Typography
@@ -100,10 +119,24 @@ function ReleaseNotes({ handleClose }) {
             fontSize: COMMON_FONT_SIZE,
             fontWeight: "bold",
             textAlign: "center",
+            flex: 1,
           }}
         >
           Release Notes
         </Typography>
+        <Button
+          onClick={handleClose}
+          sx={{
+            minWidth: 'auto',
+            p: 0.5,
+            color: '#ff0000',
+            '&:hover': {
+              color: '#cc0000',
+            },
+          }}
+        >
+          <CloseIcon />
+        </Button>
       </DialogTitle>
       <DialogContent>
         <Typography
@@ -116,7 +149,7 @@ function ReleaseNotes({ handleClose }) {
         >
           To access the latest features, please press{" "}
           <Typography
-            variant="span"
+            component="span"
             sx={{
               fontWeight: "bold",
               display: "inline",
@@ -128,8 +161,7 @@ function ReleaseNotes({ handleClose }) {
           </Typography>{" "}
           on your keyboard. This shortcut will refresh application, ensuring
           that you are using the most up-to-date version with all the newest
-          functionalities and improvements. It's a quick and easy way to make
-          sure you're always working with the latest tools available.
+          functionalities and improvements.
         </Typography>
         <Typography
           variant="body2"
@@ -138,7 +170,15 @@ function ReleaseNotes({ handleClose }) {
           Get real-time insights into estimated cost savings when switching to cloud instances powered by AMD within the same Cloud Service Provider(CSP).
         </Typography>
         <Box sx={{ mt: 1 }}>
-          <TableContainer component={Paper} sx={{ ml: 0, boxShadow: "none" }}>
+          <TableContainer 
+            component={Paper} 
+            sx={{ 
+              ml: 0, 
+              boxShadow: "none",
+              maxHeight: '60vh',
+              overflow: 'auto'
+            }}
+          >
             <Table
               sx={{
                 minWidth: 600,
@@ -149,8 +189,8 @@ function ReleaseNotes({ handleClose }) {
                   height: '36px',
                   fontSize: '0.86rem',
                   lineHeight: '1.3',
-                  color: '#ffffff',
-                  bgcolor: '#000000'
+                  color: '#000000',
+                  bgcolor: '#ffffff'
                 },
                 "& .MuiTableHead-root .MuiTableCell-root": {
                   color: '#00B0FF',
@@ -163,9 +203,9 @@ function ReleaseNotes({ handleClose }) {
               <TableHead>
                 <TableRow
                   sx={{
-                    backgroundColor: "#000",
+                    backgroundColor: "#1e1e1e",
                     "& .MuiTableCell-root": {
-                      color: "#fff",
+                      color: "#00B0FF",
                       fontWeight: "bold",
                       fontSize: COMMON_FONT_SIZE,
                       border: `1px solid ${BORDER_COLOR}`,
@@ -191,9 +231,9 @@ function ReleaseNotes({ handleClose }) {
                 </TableRow>
                 <TableRow
                   sx={{
-                    backgroundColor: "#000",
+                    backgroundColor: "#1e1e1e",
                     "& .MuiTableCell-root": {
-                      color: "#fff",
+                      color: "#00B0FF",
                       fontWeight: "bold",
                       fontSize: COMMON_FONT_SIZE,
                       border: `1px solid ${BORDER_COLOR}`,
@@ -206,7 +246,6 @@ function ReleaseNotes({ handleClose }) {
                 >
                   <TableCell sx={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>Major Features</TableCell>
                   <TableCell sx={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>Minor Improvements</TableCell>
-                  {/* No cell for Upcoming / What's Next in second row, as it's rowspan=2 above */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -219,9 +258,11 @@ function ReleaseNotes({ handleClose }) {
                         fontSize: COMMON_FONT_SIZE,
                         backgroundColor: "#fff",
                         fontFamily: "inherit",
-                        height: 28,
-                        padding: "4px 8px",
-                        textAlign: "center",
+                        height: "auto",
+                        minHeight: 28,
+                        padding: "8px 12px",
+                        textAlign: "left",
+                        color: "#000000",
                       },
                     }}
                   >
@@ -245,15 +286,15 @@ function ReleaseNotes({ handleClose }) {
           </TableContainer>
         </Box>
       </DialogContent>
-      <Divider />
       <DialogActions>
-        <Button
-          startIcon={<CloseIcon />}
-          id={"step-two-target"}
-          variant="contained"
+        <Button 
+          onClick={handleClose} 
+          variant="contained" 
           color="error"
-          onClick={handleClose}
-          sx={{ fontSize: COMMON_FONT_SIZE }}
+          sx={{ 
+            fontSize: COMMON_FONT_SIZE,
+            textTransform: 'none',
+          }}
         >
           Close
         </Button>
