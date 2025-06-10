@@ -135,14 +135,6 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
     const handlePortfolioSelection = (event) => {
       const { portfolioName } = event.detail;
       setPortfolioName(portfolioName);
-      
-      // Load data from localStorage when portfolio is selected
-      const savedData = localStorage.getItem(`portfolio_${portfolioName}`);
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        setTableData(parsedData);
-        setIsTableCreated(parsedData.length > 0);
-      }
     };
 
     window.addEventListener('updatePortfolioName', handlePortfolioSelection);
@@ -163,21 +155,11 @@ const PortfolioForm = ({ onCostAdviceClick, onCloudUsageClick }) => {
       setPortfolioName('');
     };
 
-    // Load saved data on refresh if portfolio is selected
-    if (portfolioName) {
-      const savedData = localStorage.getItem(`portfolio_${portfolioName}`);
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        setTableData(parsedData);
-        setIsTableCreated(parsedData.length > 0);
-      }
-    }
-
     window.addEventListener('clearTableData', handleClearTableData);
     return () => {
       window.removeEventListener('clearTableData', handleClearTableData);
     };
-  }, [portfolioName]);
+  }, []);
 
   React.useEffect(() => {
     const isFormComplete = region && size && pricingModel && quantity && hours;
