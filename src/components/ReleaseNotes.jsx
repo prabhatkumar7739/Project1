@@ -24,13 +24,13 @@ const BORDER_COLOR = "#BDBDBD";
 const COMMON_FONT_SIZE = "14px";
 
 const FeatureList = ({ features }) => (
-  <div style={{ whiteSpace: "pre-wrap", textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
+  <div style={{ whiteSpace: "pre-wrap", textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
     {features?.map((feature, idx) => (
       <div key={feature.label + idx} style={{ marginBottom: 4 }}>
         {feature.label && (
           <strong style={{ fontWeight: "bold", fontSize: COMMON_FONT_SIZE }}>{feature.label}:</strong>
         )}
-        <ul style={{ paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
+        <ul style={{ listStyleType: "none", paddingLeft: 0, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
           {feature.values.map((val, i) => (
             <li
               key={i}
@@ -39,7 +39,7 @@ const FeatureList = ({ features }) => (
                 padding: 0,
                 margin: 0,
                 fontSize: COMMON_FONT_SIZE,
-                textAlign: "left",
+                textAlign: "center",
               }}
             >
               {val}
@@ -52,14 +52,14 @@ const FeatureList = ({ features }) => (
 );
 
 const UpcomingList = ({ items }) => (
-  <div style={{ textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
-    <ul style={{ whiteSpace: "pre-wrap", paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
+  <div style={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
+    <ul style={{ listStyleType: "none", whiteSpace: "pre-wrap", paddingLeft: 0, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
       {items?.map((item, idx) => (
         <li key={item.label + idx} style={{ marginBottom: 4 }}>
           {item.label && (
             <strong style={{ fontWeight: "bold", fontSize: COMMON_FONT_SIZE }}>{item.label}:</strong>
           )}
-          <ul style={{ paddingLeft: 16, margin: 0, textAlign: "left", fontSize: COMMON_FONT_SIZE }}>
+          <ul style={{ listStyleType: "none", paddingLeft: 0, margin: 0, textAlign: "center", fontSize: COMMON_FONT_SIZE }}>
             {item.values.map((val, i) => (
               <li
                 key={i}
@@ -68,7 +68,7 @@ const UpcomingList = ({ items }) => (
                   padding: 0,
                   margin: 0,
                   fontSize: COMMON_FONT_SIZE,
-                  textAlign: "left",
+                  textAlign: "center",
                 }}
               >
                 {val}
@@ -190,22 +190,26 @@ function ReleaseNotes({ handleClose }) {
                   fontSize: '0.86rem',
                   lineHeight: '1.3',
                   color: '#000000',
-                  bgcolor: '#ffffff'
+                  bgcolor: '#ffffff',
+                  verticalAlign: 'top',
+                  textAlign: 'center',
                 },
                 "& .MuiTableHead-root .MuiTableCell-root": {
-                  color: '#00B0FF',
-                  bgcolor: '#1e1e1e',
+                  color: '#fff',
+                  bgcolor: '#000',
                   fontSize: '0.92rem',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  verticalAlign: 'top',
+                  textAlign: 'center',
                 },
               }}
             >
               <TableHead>
                 <TableRow
                   sx={{
-                    backgroundColor: "#1e1e1e",
+                    backgroundColor: "#000",
                     "& .MuiTableCell-root": {
-                      color: "#00B0FF",
+                      color: "#fff",
                       fontWeight: "bold",
                       fontSize: COMMON_FONT_SIZE,
                       border: `1px solid ${BORDER_COLOR}`,
@@ -213,27 +217,20 @@ function ReleaseNotes({ handleClose }) {
                       height: 28,
                       lineHeight: 1.2,
                       textAlign: "center",
+                      verticalAlign: "top",
                     },
                   }}
                 >
-                  <TableCell rowSpan={2} sx={{ verticalAlign: "middle", fontSize: COMMON_FONT_SIZE }}>
-                    Version
-                  </TableCell>
-                  <TableCell rowSpan={2} sx={{ verticalAlign: "middle", fontSize: COMMON_FONT_SIZE }}>
-                    Release Date
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }} colSpan={2}>
-                    What's New
-                  </TableCell>
-                  <TableCell rowSpan={2} sx={{ verticalAlign: "middle", fontSize: COMMON_FONT_SIZE }}>
-                    Upcoming / What's Next
-                  </TableCell>
+                  <TableCell rowSpan={2}>Version</TableCell>
+                  <TableCell rowSpan={2}>Release<br />Date</TableCell>
+                  <TableCell colSpan={2}>What's New</TableCell>
+                  <TableCell rowSpan={2}>Upcoming / What's Next</TableCell>
                 </TableRow>
                 <TableRow
                   sx={{
-                    backgroundColor: "#1e1e1e",
+                    backgroundColor: "#000",
                     "& .MuiTableCell-root": {
-                      color: "#00B0FF",
+                      color: "#fff",
                       fontWeight: "bold",
                       fontSize: COMMON_FONT_SIZE,
                       border: `1px solid ${BORDER_COLOR}`,
@@ -241,11 +238,12 @@ function ReleaseNotes({ handleClose }) {
                       height: 28,
                       lineHeight: 1.2,
                       textAlign: "center",
+                      verticalAlign: "top",
                     },
                   }}
                 >
-                  <TableCell sx={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>Major Features</TableCell>
-                  <TableCell sx={{ textAlign: "center", fontSize: COMMON_FONT_SIZE }}>Minor Improvements</TableCell>
+                  <TableCell>Major Features</TableCell>
+                  <TableCell>Minor Improvements</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -261,22 +259,21 @@ function ReleaseNotes({ handleClose }) {
                         height: "auto",
                         minHeight: 28,
                         padding: "8px 12px",
-                        textAlign: "left",
+                        textAlign: "center",
                         color: "#000000",
+                        verticalAlign: "top",
                       },
                     }}
                   >
-                    <TableCell sx={{ fontWeight: "bold", fontSize: COMMON_FONT_SIZE }}>
-                      {row.version}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: COMMON_FONT_SIZE }}>{row.releaseDate}</TableCell>
-                    <TableCell sx={{ fontSize: COMMON_FONT_SIZE }}>
+                    <TableCell sx={{ fontWeight: "bold" }}>{row.version}</TableCell>
+                    <TableCell>{row.releaseDate}</TableCell>
+                    <TableCell>
                       <FeatureList features={row.majorFeatures} />
                     </TableCell>
-                    <TableCell sx={{ fontSize: COMMON_FONT_SIZE }}>
+                    <TableCell>
                       <FeatureList features={row.minorImprovements} />
                     </TableCell>
-                    <TableCell sx={{ fontSize: COMMON_FONT_SIZE }}>
+                    <TableCell>
                       <UpcomingList items={row.upComing} />
                     </TableCell>
                   </TableRow>

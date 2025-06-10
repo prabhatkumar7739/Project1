@@ -425,7 +425,7 @@ const CostAdvice = ({ onClose }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            p:1
+            p: 1
           }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="h6" sx={{
@@ -471,14 +471,14 @@ const CostAdvice = ({ onClose }) => {
                       }
                     }}
                   >
-                     <MenuItem value="All">All</MenuItem>
-  <MenuItem value="Hourly Cost Optimization">Hourly Cost Optimization</MenuItem>
-  <MenuItem value="Modernize">Modernize</MenuItem>
-  <MenuItem value="Modernize & Downsize">Modernize & Downsize</MenuItem>
+                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem value="Hourly Cost Optimization">Hourly Cost Optimization</MenuItem>
+                    <MenuItem value="Modernize">Modernize</MenuItem>
+                    <MenuItem value="Modernize & Downsize">Modernize & Downsize</MenuItem>
                   </Select>
                 </FormControl>
 
-                <IconButton
+                {/* <IconButton
                   onClick={handleCostAdviceDialogOpen}
                   size="medium"
                   sx={{
@@ -495,7 +495,31 @@ const CostAdvice = ({ onClose }) => {
                   <CustomTooltip message="What's this?">
                     <QuestionMarkIcon sx={{ fontSize: '1.25rem' }} />
                   </CustomTooltip>
+                </IconButton> */}
+                <IconButton
+                  onClick={handleCostAdviceDialogOpen}
+                  size="medium"
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    color: '#666666',
+                    bgcolor: '#ffffff',
+                    border: '1px solid #e0e0e0',
+                    '&:hover': {
+                      bgcolor: '#f5f5f5',
+                      borderColor: '#666666',
+                    },
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <CustomTooltip message="What's this?">
+                    <QuestionMarkIcon sx={{ fontSize: '1.25rem' }} />
+                  </CustomTooltip>
                 </IconButton>
+
 
                 <Box sx={{ display: 'flex', gap: 2.5, ml: 1 }}>
                   <Link id="input-errors-explanation"
@@ -602,8 +626,8 @@ const CostAdvice = ({ onClose }) => {
                 {/* Table Headers */}
                 <TableHead>
                   <TableRow>
-                    <TableCell 
-                      colSpan={10} 
+                    <TableCell
+                      colSpan={10}
                       sx={{
                         ...COMMON_STYLES.headerCell,
                         position: 'sticky',
@@ -1041,120 +1065,120 @@ const CostAdvice = ({ onClose }) => {
         </Dialog>
         {/* Cost Advice Help Dialog */}
         <Dialog
-  open={openCostAdviceDialog}
-  onClose={handleCostAdviceDialogClose}
-  PaperProps={{
-    sx: {
-      maxWidth: '1000px',
-      width: '1000px',
-      borderRadius: '8px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-    }
-  }}
->
-  <DialogTitle
-    sx={{
-      fontSize: '1.25rem',   // Larger
-      fontWeight: 500,
-      color: '#222',
-      bgcolor: '#fff',
-      borderBottom: 'none',
-      py: 2,
-      px: 3,
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}
-  >
-    <span>All the recommendations are based on the competitive performance analysis across and within processor offerings</span>
-    <IconButton
-      onClick={handleCostAdviceDialogClose}
-      size="small"
-      sx={{
-        width: 32,
-        height: 32,
-        bgcolor: '#fff',
-        border: '1px solid #ddd',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-        borderRadius: '50%',
-        p: 0.5,
-        ml: 1,
-        '&:hover': { bgcolor: '#f5f5f5' }
-      }}
-    >
-      <CloseIcon sx={{ fontSize: 22, color: '#444' }} />
-    </IconButton>
-  </DialogTitle>
-  <Divider sx={{ m: 0 }} />
-  <DialogContent sx={{ p: 4, pt: 3 }}>
-    <List sx={{
-      pl: 2,
-      '& .MuiListItem-root': {
-        display: 'list-item',
-        py: 1.5,
-        color: '#333',
-        fontSize: '1.15rem'
-      }
-    }}>
-      <ListItem>
-        <Typography component="span" sx={{ fontWeight: 700 }}>
-          Hourly Cost Optimization:
-        </Typography>
-        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
-          Recommendation to lower hourly costs by using 5th generation AMD processors (Milan, EPYC 7R13 series) for high efficiency and the same performance.
-        </Typography>
-      </ListItem>
-      <ListItem>
-        <Typography component="span" sx={{ fontWeight: 700 }}>
-          Modernize:
-        </Typography>
-        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
-          Recommendation for using the latest AMD processors (Genoa, EPYC 9004 series) for increased performance ~2X uplift.
-        </Typography>
-      </ListItem>
-      <ListItem>
-        <Typography component="span" sx={{ fontWeight: 700 }}>
-          Modernize & Downsize:
-        </Typography>
-        <Typography component="span" sx={{ ml: 1, color: '#444' }}>
-          Recommendation to use the latest AMD processors and smaller instance sizes for the same performance and cost savings.
-        </Typography>
-      </ListItem>
-    </List>
-    <List sx={{ pl: 2 }}>
-      <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
-        <Link
-          href="https://www.amd.com/en/products/processors/server/epyc/aws.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{
-            color: '#222',
-            textDecoration: 'none',
-            fontSize: '1.1rem',
-            '&:hover': { textDecoration: 'underline' }
+          open={openCostAdviceDialog}
+          onClose={handleCostAdviceDialogClose}
+          PaperProps={{
+            sx: {
+              maxWidth: '1000px',
+              width: '1000px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+            }
           }}
         >
-          https://www.amd.com/en/products/processors/server/epyc/aws.html
-        </Link>
-      </ListItem>
-      <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
-        <Link
-          href="https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{
-            color: '#222',
-            textDecoration: 'none',
-            fontSize: '1.1rem',
-            '&:hover': { textDecoration: 'underline' }
-          }}
-        >
-          https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html
-        </Link>
-      </ListItem>
-    </List>
-  </DialogContent>
-</Dialog>
+          <DialogTitle
+            sx={{
+              fontSize: '1.25rem',   // Larger
+              fontWeight: 500,
+              color: '#222',
+              bgcolor: '#fff',
+              borderBottom: 'none',
+              py: 2,
+              px: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <span>All the recommendations are based on the competitive performance analysis across and within processor offerings</span>
+            <IconButton
+              onClick={handleCostAdviceDialogClose}
+              size="small"
+              sx={{
+                width: 32,
+                height: 32,
+                bgcolor: '#fff',
+                border: '1px solid #ddd',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                borderRadius: '50%',
+                p: 0.5,
+                ml: 1,
+                '&:hover': { bgcolor: '#f5f5f5' }
+              }}
+            >
+              <CloseIcon sx={{ fontSize: 22, color: '#444' }} />
+            </IconButton>
+          </DialogTitle>
+          <Divider sx={{ m: 0 }} />
+          <DialogContent sx={{ p: 4, pt: 3 }}>
+            <List sx={{
+              pl: 2,
+              '& .MuiListItem-root': {
+                display: 'list-item',
+                py: 1.5,
+                color: '#333',
+                fontSize: '1.15rem'
+              }
+            }}>
+              <ListItem>
+                <Typography component="span" sx={{ fontWeight: 700 }}>
+                  Hourly Cost Optimization:
+                </Typography>
+                <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+                  Recommendation to lower hourly costs by using 5th generation AMD processors (Milan, EPYC 7R13 series) for high efficiency and the same performance.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography component="span" sx={{ fontWeight: 700 }}>
+                  Modernize:
+                </Typography>
+                <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+                  Recommendation for using the latest AMD processors (Genoa, EPYC 9004 series) for increased performance ~2X uplift.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography component="span" sx={{ fontWeight: 700 }}>
+                  Modernize & Downsize:
+                </Typography>
+                <Typography component="span" sx={{ ml: 1, color: '#444' }}>
+                  Recommendation to use the latest AMD processors and smaller instance sizes for the same performance and cost savings.
+                </Typography>
+              </ListItem>
+            </List>
+            <List sx={{ pl: 2 }}>
+              <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
+                <Link
+                  href="https://www.amd.com/en/products/processors/server/epyc/aws.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    color: '#222',
+                    textDecoration: 'none',
+                    fontSize: '1.1rem',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >
+                  https://www.amd.com/en/products/processors/server/epyc/aws.html
+                </Link>
+              </ListItem>
+              <ListItem sx={{ display: 'list-item', pt: 0, pb: 0 }}>
+                <Link
+                  href="https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    color: '#222',
+                    textDecoration: 'none',
+                    fontSize: '1.1rem',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >
+                  https://www.amd.com/en/products/processors/server/epyc/microsoft-azure.html
+                </Link>
+              </ListItem>
+            </List>
+          </DialogContent>
+        </Dialog>
       </Box>
     </div>
   );

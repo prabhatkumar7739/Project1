@@ -13,12 +13,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import ScienceIcon from '@mui/icons-material/Science';
 import { useFormTable } from '../../context/FormTableContext';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { useCloudUsage } from '../../context/CloudUsageContext';
 import { useNavigate } from 'react-router-dom';
 
 const CloudUsageReportNotificationBar = () => {
   const navigate = useNavigate();
   const { formData, updateFormData, resetTable } = useFormTable();
   const { addPortfolio, portfolioList } = usePortfolio();
+  const { saveReport } = useCloudUsage();
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [testSuccess, setTestSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -94,11 +96,39 @@ const CloudUsageReportNotificationBar = () => {
         data: formData
       });
 
+      // Generate example service usage data
+      const servicesData = [
+        {
+          id: 1,
+          service: 'Compute Engine',
+          usage: `${Math.floor(Math.random() * 1000)} hours`,
+          cost: `$${(Math.random() * 1000).toFixed(2)}`
+        },
+        {
+          id: 2,
+          service: 'Cloud Storage',
+          usage: `${Math.floor(Math.random() * 500)} GB`,
+          cost: `$${(Math.random() * 500).toFixed(2)}`
+        },
+        {
+          id: 3,
+          service: 'Cloud SQL',
+          usage: `${Math.floor(Math.random() * 200)} GB`,
+          cost: `$${(Math.random() * 300).toFixed(2)}`
+        }
+      ];
+
+      // Save the report data
+      saveReport({
+        portfolio: formData,
+        services: servicesData
+      });
+
       setSaveSuccess(true);
       
-      // Navigate back to main page after successful save
+      // Navigate to the cloud usage report table page after successful save
       setTimeout(() => {
-        navigate('/');
+        navigate('/cloud-usage-report-table');
       }, 1500);
     } catch (err) {
       setError('Failed to save portfolio. Please try again.');
@@ -201,17 +231,6 @@ const CloudUsageReportNotificationBar = () => {
         </Alert>
       </Snackbar>
 
-      {/* Error Snackbar */}
-      <Snackbar 
-        open={!!error} 
-        autoHideDuration={3000} 
-        onClose={() => setError('')}
-      >
-        <Alert severity="error" sx={{ width: '100%' }}>
-          {error}
-        </Alert>
-      </Snackbar>
-
       {/* Test Success Snackbar */}
       <Snackbar
         open={testSuccess}
@@ -219,7 +238,18 @@ const CloudUsageReportNotificationBar = () => {
         onClose={() => setTestSuccess(false)}
       >
         <Alert severity="success" sx={{ width: '100%' }}>
-          Connection tested successfully
+          Test successful
+        </Alert>
+      </Snackbar>
+
+      {/* Error Snackbar */}
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError('')}
+      >
+        <Alert severity="error" sx={{ width: '100%' }}>
+          {error}
         </Alert>
       </Snackbar>
     </>
