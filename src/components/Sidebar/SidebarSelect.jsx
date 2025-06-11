@@ -1,5 +1,4 @@
-
-        import React from "react";
+import React from "react";
 import {
   ListSubheader,
   useTheme,
@@ -9,9 +8,24 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    const newValue = event.target.value;
+    onValueChange(event);
+    
+    // Navigate based on selection
+    if (newValue === "Datadog") {
+      navigate('/datadog');
+    } else if (newValue === "AWS CloudWatch") {
+      navigate('/cloudwatch');
+    }
+  };
+
   return (
     <FormControl 
       variant="outlined" 
@@ -34,7 +48,7 @@ const SidebarSelect = ({ label = "", value = "", options, onValueChange }) => {
       <Select
         id="step-six-target"
         value={value}
-        onChange={onValueChange}
+        onChange={handleChange}
         label={label}
         MenuProps={{
           PaperProps: {

@@ -17,7 +17,6 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CloseIcon from '@mui/icons-material/Close';
 import Sidebar from '../Sidebar/Sidebar';
-import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = "17%";
 
@@ -82,7 +81,6 @@ const instanceData = [
 ];
 
 const CloudUsageReportTable = () => {
-  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10); // Fixed to 10 rows per page
 
@@ -103,7 +101,8 @@ const CloudUsageReportTable = () => {
   };
 
   const handleClose = () => {
-    navigate('/');
+    // Add close functionality
+    console.log('Close clicked');
   };
 
   return (

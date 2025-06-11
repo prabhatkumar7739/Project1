@@ -48,6 +48,12 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
+  // Function to check if we should show the main notification bars
+  const shouldShowMainNotificationBars = () => {
+    const excludedPaths = ['/datadog', '/cloudwatch'];
+    return !excludedPaths.includes(location.pathname);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CloudProviderProvider>
@@ -69,10 +75,14 @@ const Layout = () => {
                 <Box sx={{ flex: 1 }}>
                   <Outlet />
                 </Box>
-                {currentView === 'portfolio' && <NotificationBar onViewChange={handleViewChange} />}
-                {currentView === 'cost-advice' && <CostAdviceNotificationBar />}
-                {currentView === 'cloud-usage' && location.pathname !== '/cloud-usage-report-table' && <CloudUsageReportNotificationBar />}
-                {location.pathname === '/cloud-usage-report-table' && <CloudUsageReportTableBar />}
+                {shouldShowMainNotificationBars() && (
+                  <>
+                    {currentView === 'portfolio' && <NotificationBar onViewChange={handleViewChange} />}
+                    {currentView === 'cost-advice' && <CostAdviceNotificationBar />}
+                    {currentView === 'cloud-usage' && location.pathname !== '/cloud-usage-report-table' && <CloudUsageReportNotificationBar />}
+                    {location.pathname === '/cloud-usage-report-table' && <CloudUsageReportTableBar />}
+                  </>
+                )}
               </Box>
               <Footer />
             </Box>

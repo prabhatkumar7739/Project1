@@ -3,6 +3,7 @@ import {
   Divider,
   useTheme,
   IconButton,
+  Box
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import SidebarSelect from "./SidebarSelect";
@@ -39,15 +40,17 @@ export default function SidebarDrawer({ toggleDrawer }) {
   };
 
   return (
-    <div style={{ 
+    <Box sx={{ 
       width: drawerWidth, 
-      height: "100vh",
+      height: "80vh",
       marginTop: "10px", 
       padding: "5px",
       borderRight: "1px solid #e0e0e0",
-      backgroundColor: "#f0f0f0"
+      backgroundColor: "#f0f0f0",
+      display: "flex",
+      flexDirection: "column"
     }}>
-      <div style={{ display: "flex" }}>
+      <Box sx={{ display: "flex" }}>
         <SidebarSelect
           label="Service Provider"
           options={selectOptions}
@@ -68,11 +71,13 @@ export default function SidebarDrawer({ toggleDrawer }) {
         >
           <ChevronLeftIcon fontSize="large" />
         </IconButton>
-      </div>
+      </Box>
 
       <Divider sx={{ my: 2 }} />
       <PortfolioHeader />
-      <PortfolioList />
-    </div>
+      <Box sx={{ flex: 1, overflow: "auto" }}>
+        <PortfolioList />
+      </Box>
+    </Box>
   );
 }

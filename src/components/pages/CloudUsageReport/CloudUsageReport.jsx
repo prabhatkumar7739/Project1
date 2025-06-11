@@ -178,7 +178,7 @@ const CloudUsageReport = ({ onClose }) => {
           alignItems: 'center', 
           mb: 2,
           justifyContent: 'space-between',
-          pt: 1,
+          pt: 0,
           pb: 2,
           px: 2
         }}>
