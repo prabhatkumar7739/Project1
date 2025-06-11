@@ -1,15 +1,21 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import Layout from './components/Layout';
-import Home from './components/pages/Home/Home';
-import CostAdvice from './components/pages/CostAdvice';
-import CloudUsageReport from './components/pages/CloudUsageReport/CloudUsageReport';
-import Explorer from './components/pages/Explorer/Explorer';
-import CloudUsageReportTable from './components/CloudUsageReportTable/CloudUsageReportTable';
 import { CloudUsageProvider } from './context/CloudUsageContext';
+import { CloudProviderProvider } from './context/CloudProviderContext';
+import { FormTableProvider } from './context/FormTableContext';
+import { PortfolioProvider } from './context/PortfolioContext';
+import MainContent from './components/pages/Home/MainContent';
+
+const Explorer = lazy(() => import('../src/components/pages/Explorer/Explorer'));
+const CostAdvice = lazy(() => import('../src/components/pages/CostAdvice'));
+const CloudUsageReports = lazy(() => import('../src/components/pages/CloudUsageReport/CloudUsageReport'));
+const CloudUsageReportTable = lazy(() => import('../src/components/CloudUsageReportTable/CloudUsageReportTable'));
+// Remove this line - Sidebar is already imported in Layout
+// const Sidebar = lazy(() => import('../src/components/Sidebar/Sidebar'));
 
 const App = () => {
-   useEffect(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       import("@/tour/tour").then((tour) => {
         tour.default.start();
@@ -17,20 +23,31 @@ const App = () => {
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, []);
+
   return (
-    <CloudUsageProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="explorer" element={<Explorer />} />
-          <Route path="cost-advice" element={<CostAdvice />} />
-          <Route path="cloud-usage" element={<CloudUsageReport />} />
-          <Route path="cloud-usage-report-table" element={<CloudUsageReportTable />} />
-          {/* Redirect any unknown routes to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </CloudUsageProvider>
+    <BrowserRouter>
+      <CloudProviderProvider>
+        <FormTableProvider>
+          <PortfolioProvider>
+            <CloudUsageProvider>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<MainContent />} />
+                    <Route path="managePortfolio" element={<MainContent />} />
+                    <Route path="explorer" element={<Explorer />} />
+                    <Route path="cost-advice" element={<CostAdvice />} />
+                    <Route path="cloud-usage" element={<CloudUsageReports />} />
+                    <Route path="cloud-usage-report-table" element={<CloudUsageReportTable />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </CloudUsageProvider>
+          </PortfolioProvider>
+        </FormTableProvider>
+      </CloudProviderProvider>
+    </BrowserRouter>
   );
 };
 

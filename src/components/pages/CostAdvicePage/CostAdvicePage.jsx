@@ -11,15 +11,8 @@ const CostAdvicePage = ({ onViewChange }) => {
   };
 
   return (
-    <div style={{ 
-         display: 'flex',
-         flexGrow: 1,
-         backgroundColor: '#f5f5f5',
-         height: '80vh'
-       }}>
-         <Sidebar />
+   
          <CostAdvice onClose={handleClose}/>
-       </div>
   );
 };
 

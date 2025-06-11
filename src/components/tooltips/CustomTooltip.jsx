@@ -26,7 +26,7 @@ const CustomTooltip = ({ message, children }) => {
         slotProps={{
           tooltip: {
             sx: {
-              backgroundColor: theme.palette.grey[800],
+              backgroundColor: 'grey',
               color: '#fff',
               fontSize: '12px',
               padding: '8px 12px',

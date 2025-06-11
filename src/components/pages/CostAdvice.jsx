@@ -405,15 +405,7 @@ const CostAdvice = ({ onClose }) => {
       height: '80vh',
       overflow: 'hidden'
     }}>
-      <Sidebar />
-      <Box sx={{
-        p: 1,
-        flexGrow: 1,
-        width: '75%',
-        backgroundColor: '#f5f5f5',
-        overflow: 'auto',
-        height: '80vh'
-      }}>
+   
         <Box sx={{
           width: '100%',
           color: '#333333',
@@ -477,25 +469,6 @@ const CostAdvice = ({ onClose }) => {
                     <MenuItem value="Modernize & Downsize">Modernize & Downsize</MenuItem>
                   </Select>
                 </FormControl>
-
-                {/* <IconButton
-                  onClick={handleCostAdviceDialogOpen}
-                  size="medium"
-                  sx={{
-                    p: 1.2,
-                    color: '#666666',
-                    bgcolor: '#ffffff',
-                    border: '1px solid #e0e0e0',
-                    '&:hover': {
-                      bgcolor: '#f5f5f5',
-                      borderColor: '#666666'
-                    }
-                  }}
-                >
-                  <CustomTooltip message="What's this?">
-                    <QuestionMarkIcon sx={{ fontSize: '1.25rem' }} />
-                  </CustomTooltip>
-                </IconButton> */}
                 <IconButton
                   onClick={handleCostAdviceDialogOpen}
                   size="medium"
@@ -519,7 +492,6 @@ const CostAdvice = ({ onClose }) => {
                     <QuestionMarkIcon sx={{ fontSize: '1.25rem' }} />
                   </CustomTooltip>
                 </IconButton>
-
 
                 <Box sx={{ display: 'flex', gap: 2.5, ml: 1 }}>
                   <Link id="input-errors-explanation"
@@ -1179,7 +1151,6 @@ const CostAdvice = ({ onClose }) => {
             </List>
           </DialogContent>
         </Dialog>
-      </Box>
     </div>
   );
 };

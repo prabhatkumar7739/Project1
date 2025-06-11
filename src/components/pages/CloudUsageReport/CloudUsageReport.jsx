@@ -162,7 +162,6 @@ const CloudUsageReport = ({ onClose }) => {
       height: 'calc(100vh - 150px)', 
       width: '100%',
     }}>
-      <Sidebar />
       <Box sx={{ 
         flexGrow: 1,
         width: `calc(100% - ${drawerWidth})`,
