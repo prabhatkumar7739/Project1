@@ -50,7 +50,7 @@ const Layout = () => {
 
   // Function to check if we should show the main notification bars
   const shouldShowMainNotificationBars = () => {
-    const excludedPaths = ['/datadog', '/cloudwatch'];
+    const excludedPaths = ['/datadog', '/cloudwatch','/datadog-table'];
     return !excludedPaths.includes(location.pathname);
   };
 

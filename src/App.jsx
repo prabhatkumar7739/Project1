@@ -7,6 +7,7 @@ import CloudUsageReport from './components/pages/CloudUsageReport/CloudUsageRepo
 import Explorer from './components/pages/Explorer/Explorer';
 import CloudUsageReportTable from './components/CloudUsageReportTable/CloudUsageReportTable';
 import Datadog from './components/datadog/datadog';
+import DatadogTable from './components/datadog/DatadogTable';
 import CloudWatch from './components/cloudwatch/CloudWatch';
 import { CloudUsageProvider } from './context/CloudUsageContext';
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="cloud-usage" element={<CloudUsageReport />} />
           <Route path="cloud-usage-report-table" element={<CloudUsageReportTable />} />
           <Route path="datadog" element={<Datadog />} />
+          <Route path="datadog-table" element={<DatadogTable />} />
           <Route path="cloudwatch" element={<CloudWatch />} />
           {/* Redirect any unknown routes to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
