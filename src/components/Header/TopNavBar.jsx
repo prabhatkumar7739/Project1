@@ -17,7 +17,7 @@ import UserMenu from "./UserMenu";
 import SupportPopover from "./SupportPopover";
 import ReleaseNotes from "../ReleaseNotes";
 
-const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
+const TopNavBar = ({ currentView, onViewChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [supportAnchorEl, setSupportAnchorEl] = useState(null);
   const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
@@ -75,14 +75,14 @@ const TopNavBar = ({ currentView = 'portfolio', onViewChange }) => {
             // id="step-one-target"  
             color="inherit"
             sx={{
-              textDecoration: currentView === 'portfolio' ? "underline" : "none",
+              textDecoration: currentView === 'manageportfolio' ? "underline" : "none",
               mr: 2,
               fontFamily: "'Titillium Web', sans-serif",
               fontWeight: 400,
               textTransform: "none",
               fontSize: "1rem"
             }}
-            onClick={() => onViewChange('portfolio')}
+            onClick={() => onViewChange('manageportfolio')}
           >
             Manage Portfolio
           </Button>

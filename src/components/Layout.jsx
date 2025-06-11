@@ -10,7 +10,7 @@ import Sidebar from './Sidebar/Sidebar';
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentView, setCurrentView] = useState('portfolio');
+  const [currentView, setCurrentView] = useState('manageportfolio');
 
   // Check if current route is explorer to hide sidebar
   const isExplorerPage = location.pathname === '/explorer';
@@ -20,14 +20,41 @@ const Layout = () => {
     const excludedPaths = ['/datadog', '/cloudwatch'];
     return !excludedPaths.includes(location.pathname);
   };
+  const routeToView = {
+    '/': 'manageportfolio',
+    '/explorer': 'explorer',
+    '/cost-advice': 'cost-advice',
+    '/cloud-usage': 'cloud-usage',
+    '/cloud-usage-report-table': 'cloud-usage'
+  };
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+    // Map views to routes
+    const viewToRoute = {
+      'manageportfolio': '/',
+      'explorer': '/explorer',
+      'cost-advice': '/cost-advice',
+      'cloud-usage': '/cloud-usage'
+    };
+    navigate(viewToRoute[view]);
+  };
+
+  // Update currentView when route changes
+  React.useEffect(() => {
+    const view = routeToView[location.pathname];
+    if (view) {
+      setCurrentView(view);
+    }
+  }, [location.pathname]);
+
 
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#f0f0f0' }}>
-        <TopNavBar currentView={currentView} onViewChange={setCurrentView} />
+        <TopNavBar currentView={currentView} onViewChange={handleViewChange} />
         <Box sx={{ display: 'flex', flexGrow: 1 }}>
           {!isExplorerPage && <Sidebar />}
-            <Outlet />
+          <Outlet />
         </Box>
         <Footer />
       </Box>
