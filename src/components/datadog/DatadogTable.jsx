@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CloseIcon from '@mui/icons-material/Close';
 import Sidebar from '../Sidebar/Sidebar';
+import DatadogTableNotificationBar from './DatadogTableNotificationBar';
 
 const drawerWidth = "17%";
 
@@ -131,32 +132,62 @@ const instanceData = [
 const DatadogTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: '',
+    severity: 'info'
+  });
+
+  // Add test notification on mount
+  useEffect(() => {
+    showNotification('Welcome to Datadog Instances Table', 'info');
+  }, []);
 
   const handleFirstPageButtonClick = () => {
     setPage(0);
+    showNotification('Navigated to first page', 'info');
   };
 
   const handleBackButtonClick = () => {
     setPage((prevPage) => prevPage - 1);
+    showNotification('Navigated to previous page', 'info');
   };
 
   const handleNextButtonClick = () => {
     setPage((prevPage) => prevPage + 1);
+    showNotification('Navigated to next page', 'info');
   };
 
   const handleLastPageButtonClick = () => {
     setPage(Math.max(0, Math.ceil(instanceData.length / rowsPerPage) - 1));
+    showNotification('Navigated to last page', 'info');
   };
 
   const handleClose = () => {
+    showNotification('Table view closed', 'warning');
     // Add close functionality
     console.log('Close clicked');
+  };
+
+  const showNotification = (message, severity) => {
+    setNotification({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const handleNotificationClose = () => {
+    setNotification({
+      ...notification,
+      open: false
+    });
   };
 
   return (
     <Box sx={{ 
       display: 'flex',
-      height: '80vh',
+      height: '100vh',
       width: '100%',
       backgroundColor: '#fff'
     }}>
@@ -165,57 +196,53 @@ const DatadogTable = () => {
         display: 'flex',
         flexDirection: 'column',
         width: `calc(100% - ${drawerWidth})`,
-        ml: drawerWidth,
-        height: '80vh',
+        height: '100%',
         backgroundColor: '#fff',
-        marginLeft: 0,
         position: 'relative'
       }}>
         <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 2,
           px: 3,
-          pb: 3,
-          pt: 0,
-          flex: 1,
-          overflow: 'auto',
-          marginTop: '10px'
+          pt: 2
         }}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            mb: 2
+          <Typography variant="h6" sx={{ 
+            fontWeight: 500, 
+            color: '#000',
           }}>
-            <Typography variant="h6" sx={{ 
-              fontWeight: 500, 
-              color: '#000',
-              ml: 0
-            }}>
-              Datadog Instances
-            </Typography>
-            <IconButton
-              onClick={handleClose}
-              size="small"
-              sx={{
-                width: '32px',
-                height: '32px',
-                padding: 0,
-                color: '#666666',
-                bgcolor: '#ffffff',
-                border: '1px solid #e0e0e0',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                '&:hover': {
-                  bgcolor: '#f5f5f5',
-                  borderColor: '#666666'
-                }
-              }}
-            >
-              <CloseIcon sx={{ fontSize: '18px' }} />
-            </IconButton>
-          </Box>
-          
+            Datadog Instances
+          </Typography>
+          <IconButton
+            onClick={handleClose}
+            size="small"
+            sx={{
+              width: '32px',
+              height: '32px',
+              padding: 0,
+              color: '#666666',
+              bgcolor: '#ffffff',
+              border: '1px solid #e0e0e0',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              '&:hover': {
+                bgcolor: '#f5f5f5',
+                borderColor: '#666666'
+              }
+            }}
+          >
+            <CloseIcon sx={{ fontSize: '18px' }} />
+          </IconButton>
+        </Box>
+
+        <Box sx={{
+          px: 3,
+          flex: 1,
+          overflow: 'auto'
+        }}>
           <TableContainer component={Paper} sx={tableStyles.container}>
             <Table>
               <TableHead>
@@ -290,6 +317,14 @@ const DatadogTable = () => {
             </Box>
           </TableContainer>
         </Box>
+
+        <DatadogTableNotificationBar />
+
+        <Box sx={{
+          height: '60px',
+          borderTop: '1px solid #e0e0e0',
+          backgroundColor: '#f8f9fa'
+        }} />
       </Box>
     </Box>
   );
