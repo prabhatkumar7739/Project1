@@ -36,17 +36,17 @@ const DatadogNotificationBar = () => {
 
   return (
     <Box sx={{
-      backgroundColor: '#f0f0f0',
-      p: 2,
-      borderTop: '1px solid #e0e0e0',
-      display: 'flex',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      width: '100%',
-      position: 'relative',
-      zIndex: 1000,
-      boxShadow: '0 -2px 4px rgba(0,0,0,0.05)',
-      mt: 'auto'
+     minHeight: '4rem',
+            backgroundColor: '#E8E8E8',
+            width: '100%',
+            position: 'absolute',
+            bottom: 0,
+            left:' -0.1%',
+            display: 'flex',
+            justifyContent:'flex-end',
+            alignItems: 'start',
+            padding: '1rem'
+      
     }}>
       <Stack direction="row" spacing={1}>
         <Button

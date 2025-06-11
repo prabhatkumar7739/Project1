@@ -19,13 +19,7 @@ const Datadog = () => {
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex',
-      height: '82vh',
-      width: '100%',
-      position: 'relative'
-    }}>
-      <Sidebar />
+  
       <Box sx={{ 
         flexGrow: 1,
         width: `calc(100% - ${drawerWidth})`,
@@ -61,7 +55,6 @@ const Datadog = () => {
 
         <DatadogNotificationBar />
       </Box>
-    </Box>
   );
 };
 
