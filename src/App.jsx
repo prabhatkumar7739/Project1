@@ -11,8 +11,8 @@ const Explorer = lazy(() => import('../src/components/pages/Explorer/Explorer'))
 const CostAdvice = lazy(() => import('../src/components/pages/CostAdvice'));
 const CloudUsageReports = lazy(() => import('../src/components/pages/CloudUsageReport/CloudUsageReport'));
 const CloudUsageReportTable = lazy(() => import('../src/components/CloudUsageReportTable/CloudUsageReportTable'));
-// Remove this line - Sidebar is already imported in Layout
-// const Sidebar = lazy(() => import('../src/components/Sidebar/Sidebar'));
+const Datadog = lazy(()=>import('../src/components/datadog/datadog'))
+const CloudWatch = lazy(()=>import('../src/components/cloudwatch/cloudwatch'))
 
 const App = () => {
   useEffect(() => {
@@ -39,6 +39,8 @@ const App = () => {
                     <Route path="cost-advice" element={<CostAdvice />} />
                     <Route path="cloud-usage" element={<CloudUsageReports />} />
                     <Route path="cloud-usage-report-table" element={<CloudUsageReportTable />} />
+                    <Route path='datadog' element={<Datadog/>}/>
+                    <Route path='cloudwatch' element={<CloudWatch/>}/>
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Route>
                 </Routes>

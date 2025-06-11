@@ -15,6 +15,12 @@ const Layout = () => {
   // Check if current route is explorer to hide sidebar
   const isExplorerPage = location.pathname === '/explorer';
 
+  // Function to check if we should show the main notification bars
+  const shouldShowMainNotificationBars = () => {
+    const excludedPaths = ['/datadog', '/cloudwatch'];
+    return !excludedPaths.includes(location.pathname);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#f0f0f0' }}>

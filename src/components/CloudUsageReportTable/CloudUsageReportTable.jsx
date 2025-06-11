@@ -82,7 +82,6 @@ const instanceData = [
 ];
 
 const CloudUsageReportTable = () => {
-  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10); // Fixed to 10 rows per page
 
@@ -103,7 +102,8 @@ const CloudUsageReportTable = () => {
   };
 
   const handleClose = () => {
-    navigate('/');
+    // Add close functionality
+    console.log('Close clicked');
   };
 
   return (
