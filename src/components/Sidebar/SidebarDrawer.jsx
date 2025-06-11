@@ -41,7 +41,6 @@ export default function SidebarDrawer({ toggleDrawer }) {
   return (
     <div style={{ 
       width: drawerWidth, 
-      height: "100vh",
       marginTop: "10px", 
       padding: "5px",
       borderRight: "1px solid #e0e0e0",

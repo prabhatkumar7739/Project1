@@ -19,12 +19,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { commonInputStyles, commonSelectStyles } from '../../../styles/commonStyles';
-import Sidebar from '../../Sidebar/Sidebar';
 import { useFormTable } from '../../../context/FormTableContext';
 import { usePortfolio } from '../../../context/PortfolioContext';
 import { useCloudUsage } from '../../../context/CloudUsageContext';
 import { useNavigate } from 'react-router-dom';
-
+import CloudUsageReportNotificationBar from '@/components/NotificationBar/CloudUsageReportNotificationBar';
 const drawerWidth = "17%";
 
 const CloudUsageReport = ({ onClose }) => {
@@ -276,7 +275,7 @@ const CloudUsageReport = ({ onClose }) => {
             </FormControl>
           </Box>
         </Paper>
-
+ <CloudUsageReportNotificationBar />
         <Snackbar
           open={showSnackbar}
           autoHideDuration={6000}

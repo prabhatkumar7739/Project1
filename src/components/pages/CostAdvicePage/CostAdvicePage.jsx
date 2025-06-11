@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import CostAdvice from '../CostAdvice';
-import Sidebar from '../../Sidebar/Sidebar';
 
 const CostAdvicePage = ({ onViewChange }) => {
   const handleClose = () => {
@@ -11,7 +10,6 @@ const CostAdvicePage = ({ onViewChange }) => {
   };
 
   return (
-   
          <CostAdvice onClose={handleClose}/>
   );
 };

@@ -16,8 +16,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CloseIcon from '@mui/icons-material/Close';
-import Sidebar from '../Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import CloudUsageReportTableBar from '../NotificationBar/CloudUsageReportTableBar';
 
 const drawerWidth = "17%";
 
@@ -107,17 +107,11 @@ const CloudUsageReportTable = () => {
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex',
-      height: '80vh',
-      width: '100%',
-      backgroundColor: '#fff'
-    }}>
-      <Sidebar />
+   
       <Box sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        width: `calc(100% - ${drawerWidth})`,
+        width: `100%`,
         ml: drawerWidth,
         height: '80vh',
         backgroundColor: '#fff',
@@ -336,8 +330,8 @@ const CloudUsageReportTable = () => {
             </Box>
           </TableContainer>
         </Box>
+        <CloudUsageReportTableBar/>
       </Box>
-    </Box>
   );
 };
 

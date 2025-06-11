@@ -21,9 +21,7 @@ const Layout = () => {
         <TopNavBar currentView={currentView} onViewChange={setCurrentView} />
         <Box sx={{ display: 'flex', flexGrow: 1 }}>
           {!isExplorerPage && <Sidebar />}
-          <Box sx={{ flexGrow: 1, p: 2 }}>
             <Outlet />
-          </Box>
         </Box>
         <Footer />
       </Box>
