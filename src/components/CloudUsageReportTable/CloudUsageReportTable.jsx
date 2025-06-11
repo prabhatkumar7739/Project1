@@ -17,100 +17,12 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CloseIcon from '@mui/icons-material/Close';
 import Sidebar from '../Sidebar/Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = "17%";
 
 // Using the same data structure as Explorer
 const instanceData = [
-  {
-    provider: 'GCP',
-    region: 'us-central1',
-    generation: 'Milan',
-    instanceType: 'n2d-highcpu-128',
-    vCPU: 128,
-    memory: 128,
-    ondemandPrice: 3811.78,
-    reservedPrice: 2401.37,
-    spotPrice: 942.16
-  },
-  {
-    provider: 'GCP',
-    region: 'us-east1',
-    generation: 'Milan',
-    instanceType: 'n2d-highcpu-16',
-    vCPU: 16,
-    memory: 16,
-    ondemandPrice: 476.47,
-    reservedPrice: 300.17,
-    spotPrice: 117.77
-  },
-  {
-    provider: 'GCP',
-    region: 'europe-west1',
-    generation: 'Milan',
-    instanceType: 'n2d-highcpu-2',
-    vCPU: 2,
-    memory: 2,
-    ondemandPrice: 59.56,
-    reservedPrice: 37.52,
-    spotPrice: 14.72
-  },
-  {
-    provider: 'GCP',
-    region: 'asia-east1',
-    generation: 'Milan',
-    instanceType: 'n2d-highcpu-224',
-    vCPU: 224,
-    memory: 224,
-    ondemandPrice: 6670.62,
-    reservedPrice: 4202.4,
-    spotPrice: 1648.77
-  },
-  // Azure Instances
-  {
-    provider: 'AZURE',
-    region: 'eastus',
-    generation: 'Milan',
-    instanceType: 'standard_b16als_v2',
-    vCPU: 16,
-    memory: 32,
-    ondemandPrice: 491.29,
-    reservedPrice: 289.83,
-    spotPrice: 318.6
-  },
-  {
-    provider: 'AZURE',
-    region: 'westus',
-    generation: 'Milan',
-    instanceType: 'standard_b16as_v2',
-    vCPU: 16,
-    memory: 64,
-    ondemandPrice: 554.8,
-    reservedPrice: 327.33,
-    spotPrice: 359.79
-  },
-  {
-    provider: 'AZURE',
-    region: 'northeurope',
-    generation: 'Milan',
-    instanceType: 'standard_b2als_v2',
-    vCPU: 2,
-    memory: 4,
-    ondemandPrice: 34.67,
-    reservedPrice: 20.42,
-    spotPrice: 22.49
-  },
-  {
-    provider: 'AZURE',
-    region: 'southeastasia',
-    generation: 'Milan',
-    instanceType: 'standard_b2als_v2',
-    vCPU: 2,
-    memory: 4,
-    ondemandPrice: 34.67,
-    reservedPrice: 20.42,
-    spotPrice: 22.49
-  },
   // AWS Instances
   {
     provider: 'AWS',
@@ -170,6 +82,7 @@ const instanceData = [
 ];
 
 const CloudUsageReportTable = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10); // Fixed to 10 rows per page
 
@@ -190,14 +103,13 @@ const CloudUsageReportTable = () => {
   };
 
   const handleClose = () => {
-    // Add close functionality
-    console.log('Close clicked');
+    navigate('/');
   };
 
   return (
     <Box sx={{ 
       display: 'flex',
-      height: '100vh',
+      height: '80vh',
       width: '100%',
       backgroundColor: '#fff'
     }}>
@@ -207,7 +119,7 @@ const CloudUsageReportTable = () => {
         flexDirection: 'column',
         width: `calc(100% - ${drawerWidth})`,
         ml: drawerWidth,
-        height: '100vh',
+        height: '80vh',
         backgroundColor: '#fff',
         marginLeft: 0,
         position: 'relative'

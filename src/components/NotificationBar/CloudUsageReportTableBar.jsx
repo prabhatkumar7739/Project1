@@ -47,14 +47,10 @@ const CloudUsageReportTableBar = () => {
       p: 3,
       borderTop: '1px solid #e0e0e0',
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       alignItems: 'center',
       width: '100%'
     }}>
-      <Typography variant="body2">
-        Note: This table shows all the instances available in the selected region
-      </Typography>
-
       <Stack direction="row" spacing={1}>
         <Button
           startIcon={<CloseIcon />}

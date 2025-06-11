@@ -167,7 +167,10 @@ const CloudUsageReport = ({ onClose }) => {
         flexGrow: 1,
         width: `calc(100% - ${drawerWidth})`,
         minHeight: '100vh',
-        p: 3, 
+        pt: 0,
+        pl: 0,
+        pr: 3,
+        pb: 3,
         backgroundColor: '#f0f0f0',
       }}>
         <Box sx={{ 
@@ -182,19 +185,7 @@ const CloudUsageReport = ({ onClose }) => {
           <Typography variant="h5" sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Add Portfolio</Typography>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button 
-              variant="contained" 
-              onClick={handleSave}
-              sx={{
-                backgroundColor: '#000',
-                '&:hover': {
-                  backgroundColor: '#333',
-                },
-              }}
-            >
-              Save Report
-            </Button>
-            <IconButton onClick={handleClose} sx={{ p: 0, mr: -1 }}>
+            <IconButton onClick={handleClose} sx={{ p: 0 }}>
               <CloseIcon />
             </IconButton>
           </Box>
