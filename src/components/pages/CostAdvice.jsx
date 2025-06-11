@@ -401,37 +401,40 @@ const CostAdvice = ({ onClose }) => {
   return (
 
     <>
-      <Box sx={{
-        width: '100%',
-        color: '#333333',
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: '1200px'
-      }}>
-        <Box sx={{
+      <Box
+        sx={{
+          width: '90%',
+          color: '#333333',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          p: 1
-        }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography variant="h6" sx={{
-              color: '#333333',
-              fontWeight: 500,
-              fontSize: '1.5rem'
-            }}>
+          flexDirection: 'column'
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            p: 1,
+          }}
+        >
+          {/* Left Section: Title + Savings Type + Links */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: '70%' }}>
+            <Typography
+              variant="h6"
+              sx={{ color: '#333', fontWeight: 500, fontSize: '1.5rem' }}
+            >
               Cost Advice
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <FormControl
-                id="Allseving"
-                size="medium" sx={{ width: 280 }}>
-                <InputLabel sx={{
-                  color: '#666666',
-                  fontSize: '1rem',
-                  '&.Mui-focused': { color: 'black' }
-                }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+              <FormControl size="medium" sx={{ width: 280 }}>
+                <InputLabel
+                  sx={{
+                    color: '#666',
+                    fontSize: '1rem',
+                    '&.Mui-focused': { color: 'black' },
+                  }}
+                >
                   Savings Type
                 </InputLabel>
                 <Select
@@ -439,23 +442,23 @@ const CostAdvice = ({ onClose }) => {
                   onChange={handleSavingsTypeChange}
                   label="Savings Type"
                   sx={{
-                    bgcolor: '#ffffff',
+                    bgcolor: '#fff',
                     fontSize: '1rem',
                     height: 50,
                     '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#e0e0e0'
+                      borderColor: '#e0e0e0',
                     },
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#666666'
+                      borderColor: '#666',
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                       borderColor: 'black',
-                      borderWidth: '2px'
+                      borderWidth: '2px',
                     },
                     '& .MuiSvgIcon-root': {
-                      color: '#666666',
-                      fontSize: '1.25rem'
-                    }
+                      color: '#666',
+                      fontSize: '1.25rem',
+                    },
                   }}
                 >
                   <MenuItem value="All">All</MenuItem>
@@ -464,19 +467,20 @@ const CostAdvice = ({ onClose }) => {
                   <MenuItem value="Modernize & Downsize">Modernize & Downsize</MenuItem>
                 </Select>
               </FormControl>
+
               <IconButton
                 onClick={handleCostAdviceDialogOpen}
                 size="medium"
                 sx={{
                   width: 40,
                   height: 40,
-                  borderRadius: "50%",
-                  color: '#666666',
-                  bgcolor: '#ffffff',
+                  borderRadius: '50%',
+                  color: '#666',
+                  bgcolor: '#fff',
                   border: '1px solid #e0e0e0',
                   '&:hover': {
                     bgcolor: '#f5f5f5',
-                    borderColor: '#666666',
+                    borderColor: '#666',
                   },
                   display: 'flex',
                   alignItems: 'center',
@@ -488,27 +492,29 @@ const CostAdvice = ({ onClose }) => {
                 </CustomTooltip>
               </IconButton>
 
-              <Box sx={{ display: 'flex', gap: 2.5, ml: 1 }}>
-                <Link id="input-errors-explanation"
+              <Box sx={{ display: 'flex', gap: 2.5, ml: 1, flexWrap: 'wrap' }}>
+                <Link
+                  id="input-errors-explanation"
                   onClick={handleErrorDialogOpen}
                   sx={{
                     color: '#202020',
                     textDecoration: 'underline',
                     fontSize: '1.05rem',
                     fontWeight: 600,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   Input Errors Explanation
                 </Link>
-                <Link id="eai-recommended"
+                <Link
+                  id="eai-recommended"
                   onClick={handleEIADialogOpen}
                   sx={{
                     color: '#202020',
                     textDecoration: 'underline',
                     fontSize: '1.05rem',
                     fontWeight: 600,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   When is EIA Recommended?
@@ -517,11 +523,22 @@ const CostAdvice = ({ onClose }) => {
             </Box>
           </Box>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+          {/* Right Section: Export Button + Search */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              gap: 2,
+              minWidth: 280,
+            }}
+          >
             <Button
               id="btn-cost-advice-export"
               variant="outlined"
-              startIcon={isExporting ? <CircularProgress size={22} /> : <FileDownloadIcon sx={{ fontSize: '1.25rem' }} />}
+              startIcon={
+                isExporting ? <CircularProgress size={22} /> : <FileDownloadIcon sx={{ fontSize: '1.25rem' }} />
+              }
               disabled={isExporting}
               onClick={handleExport}
               sx={{
@@ -529,13 +546,13 @@ const CostAdvice = ({ onClose }) => {
                 px: 3,
                 textTransform: 'none',
                 fontSize: '1rem',
-                color: '#333333',
-                bgcolor: '#ffffff',
+                color: '#333',
+                bgcolor: '#fff',
                 borderColor: '#e0e0e0',
                 '&:hover': {
                   bgcolor: '#f5f5f5',
-                  borderColor: '#666666'
-                }
+                  borderColor: '#666',
+                },
               }}
             >
               {isExporting ? 'Exporting...' : 'Export'}
@@ -547,31 +564,22 @@ const CostAdvice = ({ onClose }) => {
               value={searchTerm}
               onChange={handleSearchChange}
               sx={{
-                width: 280,
+                width: '100%',
+                maxWidth: 280,
                 '& .MuiOutlinedInput-root': {
                   height: 44,
                   fontSize: '1rem',
-                  bgcolor: '#ffffff',
-                  '& fieldset': {
-                    borderColor: '#e0e0e0'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#666666'
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#e0e0e0',
-                    borderWidth: '1px'
-                  },
-                  '& input::placeholder': {
-                    color: '#666666',
-                    opacity: 1
-                  }
-                }
+                  bgcolor: '#fff',
+                  '& fieldset': { borderColor: '#e0e0e0' },
+                  '&:hover fieldset': { borderColor: '#666' },
+                  '&.Mui-focused fieldset': { borderColor: '#e0e0e0', borderWidth: '1px' },
+                  '& input::placeholder': { color: '#666', opacity: 1 },
+                },
               }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <SearchIcon sx={{ fontSize: '1.5rem', color: '#666666' }} />
+                    <SearchIcon sx={{ fontSize: '1.5rem', color: '#666' }} />
                   </InputAdornment>
                 ),
               }}
@@ -808,16 +816,18 @@ const CostAdvice = ({ onClose }) => {
 
           {/* Pagination: show only if there is data */}
           {visibleRows.length > 0 && (
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: 2,
-              color: '#ffffff',
-              bgcolor: '#000000',
-              p: 2
-            }}>
-              <Typography variant="body2" sx={{ color: '#ffffff' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: 2,
+                color: '#fff',
+                bgcolor: '#000',
+                p: 2,
+              }}
+            >
+              <Typography variant="body2" sx={{ color: '#fff' }}>
                 Items per page:
               </Typography>
               <Select
@@ -826,28 +836,25 @@ const CostAdvice = ({ onClose }) => {
                 size="small"
                 sx={{
                   minWidth: 70,
-                  color: '#ffffff',
-                  bgcolor: '#000000',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff40'
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff80'
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#ffffff',
-                    borderWidth: '2px'
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#ffffff'
-                  }
+                  color: '#fff',
+                  bgcolor: '#000',
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#ffffff40' },
+                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#ffffff80' },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#fff', borderWidth: '2px' },
+                  '& .MuiSvgIcon-root': { color: '#fff' },
                 }}
               >
-                <MenuItem value={10} sx={{ color: '#000000' }}>10</MenuItem>
-                <MenuItem value={25} sx={{ color: '#000000' }}>25</MenuItem>
-                <MenuItem value={50} sx={{ color: '#000000' }}>50</MenuItem>
+                <MenuItem value={10} sx={{ color: '#000' }}>
+                  10
+                </MenuItem>
+                <MenuItem value={25} sx={{ color: '#000' }}>
+                  25
+                </MenuItem>
+                <MenuItem value={50} sx={{ color: '#000' }}>
+                  50
+                </MenuItem>
               </Select>
-              <Typography variant="body2" sx={{ color: '#ffffff' }}>
+              <Typography variant="body2" sx={{ color: '#fff' }}>
                 {pageStart}-{pageEnd} of {totalRows}
               </Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
